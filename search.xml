@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图</title>
-    <url>/2021/03/07/%E9%9B%B7%E8%BE%BE%E5%9B%BE/</url>
+    <url>/2021/03/07/pyecharts%E9%9B%B7%E8%BE%BE%E5%9B%BE/</url>
     <content><![CDATA[<h1 id="还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图"><a href="#还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图" class="headerlink" title="还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图"></a>还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图</h1><h3 id="首先，来介绍一下Pyecharts"><a href="#首先，来介绍一下Pyecharts" class="headerlink" title="首先，来介绍一下Pyecharts."></a>首先，来介绍一下Pyecharts.</h3><p>Pyecharts是我国开发人员开发的，相比较Matplotlib、Seaborn等可视化，Pyehcarts十分符合国内用户的习惯。<br>Pyecharts的目的是实现Echarts与Python的对接，以便在Python中使用Echarts生成图表。<br>Echarts是Apache软件基金会的一个数据可视化JavaScript库，生成图的可视化效果非常好，其凭借良好的交互性，精巧的图表设计，得到众多开发者的认可。</p>
 <span id="more"></span>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">ld_pict = pd.read_excel(<span class="string">&quot;雷达图数据.xlsx&quot;</span>,index_col=<span class="number">0</span>)</span><br><span class="line">ld_pict.head()</span><br></pre></td></tr></table></figure>
@@ -24,7 +24,7 @@
     text-align: right;
 &#125;
 </code></pre>
-<p></style></p>
+<p></style><p></p>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -106,7 +106,7 @@
     text-align: right;
 &#125;
 </code></pre>
-<p></style></p>
+<p></style><p></p>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -191,9 +191,542 @@
         <category>数据可视化</category>
       </categories>
       <tags>
-        <tag>数据可视化</tag>
         <tag>Python</tag>
         <tag>Pyrcharts</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pyecharts 饼图 玫瑰图</title>
+    <url>/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/</url>
+    <content><![CDATA[<h1 id="文章目录"><a href="#文章目录" class="headerlink" title="文章目录"></a>文章目录</h1><span id="more"></span>
+<h2 id="一、-饼图"><a href="#一、-饼图" class="headerlink" title="一、 饼图"></a>一、 饼图</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts.charts <span class="keyword">import</span> Pie</span><br><span class="line"><span class="keyword">import</span> pyecharts.options <span class="keyword">as</span> opts</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts.<span class="built_in">globals</span> <span class="keyword">import</span> CurrentConfig, NotebookType  </span><br><span class="line">CurrentConfig.NOTEBOOK_TYPE = NotebookType.JUPYTER_LAB</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">x_data = [<span class="string">&quot;深度学习&quot;</span>, <span class="string">&quot;数据分析&quot;</span>, <span class="string">&quot;Web开发&quot;</span>, <span class="string">&quot;爬虫&quot;</span>, <span class="string">&quot;图像处理&quot;</span>]</span><br><span class="line">y_data = [<span class="number">688</span>, <span class="number">888</span>, <span class="number">560</span>, <span class="number">388</span>, <span class="number">480</span>]</span><br><span class="line">data_pair = [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(x_data, y_data)]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data_pair</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[[&#39;深度学习&#39;, 688], [&#39;数据分析&#39;, 888], [&#39;Web开发&#39;, 560], [&#39;爬虫&#39;, 388], [&#39;图像处理&#39;, 480]]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data_pair.sort(key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data_pair</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[[&#39;爬虫&#39;, 388], [&#39;图像处理&#39;, 480], [&#39;Web开发&#39;, 560], [&#39;深度学习&#39;, 688], [&#39;数据分析&#39;, 888]]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pie = (</span><br><span class="line">    Pie(init_opts=opts.InitOpts(width=<span class="string">&quot;1200px&quot;</span>, height=<span class="string">&quot;800px&quot;</span>, bg_color=<span class="string">&quot;#2c343c&quot;</span>))</span><br><span class="line">    .add(</span><br><span class="line">        series_name=<span class="string">&quot;学习方向&quot;</span>, <span class="comment"># 系列名称</span></span><br><span class="line">        data_pair=data_pair, <span class="comment"># 数据格式为[(key1,value1),(key2,value2)]</span></span><br><span class="line">        rosetype=<span class="string">&quot;radius&quot;</span>, <span class="comment"># radius：扇区圆心角展现数据的百分比，半径展现数据的大小</span></span><br><span class="line">        radius=<span class="string">&quot;55%&quot;</span>,             <span class="comment"># 饼图的半径</span></span><br><span class="line">        center=[<span class="string">&quot;50%&quot;</span>, <span class="string">&quot;50%&quot;</span>],    <span class="comment"># 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标</span></span><br><span class="line">        </span><br><span class="line">    )</span><br><span class="line">    .set_global_opts(</span><br><span class="line">        title_opts=opts.TitleOpts(</span><br><span class="line">            title=<span class="string">&quot;Customized Pie&quot;</span>,</span><br><span class="line">            pos_left=<span class="string">&quot;center&quot;</span>,</span><br><span class="line">            pos_top=<span class="string">&quot;20&quot;</span>,</span><br><span class="line">            title_textstyle_opts=opts.TextStyleOpts(color=<span class="string">&quot;#fff&quot;</span>),</span><br><span class="line">        ),</span><br><span class="line">        legend_opts=opts.LegendOpts(is_show=<span class="literal">False</span>),</span><br><span class="line">    )</span><br><span class="line">    .set_series_opts(</span><br><span class="line">        tooltip_opts=opts.TooltipOpts(</span><br><span class="line">            trigger=<span class="string">&quot;item&quot;</span>, formatter=<span class="string">&quot;&#123;a&#125; &lt;br/&gt;&#123;b&#125;: &#123;c&#125; (&#123;d&#125;%)&quot;</span>  <span class="comment"># &#x27;item&#x27;: 数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用</span></span><br><span class="line">         ),</span><br><span class="line">        label_opts=opts.LabelOpts(color=<span class="string">&quot;rgba(255, 255, 255, 0.3)&quot;</span>),</span><br><span class="line">    )</span><br><span class="line">)</span><br><span class="line">pie.load_javascript()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pie.render_notebook()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E9%A5%BC%E5%9B%BE.png" alt="图像"></p>
+<h2 id="二、-环形图"><a href="#二、-环形图" class="headerlink" title="二、 环形图"></a>二、 环形图</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts.faker <span class="keyword">import</span> Faker</span><br><span class="line">c = (</span><br><span class="line">    Pie()</span><br><span class="line">    .add(</span><br><span class="line">        <span class="string">&quot;&quot;</span>,</span><br><span class="line">        [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(Faker.choose(), Faker.values())],</span><br><span class="line">        <span class="comment"># 饼图的半径，数组的第一项是内半径，第二项是外半径</span></span><br><span class="line">        <span class="comment"># 默认设置成百分比，相对于容器高宽中较小的一项的一半</span></span><br><span class="line">        radius=[<span class="string">&quot;40%&quot;</span>, <span class="string">&quot;60%&quot;</span>],</span><br><span class="line">    )</span><br><span class="line">    .set_colors([<span class="string">&quot;blue&quot;</span>, <span class="string">&quot;green&quot;</span>, <span class="string">&quot;	#800000&quot;</span>, <span class="string">&quot;red&quot;</span>, <span class="string">&quot;#000000&quot;</span>, <span class="string">&quot;orange&quot;</span>, <span class="string">&quot;purple&quot;</span>])</span><br><span class="line">    .set_global_opts(</span><br><span class="line">        title_opts=opts.TitleOpts(title=<span class="string">&quot;Pie-Radius&quot;</span>),</span><br><span class="line">        legend_opts=opts.LegendOpts(orient=<span class="string">&quot;vertical&quot;</span>, pos_top=<span class="string">&quot;15%&quot;</span>, pos_left=<span class="string">&quot;2%&quot;</span>),</span><br><span class="line">    )</span><br><span class="line">    .set_series_opts(label_opts=opts.LabelOpts(formatter=<span class="string">&quot;&#123;b&#125;: &#123;c&#125; &quot;</span>))</span><br><span class="line">)</span><br><span class="line">c.load_javascript()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">c.render_notebook()</span><br></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E7%8E%AF%E5%BD%A2%E5%9B%BE.png" alt="图像"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">labels = [<span class="string">&#x27;可乐&#x27;</span>, <span class="string">&#x27;雪碧&#x27;</span>, <span class="string">&#x27;橙汁&#x27;</span>, <span class="string">&#x27;奶茶&#x27;</span>, <span class="string">&#x27;冰啤酒&#x27;</span>, <span class="string">&#x27;柠檬水&#x27;</span>]</span><br><span class="line">values = [<span class="number">6</span>, <span class="number">12</span>, <span class="number">28</span>, <span class="number">52</span>, <span class="number">72</span>, <span class="number">96</span>]</span><br><span class="line">v = Faker.choose()</span><br><span class="line">c = (</span><br><span class="line">    Pie()</span><br><span class="line">    .add(</span><br><span class="line">        <span class="string">&quot;&quot;</span>,</span><br><span class="line">        [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(Faker.choose(), Faker.values())],</span><br><span class="line">        radius=[<span class="string">&quot;40%&quot;</span>, <span class="string">&quot;75%&quot;</span>],</span><br><span class="line">        center=[<span class="string">&quot;22%&quot;</span>, <span class="string">&quot;50%&quot;</span>],</span><br><span class="line">        rosetype=<span class="string">&quot;radius&quot;</span>,</span><br><span class="line">        label_opts=opts.LabelOpts(is_show=<span class="literal">False</span>),</span><br><span class="line">    )</span><br><span class="line">    .add(</span><br><span class="line">        <span class="string">&quot;&quot;</span>,</span><br><span class="line">        [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(Faker.choose(), Faker.values())],</span><br><span class="line">        radius=[<span class="string">&quot;40%&quot;</span>, <span class="string">&quot;75%&quot;</span>],</span><br><span class="line">        center=[<span class="string">&quot;70%&quot;</span>, <span class="string">&quot;50%&quot;</span>],</span><br><span class="line">        rosetype=<span class="string">&quot;area&quot;</span>,</span><br><span class="line">    )</span><br><span class="line">    .set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">&quot;Pie-玫瑰图示例&quot;</span>),</span><br><span class="line">                     legend_opts=opts.LegendOpts(is_show=<span class="literal">False</span>)</span><br><span class="line">                     )</span><br><span class="line">    </span><br><span class="line">)</span><br><span class="line">c.load_javascript()</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">c.render()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E7%8E%AB%E7%91%B0%E5%9B%BE.png" alt="图像"></p>
+<h2 id="三、南丁格尔玫瑰图"><a href="#三、南丁格尔玫瑰图" class="headerlink" title="三、南丁格尔玫瑰图"></a>三、南丁格尔玫瑰图</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">provinces = [<span class="string">&#x27;北京&#x27;</span>,<span class="string">&#x27;上海&#x27;</span>,<span class="string">&#x27;黑龙江&#x27;</span>,<span class="string">&#x27;吉林&#x27;</span>,<span class="string">&#x27;辽宁&#x27;</span>,<span class="string">&#x27;内蒙古&#x27;</span>,<span class="string">&#x27;新疆&#x27;</span>,<span class="string">&#x27;西藏&#x27;</span>,<span class="string">&#x27;青海&#x27;</span>,<span class="string">&#x27;四川&#x27;</span>,<span class="string">&#x27;云南&#x27;</span>,<span class="string">&#x27;陕西&#x27;</span>,<span class="string">&#x27;重庆&#x27;</span>,</span><br><span class="line">             <span class="string">&#x27;贵州&#x27;</span>,<span class="string">&#x27;广西&#x27;</span>,<span class="string">&#x27;海南&#x27;</span>,<span class="string">&#x27;澳门&#x27;</span>,<span class="string">&#x27;湖南&#x27;</span>,<span class="string">&#x27;江西&#x27;</span>,<span class="string">&#x27;福建&#x27;</span>,<span class="string">&#x27;安徽&#x27;</span>,<span class="string">&#x27;浙江&#x27;</span>,<span class="string">&#x27;江苏&#x27;</span>,<span class="string">&#x27;宁夏&#x27;</span>,<span class="string">&#x27;山西&#x27;</span>,<span class="string">&#x27;河北&#x27;</span>,<span class="string">&#x27;天津&#x27;</span>]</span><br><span class="line">num = [<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">17</span>,<span class="number">9</span>,<span class="number">22</span>,<span class="number">23</span>,<span class="number">42</span>,<span class="number">35</span>,<span class="number">7</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="number">16</span>,<span class="number">24</span>,<span class="number">16</span>,<span class="number">21</span>,<span class="number">37</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">13</span>,<span class="number">7</span>,<span class="number">22</span>,<span class="number">8</span>,<span class="number">16</span>,<span class="number">13</span>,<span class="number">13</span>]</span><br><span class="line">color_series = [<span class="string">&#x27;#FAE927&#x27;</span>,<span class="string">&#x27;#E9E416&#x27;</span>,<span class="string">&#x27;#C9DA36&#x27;</span>,<span class="string">&#x27;#9ECB3C&#x27;</span>,<span class="string">&#x27;#6DBC49&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;#37B44E&#x27;</span>,<span class="string">&#x27;#3DBA78&#x27;</span>,<span class="string">&#x27;#14ADCF&#x27;</span>,<span class="string">&#x27;#209AC9&#x27;</span>,<span class="string">&#x27;#1E91CA&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;#2C6BA0&#x27;</span>,<span class="string">&#x27;#2B55A1&#x27;</span>,<span class="string">&#x27;#2D3D8E&#x27;</span>,<span class="string">&#x27;#44388E&#x27;</span>,<span class="string">&#x27;#6A368B&#x27;</span></span><br><span class="line">                <span class="string">&#x27;#7D3990&#x27;</span>,<span class="string">&#x27;#A63F98&#x27;</span>,<span class="string">&#x27;#C31C88&#x27;</span>,<span class="string">&#x27;#D52178&#x27;</span>,<span class="string">&#x27;#D5225B&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;#D02C2A&#x27;</span>,<span class="string">&#x27;#D44C2D&#x27;</span>,<span class="string">&#x27;#F57A34&#x27;</span>,<span class="string">&#x27;#FA8F2F&#x27;</span>,<span class="string">&#x27;#D99D21&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;#CF7B25&#x27;</span>,<span class="string">&#x27;#CF7B25&#x27;</span>,<span class="string">&#x27;#CF7B25&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建DataFrame</span></span><br><span class="line">df = pd.DataFrame(&#123;<span class="string">&#x27;provinces&#x27;</span>: provinces, <span class="string">&#x27;num&#x27;</span>: num&#125;)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>provinces</th>
+      <th>num</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>北京</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>上海</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>黑龙江</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>吉林</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>辽宁</td>
+      <td>9</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.sort_values(by=<span class="string">&quot;num&quot;</span>,ascending=<span class="literal">True</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 提取数据</span></span><br><span class="line">v = df[<span class="string">&#x27;provinces&#x27;</span>].values.tolist()</span><br><span class="line">d = df[<span class="string">&#x27;num&#x27;</span>].values.tolist()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 绘制饼图</span></span><br><span class="line">pie1 = Pie(init_opts=opts.InitOpts(width=<span class="string">&#x27;1250px&#x27;</span>, height=<span class="string">&#x27;750px&#x27;</span>))</span><br><span class="line"><span class="comment"># 设置颜色</span></span><br><span class="line">pie1.set_colors(color_series)</span><br><span class="line"></span><br><span class="line">pie1.add(<span class="string">&quot;&quot;</span>, [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(v, d)],</span><br><span class="line">        radius=[<span class="string">&quot;30%&quot;</span>, <span class="string">&quot;100%&quot;</span>],</span><br><span class="line">        center=[<span class="string">&quot;50%&quot;</span>, <span class="string">&quot;50%&quot;</span>],</span><br><span class="line">        rosetype=<span class="string">&quot;area&quot;</span></span><br><span class="line">        )</span><br><span class="line"><span class="comment"># 设置全局配置项</span></span><br><span class="line">pie1.set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">&#x27;多省区市\n确诊病例连续多日&#x27;</span>,subtitle=<span class="string">&#x27;零新增&#x27;</span>,</span><br><span class="line">                                               title_textstyle_opts=opts.TextStyleOpts(font_size=<span class="number">25</span>,color= <span class="string">&#x27;#0085c3&#x27;</span>),</span><br><span class="line">                                               subtitle_textstyle_opts= opts.TextStyleOpts(font_size=<span class="number">50</span>,color= <span class="string">&#x27;#003399&#x27;</span>),</span><br><span class="line">                                               pos_right= <span class="string">&#x27;center&#x27;</span>,pos_left= <span class="string">&#x27;center&#x27;</span>,pos_top=<span class="string">&#x27;42%&#x27;</span>,pos_bottom=<span class="string">&#x27;center&#x27;</span></span><br><span class="line">                                              ),</span><br><span class="line">                     legend_opts=opts.LegendOpts(is_show=<span class="literal">False</span>),</span><br><span class="line">                     toolbox_opts=opts.ToolboxOpts())</span><br><span class="line"><span class="comment"># 设置系列配置项</span></span><br><span class="line">pie1.set_series_opts(label_opts=opts.LabelOpts(is_show=<span class="literal">True</span>, position=<span class="string">&quot;inside&quot;</span>, font_size=<span class="number">12</span>,</span><br><span class="line">                                               formatter=<span class="string">&quot;&#123;b&#125;:&#123;c&#125;天&quot;</span>, font_style=<span class="string">&quot;italic&quot;</span>,</span><br><span class="line">                                               font_weight=<span class="string">&quot;bold&quot;</span>, font_family=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">                                               ),</span><br><span class="line">                     )</span><br><span class="line">pie1.load_javascript()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pie1.render_notebook()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E5%8D%97%E4%B8%81%E6%A0%BC%E5%B0%94%E7%8E%AB%E7%91%B0%E5%9B%BE.png" alt="图像"></p>
+]]></content>
+      <categories>
+        <category>数据可视化</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>seaborn的基本使用</title>
+    <url>/2021/03/09/seaborn%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>介绍python一种常用的的绘图库，他是对matplotlib的基本封装，并进行了美化，由于其调用起来<br>比较方便，所以还是有必要学习一下的。</p>
+<span id="more"></span>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> mpl</span><br><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">?sns.set_style</span><br></pre></td></tr></table></figure>
+
+
+
+<pre><code>Set the aesthetic style of the plots.
+
+This affects things like the color of the axes, whether a grid is
+enabled by default, and other aesthetic elements.
+
+Parameters
+----------
+style : dict, None, or one of &#123;darkgrid, whitegrid, dark, white, ticks&#125;
+    A dictionary of parameters or the name of a preconfigured set.
+rc : dict, optional
+    Parameter mappings to override the values in the preset seaborn
+    style dictionaries. This only updates parameters that are
+    considered part of the style definition.
+
+Examples
+--------
+&gt;&gt;&gt; set_style(&quot;whitegrid&quot;)
+
+&gt;&gt;&gt; set_style(&quot;ticks&quot;, &#123;&quot;xtick.major.size&quot;: 8, &quot;ytick.major.size&quot;: 8&#125;)
+
+See Also
+--------
+axes_style : return a dict of parameters or use in a ``with`` statement
+             to temporarily set the style.
+set_context : set parameters to scale plot elements
+set_palette : set the default color palette for figures
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sns.set_style(<span class="string">&#x27;whitegrid&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="1-数值型变量"><a href="#1-数值型变量" class="headerlink" title="1. 数值型变量"></a>1. 数值型变量</h2><h3 id="1-1-单变量分布和多变量分布"><a href="#1-1-单变量分布和多变量分布" class="headerlink" title="1.1 单变量分布和多变量分布"></a>1.1 单变量分布和多变量分布</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这里采用seaborn自带的数据集，鸢尾花数据集</span></span><br><span class="line">iris = sns.load_dataset(<span class="string">&#x27;iris&#x27;</span>)</span><br><span class="line">iris.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sepal_length</th>
+      <th>sepal_width</th>
+      <th>petal_length</th>
+      <th>petal_width</th>
+      <th>species</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5.1</td>
+      <td>3.5</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4.9</td>
+      <td>3.0</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4.7</td>
+      <td>3.2</td>
+      <td>1.3</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.6</td>
+      <td>3.1</td>
+      <td>1.5</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>3.6</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<ul>
+<li>jointplot</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sns.jointplot(x=<span class="string">&quot;sepal_length&quot;</span>,y=<span class="string">&quot;sepal_width&quot;</span>,data=iris)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+<p><img src="/images/output_8_1.png" alt="png"></p>
+<ul>
+<li>pairplot</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sns.pairplot(data=iris)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p><img src="/images/output_10_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># distplot(直方图)</span></span><br><span class="line">sns.distplot(iris[<span class="string">&#x27;sepal_length&#x27;</span>],rug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p><img src="/images/output_11_1.png" alt="png"></p>
+<h3 id="1-2-关系型图表"><a href="#1-2-关系型图表" class="headerlink" title="1.2 关系型图表"></a>1.2 关系型图表</h3><p>不同种类花的两变量散点图</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sns.scatterplot(x=<span class="string">&quot;sepal_width&quot;</span>,y=<span class="string">&quot;sepal_length&quot;</span>,hue=<span class="string">&quot;species&quot;</span>,data=iris)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p><img src="/images/output_14_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 折线图</span></span><br><span class="line">sns.lineplot(x=<span class="string">&quot;sepal_width&quot;</span>,y=<span class="string">&quot;sepal_length&quot;</span>,hue=<span class="string">&quot;species&quot;</span>,data=iris)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p><img src="/images/output_15_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sns.regplot(x=<span class="string">&quot;sepal_width&quot;</span>,y=<span class="string">&quot;sepal_length&quot;</span>,data=iris)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p><img src="/images/output_16_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 残差分布图</span></span><br><span class="line">sns.residplot(x=<span class="string">&quot;sepal_width&quot;</span>,y=<span class="string">&quot;sepal_length&quot;</span>,data=iris)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p><img src="/images/output_17_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tips= sns.load_dataset(<span class="string">&#x27;tips&#x27;</span>)</span><br><span class="line">tips.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>total_bill</th>
+      <th>tip</th>
+      <th>sex</th>
+      <th>smoker</th>
+      <th>day</th>
+      <th>time</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>16.99</td>
+      <td>1.01</td>
+      <td>Female</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10.34</td>
+      <td>1.66</td>
+      <td>Male</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>21.01</td>
+      <td>3.50</td>
+      <td>Male</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>23.68</td>
+      <td>3.31</td>
+      <td>Male</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>24.59</td>
+      <td>3.61</td>
+      <td>Female</td>
+      <td>No</td>
+      <td>Sun</td>
+      <td>Dinner</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 根据性别及是否抽烟，以及时间段，来看小费总额与小费的关系</span></span><br><span class="line">sns.lmplot(x=<span class="string">&quot;total_bill&quot;</span>,y=<span class="string">&quot;tip&quot;</span>,row=<span class="string">&#x27;sex&#x27;</span>,col=<span class="string">&quot;smoker&quot;</span>,hue=<span class="string">&quot;time&quot;</span>,data=tips)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<p><img src="/images/output_19_1.png" alt="png"></p>
+<h3 id="1-3-矩阵图"><a href="#1-3-矩阵图" class="headerlink" title="1.3 矩阵图"></a>1.3 矩阵图</h3><p><strong>主要用于相关性分析</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sns.heatmap(iris.corr(),annot=<span class="literal">True</span>,fmt=<span class="string">&quot;.2f&quot;</span>,cmap=<span class="string">&quot;Blues&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p><img src="/images/output_22_1.png" alt="png"></p>
+<h2 id="2-分类数据"><a href="#2-分类数据" class="headerlink" title="2. 分类数据"></a>2. 分类数据</h2><h3 id="2-1-散点图"><a href="#2-1-散点图" class="headerlink" title="2.1 散点图"></a>2.1 散点图</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># swarmplot</span></span><br><span class="line"><span class="comment"># 每一天根据男女不同的小费分布</span></span><br><span class="line">sns.swarmplot(x=<span class="string">&quot;day&quot;</span>,y=<span class="string">&quot;tip&quot;</span>,hue=<span class="string">&quot;sex&quot;</span>,data=tips)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+<p><img src="/images/output_25_1.png" alt="png"></p>
+<h3 id="2-2-分布图"><a href="#2-2-分布图" class="headerlink" title="2.2 分布图"></a>2.2 分布图</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 箱线图，表达了给分类数据下4分位数与离群点信息</span></span><br><span class="line">sns.boxplot(x=<span class="string">&quot;day&quot;</span>,y=<span class="string">&quot;tip&quot;</span>,hue=<span class="string">&quot;sex&quot;</span>,data=tips)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x21734900370&gt;
+</code></pre>
+<p><img src="/images/output_27_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 小提琴图</span></span><br><span class="line">sns.violinplot(x=<span class="string">&quot;day&quot;</span>,y=<span class="string">&quot;tip&quot;</span>,hue=<span class="string">&quot;sex&quot;</span>,data=tips,split=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p><img src="/images/output_28_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 条形图</span></span><br><span class="line">sns.barplot(x=<span class="string">&#x27;day&#x27;</span>,y=<span class="string">&#x27;tip&#x27;</span>,hue=<span class="string">&#x27;sex&#x27;</span>,data=tips)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p><img src="/images/output_29_1.png" alt="png"></p>
+<p>这里只介绍几种个人常用的API，若想详细了解，请<a href="http://seaborn.pydata.org/api.html">参考</a></p>
+]]></content>
+      <categories>
+        <category>数据可视化</category>
+      </categories>
+      <tags>
+        <tag>seaborn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python爬取瓜子二手车</title>
+    <url>/2021/03/10/python%E7%88%AC%E5%8F%96%E7%93%9C%E5%AD%90%E4%BA%8C%E6%89%8B%E8%BD%A6/</url>
+    <content><![CDATA[<p>自己平时比较喜欢车，但是又没钱，于是萌生了一个购买二手车的想法，最近二手车的市场行情是怎样的呢，这次爬取了二手车交易网站，了解一下交易的行情。</p>
+<p>于是，本人便兴高采烈地打开了网站，还是根据爬虫的基本流程，首先对网页结构进行分析，发现二手车网站只显示50个页面的二手车信息。<br>按下F12,清除cookie,清除浏览器缓存，刷新页面，得到了下面这个页面。</p>
+<span id="more"></span>
+<p><img src="/2021/03/10/python%E7%88%AC%E5%8F%96%E7%93%9C%E5%AD%90%E4%BA%8C%E6%89%8B%E8%BD%A6/1.png" alt="image.png"></p>
+<p>首先。我看到了这两个buy文件，响应码分别是203和200，这是如果常玩爬虫的人，<br>便会想到这里边一定有猫腻，于是我打开了第一个buy页面，果然response的响应页面是看不到详细信息的，<br>既然如此，我们便打开第二个页面看一下，发现了我们想要的内容，如下：</p>
+<p><img src="/2021/03/10/python%E7%88%AC%E5%8F%96%E7%93%9C%E5%AD%90%E4%BA%8C%E6%89%8B%E8%BD%A6/2.png" alt="image.png"></p>
+<p>这时，便可以写代码了，进行提取了，但是当我在进行请求时，却得不到想要的信息，这时我想可能是请求头的cookie出了问题，很有可能这里的cookie是根据上面的页面，动态生成的。</p>
+<p>这就和前一个Buy脱不了干系，于是我用爬虫对第一个文件进了请求，想看一下里边到底有什么内容，<br>经过请求发现响应内容是乱码的js,如图所示：</p>
+<p><img src="/2021/03/10/python%E7%88%AC%E5%8F%96%E7%93%9C%E5%AD%90%E4%BA%8C%E6%89%8B%E8%BD%A6/3.png" alt="image.png"></p>
+<p>仔细观察可发现，这里边是由一个eval()函数包着的，搜索antipas参数果然在这个响应文件中，那么就需要对该该js进行解码，<br>这是我只需要cosole.log()这个函数就可以了，得到解码后的js,如下图所示：</p>
+<p><img src="/2021/03/10/python%E7%88%AC%E5%8F%96%E7%93%9C%E5%AD%90%E4%BA%8C%E6%89%8B%E8%BD%A6/4.png" alt="image.png"></p>
+<p>这里，只是稍微讲一下，那么接下来，就是写代码了，代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">headers=&#123;</span><br><span class="line"><span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Cache-Control&#x27;</span>: <span class="string">&#x27;no-cache&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Connection&#x27;</span>: <span class="string">&#x27;keep-alive&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Host&#x27;</span>: <span class="string">&#x27;www.guazi.com&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Pragma&#x27;</span>: <span class="string">&#x27;no-cache&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Referer&#x27;</span>: <span class="string">&#x27;https://www.guazi.com/www/buy/o50c-1/&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;sec-ch-ua&#x27;</span>: <span class="string">&#x27;&quot;Chromium&quot;;v=&quot;88&quot;, &quot;Google Chrome&quot;;v=&quot;88&quot;, &quot;;Not A Brand&quot;;v=&quot;99&quot;&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;sec-ch-ua-mobile&#x27;</span>: <span class="string">&#x27;?0&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Sec-Fetch-Dest&#x27;</span>: <span class="string">&#x27;document&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Sec-Fetch-Mode&#x27;</span>: <span class="string">&#x27;navigate&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Sec-Fetch-Site&#x27;</span>: <span class="string">&#x27;same-origin&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Sec-Fetch-User&#x27;</span>: <span class="string">&#x27;?1&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;Upgrade-Insecure-Requests&#x27;</span>: <span class="string">&#x27;1&#x27;</span>,</span><br><span class="line"><span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line">city = <span class="built_in">input</span>(<span class="string">&quot;请输入要查询的地点缩写：&quot;</span>)</span><br><span class="line">url=<span class="string">&quot;https://www.guazi.com/%s/buy&quot;</span> % city</span><br><span class="line">response = requests.get(url,headers=headers)</span><br><span class="line">pattern = <span class="string">r&quot;value=anti\(&#x27;zoQ5hc4WI7OKZKzz0yvwhTimCXIlNazFSgv7ysBQVIE=&#x27;,&#x27;(\d+?)&#x27;\)&quot;</span></span><br><span class="line">ptt = re.<span class="built_in">compile</span>(pattern)</span><br><span class="line">key = re.findall(ptt,response.text)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">print(key)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> execjs</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">os.environ[<span class="string">&quot;EXECJS_RUNTIME&quot;</span>] = <span class="string">&quot;PhantomJS&quot;</span></span><br><span class="line">node = execjs.get()</span><br><span class="line">file = <span class="string">&#x27;guaizi_1.js&#x27;</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(file,<span class="string">&#x27;r&#x27;</span>,encoding=<span class="string">&#x27;utf8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    js_data = f.read()</span><br><span class="line"></span><br><span class="line">result = execjs.<span class="built_in">compile</span>(js_data).call(<span class="string">&#x27;anti&#x27;</span>,<span class="string">&#x27;zoQ5hc4WI7OKZKzz0yvwhTimCXIlNazFSgv7ysBQVIE=&#x27;</span>,key)</span><br><span class="line">print(result)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">headers=&#123;</span><br><span class="line">    <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept-Encoding&#x27;</span>: <span class="string">&#x27;gzip, deflate, br&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Accept-Language&#x27;</span>: <span class="string">&#x27;zh-CN,zh;q=0.9&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Cache-Control&#x27;</span>: <span class="string">&#x27;no-cache&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Connection&#x27;</span>: <span class="string">&#x27;keep-alive&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Cookie&#x27;</span>: <span class="string">&#x27;rfnl=https://www.guazi.com/%s/buy; antipas=%s&#x27;</span> % (city,result),</span><br><span class="line">    <span class="string">&#x27;Host&#x27;</span>: <span class="string">&#x27;www.guazi.com&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Pragma&#x27;</span>: <span class="string">&#x27;no-cache&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Referer&#x27;</span>: <span class="string">&#x27;https://www.guazi.com/%s/buy&#x27;</span> % city,</span><br><span class="line">    <span class="string">&#x27;sec-ch-ua&#x27;</span>: <span class="string">&#x27;&quot;Chromium&quot;;v=&quot;88&quot;, &quot;Google Chrome&quot;;v=&quot;88&quot;, &quot;;Not A Brand&quot;;v=&quot;99&quot;&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;sec-ch-ua-mobile&#x27;</span>: <span class="string">&#x27;?0&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Sec-Fetch-Dest&#x27;</span>: <span class="string">&#x27;document&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Sec-Fetch-Mode&#x27;</span>: <span class="string">&#x27;navigate&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Sec-Fetch-Site&#x27;</span>: <span class="string">&#x27;same-origin&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Upgrade-Insecure-Requests&#x27;</span>: <span class="string">&#x27;1&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">car_list=[]</span><br><span class="line"><span class="keyword">for</span> page <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">51</span>):</span><br><span class="line">    print(page)</span><br><span class="line">    url = <span class="string">&quot;https://www.guazi.com/%s/buy/o%s&quot;</span> % (city,page)</span><br><span class="line">    req = requests.get(url,headers=headers)</span><br><span class="line">    html = etree.HTML(req.text)</span><br><span class="line">    li_bq_list = html.xpath(<span class="string">&#x27;//ul[@class=&quot;carlist clearfix js-top&quot;]/li&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> li_bq <span class="keyword">in</span> li_bq_list:</span><br><span class="line">        car_dict = &#123;&#125;</span><br><span class="line">        desc_car = li_bq.xpath(<span class="string">&#x27;./a/h2/text()&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">        sevice_list = li_bq.xpath(<span class="string">&#x27;./a/div[@class=&quot;t-i&quot;]/text()&#x27;</span>)</span><br><span class="line">        xianjia_list = li_bq.xpath(<span class="string">&#x27;./a/div[@class=&quot;t-price&quot;]/p//text()&#x27;</span>)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            yuanjia = li_bq.xpath(<span class="string">&#x27;./a/div[@class=&quot;t-price&quot;]/em/text()&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            yuanjia=<span class="string">&quot;&quot;</span></span><br><span class="line">        xianjia = <span class="string">&#x27;&#x27;</span>.join(xianjia_list).strip()</span><br><span class="line">        car_dict[<span class="string">&#x27;基本描述&#x27;</span>] = desc_car</span><br><span class="line">        car_dict[<span class="string">&#x27;服务&#x27;</span>] = sevice_list</span><br><span class="line">        car_dict[<span class="string">&#x27;原价&#x27;</span>] = yuanjia</span><br><span class="line">        car_dict[<span class="string">&#x27;现价&#x27;</span>] = xianjia</span><br><span class="line">        print(car_dict)</span><br><span class="line">        car_list.append(car_dict)</span><br><span class="line">    time.sleep(<span class="number">5</span>)</span><br><span class="line">df_car = pd.DataFrame(car_list)</span><br><span class="line">print(df_car)</span><br><span class="line">df_car.to_excel(<span class="string">&#x27;bj_car.xlsx&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>最终，将其放在excel中，结果如图所示：</p>
+<p><img src="/2021/03/10/python%E7%88%AC%E5%8F%96%E7%93%9C%E5%AD%90%E4%BA%8C%E6%89%8B%E8%BD%A6/5.png" alt="image.png"></p>
+<p>想要源码的可以评论区，留邮箱。</p>
+]]></content>
+      <categories>
+        <category>python爬虫</category>
+      </categories>
+      <tags>
+        <tag>爬虫</tag>
       </tags>
   </entry>
 </search>
