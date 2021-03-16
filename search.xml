@@ -729,4 +729,1475 @@ set_palette : set the default color palette for figures
         <tag>seaborn</tag>
       </tags>
   </entry>
+  <entry>
+    <title>淘宝用户行为分析</title>
+    <url>/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="一、项目背景"><a href="#一、项目背景" class="headerlink" title="一、项目背景"></a>一、项目背景</h1><p>以淘宝APP平台为数据集，通过行业的指标对淘宝用户行为进行分析，从而探索淘宝用户的行为模式，具体指标包括：日PV和日uv分析，付费率分析，复购行为分析，漏斗流失分析</p>
+<span id="more"></span>
+<h1 id="二、数据的读取"><a href="#二、数据的读取" class="headerlink" title="二、数据的读取"></a>二、数据的读取</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mpl.rcParams[<span class="string">&#x27;font.family&#x27;</span>]=<span class="string">&#x27;SimHei&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.style&#x27;</span>] = <span class="string">&#x27;italic&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.size&#x27;</span>] = <span class="number">16</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] =<span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df = pd.read_csv(<span class="string">&#x27;tianchi_mobile_recommend_train_user.csv&#x27;</span>)</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>user_id</th>
+      <th>item_id</th>
+      <th>behavior_type</th>
+      <th>user_geohash</th>
+      <th>item_category</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>98047837</td>
+      <td>232431562</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>4245</td>
+      <td>2014-12-06 02</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>97726136</td>
+      <td>383583590</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>5894</td>
+      <td>2014-12-09 20</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>98607707</td>
+      <td>64749712</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>2883</td>
+      <td>2014-12-18 11</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>98662432</td>
+      <td>320593836</td>
+      <td>1</td>
+      <td>96nn52n</td>
+      <td>6562</td>
+      <td>2014-12-06 10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>98145908</td>
+      <td>290208520</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>13926</td>
+      <td>2014-12-16 21</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 12256906 entries, 0 to 12256905
+Data columns (total 6 columns):
+ #   Column         Dtype 
+---  ------         ----- 
+ 0   user_id        int64 
+ 1   item_id        int64 
+ 2   behavior_type  int64 
+ 3   user_geohash   object
+ 4   item_category  int64 
+ 5   time           object
+dtypes: int64(4), object(2)
+memory usage: 561.1+ MB
+</code></pre>
+<h1 id="二、数据的清洗与处理"><a href="#二、数据的清洗与处理" class="headerlink" title="二、数据的清洗与处理"></a>二、数据的清洗与处理</h1><p>user_geohash列有空值，看一下空值的比例</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[<span class="string">&#x27;user_geohash&#x27;</span>].isnull().<span class="built_in">sum</span>()/df[<span class="string">&#x27;user_geohash&#x27;</span>].isnull().count()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0.6800104365653127
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[<span class="string">&#x27;天&#x27;</span>] = df[<span class="string">&#x27;time&#x27;</span>].<span class="built_in">str</span>.split(<span class="string">&#x27; &#x27;</span>,expand=<span class="literal">True</span>)[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[<span class="string">&#x27;小时&#x27;</span>] = df[<span class="string">&#x27;time&#x27;</span>].<span class="built_in">str</span>.split(<span class="string">&#x27; &#x27;</span>,expand=<span class="literal">True</span>)[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>user_id</th>
+      <th>item_id</th>
+      <th>behavior_type</th>
+      <th>user_geohash</th>
+      <th>item_category</th>
+      <th>time</th>
+      <th>天</th>
+      <th>小时</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>98047837</td>
+      <td>232431562</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>4245</td>
+      <td>2014-12-06 02</td>
+      <td>2014-12-06</td>
+      <td>02</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>97726136</td>
+      <td>383583590</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>5894</td>
+      <td>2014-12-09 20</td>
+      <td>2014-12-09</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>98607707</td>
+      <td>64749712</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>2883</td>
+      <td>2014-12-18 11</td>
+      <td>2014-12-18</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>98662432</td>
+      <td>320593836</td>
+      <td>1</td>
+      <td>96nn52n</td>
+      <td>6562</td>
+      <td>2014-12-06 10</td>
+      <td>2014-12-06</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>98145908</td>
+      <td>290208520</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>13926</td>
+      <td>2014-12-16 21</td>
+      <td>2014-12-16</td>
+      <td>21</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.columns =[<span class="string">&quot;用户ID&quot;</span>,<span class="string">&quot;商品ID&quot;</span>,<span class="string">&quot;用户行为&quot;</span>,<span class="string">&quot;地理位置&quot;</span>,<span class="string">&quot;品类ID&quot;</span>,<span class="string">&quot;日期&quot;</span>,<span class="string">&quot;天&quot;</span>,<span class="string">&quot;小时&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>用户ID</th>
+      <th>商品ID</th>
+      <th>用户行为</th>
+      <th>地理位置</th>
+      <th>品类ID</th>
+      <th>日期</th>
+      <th>天</th>
+      <th>小时</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>98047837</td>
+      <td>232431562</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>4245</td>
+      <td>2014-12-06 02</td>
+      <td>2014-12-06</td>
+      <td>02</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>97726136</td>
+      <td>383583590</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>5894</td>
+      <td>2014-12-09 20</td>
+      <td>2014-12-09</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>98607707</td>
+      <td>64749712</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>2883</td>
+      <td>2014-12-18 11</td>
+      <td>2014-12-18</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>98662432</td>
+      <td>320593836</td>
+      <td>1</td>
+      <td>96nn52n</td>
+      <td>6562</td>
+      <td>2014-12-06 10</td>
+      <td>2014-12-06</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>98145908</td>
+      <td>290208520</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>13926</td>
+      <td>2014-12-16 21</td>
+      <td>2014-12-16</td>
+      <td>21</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 12256906 entries, 0 to 12256905
+Data columns (total 8 columns):
+ #   Column  Dtype 
+---  ------  ----- 
+ 0   用户ID    int64 
+ 1   商品ID    int64 
+ 2   用户行为    int64 
+ 3   地理位置    object
+ 4   品类ID    int64 
+ 5   日期      object
+ 6   天       object
+ 7   小时      object
+dtypes: int64(4), object(4)
+memory usage: 748.1+ MB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[<span class="string">&quot;日期&quot;</span>] =pd.to_datetime(df[<span class="string">&#x27;日期&#x27;</span>])</span><br><span class="line">df[<span class="string">&#x27;天&#x27;</span>] = pd.to_datetime(df[<span class="string">&#x27;天&#x27;</span>])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>用户ID</th>
+      <th>商品ID</th>
+      <th>用户行为</th>
+      <th>地理位置</th>
+      <th>品类ID</th>
+      <th>日期</th>
+      <th>天</th>
+      <th>小时</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>98047837</td>
+      <td>232431562</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>4245</td>
+      <td>2014-12-06 02:00:00</td>
+      <td>2014-12-06</td>
+      <td>02</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>97726136</td>
+      <td>383583590</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>5894</td>
+      <td>2014-12-09 20:00:00</td>
+      <td>2014-12-09</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>98607707</td>
+      <td>64749712</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>2883</td>
+      <td>2014-12-18 11:00:00</td>
+      <td>2014-12-18</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>98662432</td>
+      <td>320593836</td>
+      <td>1</td>
+      <td>96nn52n</td>
+      <td>6562</td>
+      <td>2014-12-06 10:00:00</td>
+      <td>2014-12-06</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>98145908</td>
+      <td>290208520</td>
+      <td>1</td>
+      <td>NaN</td>
+      <td>13926</td>
+      <td>2014-12-16 21:00:00</td>
+      <td>2014-12-16</td>
+      <td>21</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 取消pandas科学技术法</span></span><br><span class="line">pd.set_option(<span class="string">&#x27;display.float_format&#x27;</span>, <span class="keyword">lambda</span> x: <span class="string">&#x27;%.3f&#x27;</span> % x)</span><br><span class="line">df.describe()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>用户ID</th>
+      <th>商品ID</th>
+      <th>用户行为</th>
+      <th>品类ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>12256906.000</td>
+      <td>12256906.000</td>
+      <td>12256906.000</td>
+      <td>12256906.000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>71707324.052</td>
+      <td>202308365.377</td>
+      <td>1.105</td>
+      <td>6846.162</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>41229195.091</td>
+      <td>116739662.863</td>
+      <td>0.457</td>
+      <td>3809.922</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>4913.000</td>
+      <td>64.000</td>
+      <td>1.000</td>
+      <td>2.000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>35849648.000</td>
+      <td>101413047.000</td>
+      <td>1.000</td>
+      <td>3721.000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>72928045.000</td>
+      <td>202135938.000</td>
+      <td>1.000</td>
+      <td>6209.000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>107377446.000</td>
+      <td>303540514.000</td>
+      <td>1.000</td>
+      <td>10290.000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>142455899.000</td>
+      <td>404562461.000</td>
+      <td>4.000</td>
+      <td>14080.000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<h1 id="三、总体用户行为分析"><a href="#三、总体用户行为分析" class="headerlink" title="三、总体用户行为分析"></a>三、总体用户行为分析</h1><h2 id="1-PV和UV分析"><a href="#1-PV和UV分析" class="headerlink" title="(1) PV和UV分析"></a>(1) PV和UV分析</h2><p>PV(页面浏览量):即Page View,它是指页面浏览量或点击量，页面被刷新一次计一次。<br>UV(独立访客量): 即Unique Visitor,访问网站的用户ID计一次。</p>
+<h3 id="1-日访问量"><a href="#1-日访问量" class="headerlink" title="1. 日访问量"></a>1. 日访问量</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_daily_pv = df.groupby(<span class="string">&#x27;天&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].count()</span><br><span class="line">df_daily_uv = df.groupby(<span class="string">&#x27;天&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].nunique()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">plt.plot(df_daily_pv)</span><br><span class="line">plt.title(<span class="string">u&#x27;日访问量&#x27;</span>)</span><br><span class="line">plt.xticks(rotation=<span class="number">60</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_24_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">plt.plot(df_daily_uv)</span><br><span class="line">plt.title(<span class="string">u&#x27;独立访客量&#x27;</span>)</span><br><span class="line">plt.xticks(rotation=<span class="number">60</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_25_0.png" alt="png"></p>
+<p>结果显示：在双十二期间，pv和uv访问量均达到峰值，且pv和uv两个访问量数值差距较大</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 日活跃度</span></span><br><span class="line"></span><br><span class="line">user_id_num = df[<span class="string">&#x27;用户ID&#x27;</span>].nunique()</span><br><span class="line">daily_user = df_daily_uv/user_id_num</span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">plt.plot(daily_user)</span><br><span class="line">plt.title(<span class="string">u&#x27;注册用户日活跃率&#x27;</span>)</span><br><span class="line">plt.xticks(rotation=<span class="number">60</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_27_0.png" alt="png"></p>
+<p>可以看出：淘宝用户在双十二期间日活跃度为60%-66%，在双十二当天，达到峰值77%左右。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># pv_hour记录用户每小时操作数量</span></span><br><span class="line">pv_hour = df.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].count()</span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">plt.plot(pv_hour)</span><br><span class="line">plt.title(<span class="string">u&#x27;小时访问量&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_29_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">uv_hour = df.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].nunique()</span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">plt.plot(uv_hour)</span><br><span class="line">plt.title(<span class="string">u&#x27;小时在线人数&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_30_0.png" alt="png"></p>
+<p>可以看出:pv和uv在凌晨0-5点期间波动情况相同，都呈下降趋势，凌晨5点之后，都呈上升趋势，10点之后保持平稳状态。其中，在在晚上18：00左右，pv大幅度上升，21点左右达到顶峰，相比来看uv波动不太明显，可见晚上18：00以后是淘宝用户访问app的活跃时间段。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 不同行为用户pv分析</span></span><br><span class="line">df_01 =df.query(<span class="string">&#x27;用户行为==1&#x27;</span>)</span><br><span class="line">df_02 = df.query(<span class="string">&#x27;用户行为==2&#x27;</span>)</span><br><span class="line">df_03 = df.query(<span class="string">&quot;用户行为==3&quot;</span>)</span><br><span class="line">df_04 = df.query(<span class="string">&quot;用户行为==4&quot;</span>)</span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">sns.lineplot(data=df_01.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].count(),label=<span class="string">&quot;点击&quot;</span>)</span><br><span class="line">sns.lineplot(data=df_02.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].count(),label=<span class="string">&quot;收藏&quot;</span>)</span><br><span class="line">sns.lineplot(data=df_03.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].count(),label=<span class="string">&quot;加入购物车&quot;</span>)</span><br><span class="line">sns.lineplot(data = df_04.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].count(),label=<span class="string">&quot;下单&quot;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_32_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 不同行为用户uv分析</span></span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">sns.lineplot(data=df_01.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].nunique(),label=<span class="string">&quot;点击&quot;</span>)</span><br><span class="line">sns.lineplot(data=df_02.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].nunique(),label=<span class="string">&quot;收藏&quot;</span>)</span><br><span class="line">sns.lineplot(data=df_03.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].nunique(),label=<span class="string">&quot;加入购物车&quot;</span>)</span><br><span class="line">sns.lineplot(data = df_04.groupby(<span class="string">&#x27;小时&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].nunique(),label=<span class="string">&quot;下单&quot;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_33_0.png" alt="png"></p>
+<p>总体的操作量波动，与各行为操作量的波动是一致的，且各操作量排序为点击，加入购物车，收藏，购买，且晚上用户操作最为频繁</p>
+<h1 id="四、用户消费行为分析"><a href="#四、用户消费行为分析" class="headerlink" title="四、用户消费行为分析"></a>四、用户消费行为分析</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 用户购买次数分析</span></span><br><span class="line">df_buy = df_04.groupby([<span class="string">&#x27;用户ID&#x27;</span>])[<span class="string">&#x27;用户行为&#x27;</span>].count()</span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>))</span><br><span class="line">sns.distplot(df_buy)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;用户购买次数&#x27;</span>)</span><br><span class="line">plt.xlim([<span class="number">0</span>,<span class="number">100</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_36_0.png" alt="png"></p>
+<p>随着购买次数的增加，购买人数在不断下降，需要重点关注十次以上的客户。</p>
+<p>(1) ARPPU(Average Renvenu per pay user) 它是指每位付费用户的平均付费额度。  </p>
+<ul>
+<li>ARPPU = 总付费额度/付费总人数</li>
+<li>由于这里没付费金额，这里用付费次数代替</li>
+<li>总付费次数/用户数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">daily_user_buy = df_04.groupby(<span class="string">&#x27;天&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].nunique()</span><br><span class="line">daily_user_buy_pinci = df_04.groupby(<span class="string">&#x27;天&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].count()</span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">plt.plot(daily_user_buy_pinci/daily_user_buy)</span><br><span class="line">plt.title(<span class="string">&#x27;ARPPU&#x27;</span>)</span><br><span class="line">plt.xticks(rotation=<span class="number">60</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_39_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(daily_user_buy_pinci/daily_user_buy).mean()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>2.36844627368819
+</code></pre>
+<p>每日付费次数在2次左右，双十二当天人均付费次数达到将近四次</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data1=df[df[<span class="string">&#x27;用户行为&#x27;</span>]==<span class="number">4</span>].groupby([<span class="string">&#x27;日期&#x27;</span>])[<span class="string">&#x27;用户行为&#x27;</span>].count()  <span class="comment">#每天用户消费总次数</span></span><br><span class="line">data2=df.groupby([<span class="string">&#x27;日期&#x27;</span>])[<span class="string">&#x27;用户ID&#x27;</span>].nunique()<span class="comment">#每天活跃人数</span></span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">plt.plot(data1/data2)</span><br><span class="line">plt.title(<span class="string">&#x27;活跃用户数日平均消费次数&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_42_0.png" alt="png"></p>
+<p>图表显示，淘宝活跃用户（有过操作行为的用户）平均每天消费次数比较低，在0.6次左右，双十二期间达到最高值，有2左右。</p>
+<p><strong>付费率 = 付费人数/活跃人数</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">daily_pay_lv = daily_user_buy/df.groupby(<span class="string">&#x27;天&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].nunique()</span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">plt.plot(daily_pay_lv)</span><br><span class="line">plt.title(<span class="string">&#x27;日付费率&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_45_0.png" alt="png"></p>
+<p>图表显示：每天活跃用户人群中，大概25%的用户具有消费行为，在双十二期间消费用户人数最多。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#每个时间段用户消费次数分布</span></span><br><span class="line">data1=df[df[<span class="string">&#x27;用户行为&#x27;</span>]==<span class="number">4</span>].groupby([<span class="string">&#x27;小时&#x27;</span>])[<span class="string">&#x27;用户行为&#x27;</span>].count()<span class="comment">#每个时间段的消费总次数</span></span><br><span class="line">data2=df[df[<span class="string">&#x27;用户行为&#x27;</span>]==<span class="number">4</span>].groupby([<span class="string">&#x27;小时&#x27;</span>])[<span class="string">&#x27;用户ID&#x27;</span>].nunique()<span class="comment">#每个时间段的消费人数</span></span><br><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">plt.plot(data1/data2)</span><br><span class="line">plt.title(<span class="string">&#x27;每个时间段用户消费次数&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_47_0.png" alt="png"></p>
+<p>可以看出：每天凌晨过后，消费次数开始下降，早上7点左右，消费次数开始上升，10点左右开始稳定在2.6次左右，到晚上22点左右是消费高峰期。</p>
+<h1 id="五、复购行为分析"><a href="#五、复购行为分析" class="headerlink" title="五、复购行为分析"></a>五、复购行为分析</h1><p>复购：一段时间内消费两次及以上的用户数<br>复购率：一段时间内消费两次及以上的用户数/消费总人数</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">user_buy_lv = df_04.groupby(<span class="string">&#x27;用户ID&#x27;</span>)[<span class="string">&#x27;天&#x27;</span>].nunique()</span><br><span class="line">user_buy_lv</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>用户ID
+4913         5
+6118         1
+7528         6
+7591         9
+12645        4
+            ..
+142376113    1
+142412247    7
+142430177    5
+142450275    8
+142455899    7
+Name: 天, Length: 8886, dtype: int64
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="built_in">len</span>(user_buy_lv[user_buy_lv&gt;<span class="number">2</span>])/<span class="built_in">len</span>(user_buy_lv)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0.7451046590141797
+</code></pre>
+<p>可以看出，用户三十天复购率在74%以上，产品还是非常健康的</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data =df_04.groupby([<span class="string">&#x27;用户ID&#x27;</span>,<span class="string">&quot;天&quot;</span>]).count().reset_index()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data =data.groupby(<span class="string">&#x27;用户ID&#x27;</span>)[<span class="string">&#x27;天&#x27;</span>].diff(<span class="number">1</span>).dropna()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = data.<span class="built_in">map</span>(<span class="keyword">lambda</span> x: x.days)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>1        6
+2        4
+3        2
+4        3
+7        4
+        ..
+49196    2
+49197    2
+49198    4
+49199    3
+49200    1
+Name: 天, Length: 40315, dtype: int64
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">data.value_counts().plot.bar()</span><br><span class="line">plt.title(<span class="string">&#x27;复购时间间隔分布&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;复购时间间隔&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;购买人数&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_58_0.png" alt="png"></p>
+<p>从图可以看出：消费次数随着消费时间间隔的增加而不断下降，在1-10天之内复购次数比较多，10天之后淘宝用户很少再进行复购，因此需要重视10天之内的淘宝用户复购行为，增加用户复购。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">sns.distplot(data)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_60_0.png" alt="png"></p>
+<p>总体来看，呈现逐渐下降趋势。多数淘宝用户平均复购时间集中在1-10天时间间隔内</p>
+<h1 id="六、漏斗流失分析"><a href="#六、漏斗流失分析" class="headerlink" title="六、漏斗流失分析"></a>六、漏斗流失分析</h1><p>漏斗分析是一套流程式数据分析，它能够科学反映用户行为状态以及从起点到终点各阶段用户转化率情况的重要分析模型</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts <span class="keyword">import</span> options <span class="keyword">as</span> opts</span><br><span class="line"><span class="keyword">from</span> pyecharts.charts <span class="keyword">import</span> Funnel</span><br><span class="line"><span class="keyword">from</span> pyecharts.<span class="built_in">globals</span> <span class="keyword">import</span> CurrentConfig, NotebookType  </span><br><span class="line">CurrentConfig.NOTEBOOK_TYPE = NotebookType.JUPYTER_LAB</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = df.groupby(<span class="string">&#x27;用户行为&#x27;</span>)[<span class="string">&#x27;用户ID&#x27;</span>].count().reset_index()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data[<span class="string">&#x27;行为&#x27;</span>]=data[<span class="string">&#x27;用户行为&#x27;</span>].<span class="built_in">map</span>(&#123;<span class="number">1</span>:<span class="string">&quot;点击&quot;</span>,<span class="number">2</span>:<span class="string">&quot;收藏&quot;</span>,<span class="number">3</span>:<span class="string">&quot;加入购物车&quot;</span>,<span class="number">4</span>:<span class="string">&quot;下单&quot;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.rename(columns=&#123;<span class="string">&#x27;用户ID&#x27;</span>:<span class="string">&quot;行为次数&quot;</span>&#125;,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data[<span class="string">&#x27;剩余客户&#x27;</span>]=data[<span class="string">&#x27;行为次数&#x27;</span>]/data[<span class="string">&#x27;行为次数&#x27;</span>].<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">c = (</span><br><span class="line">    Funnel()</span><br><span class="line">    .add(<span class="string">&quot;客户流失漏斗&quot;</span>, [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(data[<span class="string">&#x27;行为&#x27;</span>].tolist(), data[<span class="string">&#x27;剩余客户&#x27;</span>].tolist())])</span><br><span class="line">    .set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">&quot;客户流失漏斗分析&quot;</span>))</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">c.load_javascript()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/%E4%B8%8B%E8%BD%BD.png" alt="图像"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">c.render()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h1 id="七、用户行为与商品种类关系分析"><a href="#七、用户行为与商品种类关系分析" class="headerlink" title="七、用户行为与商品种类关系分析"></a>七、用户行为与商品种类关系分析</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data =pd.pivot_table(data=df,index=<span class="string">&#x27;品类ID&#x27;</span>,columns=<span class="string">&quot;用户行为&quot;</span>,values=<span class="string">&quot;商品ID&quot;</span>,aggfunc=<span class="string">&quot;count&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.columns=[<span class="string">&#x27;点击&#x27;</span>,<span class="string">&quot;收藏&quot;</span>,<span class="string">&quot;加入购物车&quot;</span>,<span class="string">&quot;下单&quot;</span>]</span><br><span class="line">data.fillna(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>点击</th>
+      <th>收藏</th>
+      <th>加入购物车</th>
+      <th>下单</th>
+    </tr>
+    <tr>
+      <th>品类ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>3.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>10.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>976.000</td>
+      <td>9.000</td>
+      <td>4.000</td>
+      <td>4.000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>14075</th>
+      <td>44.000</td>
+      <td>0.000</td>
+      <td>3.000</td>
+      <td>1.000</td>
+    </tr>
+    <tr>
+      <th>14076</th>
+      <td>28.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>14078</th>
+      <td>60.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>14079</th>
+      <td>93007.000</td>
+      <td>2189.000</td>
+      <td>2515.000</td>
+      <td>479.000</td>
+    </tr>
+    <tr>
+      <th>14080</th>
+      <td>86.000</td>
+      <td>3.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+    </tr>
+  </tbody>
+</table>
+<p>8916 rows × 4 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data[<span class="string">&#x27;点击_下单转化率&#x27;</span>] = data[<span class="string">&#x27;下单&#x27;</span>]/data[<span class="string">&#x27;点击&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.fillna(<span class="number">0</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(data[<span class="string">&#x27;点击_下单转化率&#x27;</span>]&gt;<span class="number">1</span>).<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>点击</th>
+      <th>收藏</th>
+      <th>加入购物车</th>
+      <th>下单</th>
+      <th>点击_下单转化率</th>
+    </tr>
+    <tr>
+      <th>品类ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>3.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>10.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>976.000</td>
+      <td>9.000</td>
+      <td>4.000</td>
+      <td>4.000</td>
+      <td>0.004</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.sort_values(by=<span class="string">&quot;点击_下单转化率&quot;</span>,ascending=<span class="literal">False</span>)[:<span class="number">10</span>]</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>点击</th>
+      <th>收藏</th>
+      <th>加入购物车</th>
+      <th>下单</th>
+      <th>点击_下单转化率</th>
+    </tr>
+    <tr>
+      <th>品类ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4527</th>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>2.000</td>
+      <td>1.000</td>
+    </tr>
+    <tr>
+      <th>7628</th>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>1.000</td>
+    </tr>
+    <tr>
+      <th>12895</th>
+      <td>2.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>2.000</td>
+      <td>1.000</td>
+    </tr>
+    <tr>
+      <th>8680</th>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>0.500</td>
+    </tr>
+    <tr>
+      <th>7912</th>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>0.500</td>
+    </tr>
+    <tr>
+      <th>5105</th>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>0.500</td>
+    </tr>
+    <tr>
+      <th>5069</th>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>0.500</td>
+    </tr>
+    <tr>
+      <th>13900</th>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>0.500</td>
+    </tr>
+    <tr>
+      <th>11336</th>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>0.500</td>
+    </tr>
+    <tr>
+      <th>129</th>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>1.000</td>
+      <td>0.500</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">sns.distplot(data[<span class="string">&#x27;点击_下单转化率&#x27;</span>])</span><br><span class="line">plt.title(<span class="string">&#x27;点击_下单转化率&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_79_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.query(<span class="string">&#x27;点击_下单转化率&gt;0&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>点击</th>
+      <th>收藏</th>
+      <th>加入购物车</th>
+      <th>下单</th>
+      <th>点击_下单转化率</th>
+    </tr>
+    <tr>
+      <th>品类ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>8</th>
+      <td>976.000</td>
+      <td>9.000</td>
+      <td>4.000</td>
+      <td>4.000</td>
+      <td>0.004</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>212.000</td>
+      <td>3.000</td>
+      <td>9.000</td>
+      <td>4.000</td>
+      <td>0.019</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>8818.000</td>
+      <td>94.000</td>
+      <td>78.000</td>
+      <td>5.000</td>
+      <td>0.001</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>194.000</td>
+      <td>8.000</td>
+      <td>14.000</td>
+      <td>5.000</td>
+      <td>0.026</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>99.000</td>
+      <td>6.000</td>
+      <td>2.000</td>
+      <td>6.000</td>
+      <td>0.061</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>14066</th>
+      <td>184.000</td>
+      <td>9.000</td>
+      <td>7.000</td>
+      <td>2.000</td>
+      <td>0.011</td>
+    </tr>
+    <tr>
+      <th>14068</th>
+      <td>32.000</td>
+      <td>0.000</td>
+      <td>1.000</td>
+      <td>2.000</td>
+      <td>0.062</td>
+    </tr>
+    <tr>
+      <th>14073</th>
+      <td>189.000</td>
+      <td>1.000</td>
+      <td>48.000</td>
+      <td>17.000</td>
+      <td>0.090</td>
+    </tr>
+    <tr>
+      <th>14075</th>
+      <td>44.000</td>
+      <td>0.000</td>
+      <td>3.000</td>
+      <td>1.000</td>
+      <td>0.023</td>
+    </tr>
+    <tr>
+      <th>14079</th>
+      <td>93007.000</td>
+      <td>2189.000</td>
+      <td>2515.000</td>
+      <td>479.000</td>
+      <td>0.005</td>
+    </tr>
+  </tbody>
+</table>
+<p>4662 rows × 5 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">20</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">sns.distplot(data.query(<span class="string">&#x27;点击_下单转化率&gt;0&#x27;</span>))</span><br><span class="line">plt.title(<span class="string">&#x27;点击_下单转化率&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/output_81_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#将点击-购买转化率分三类查看各类占比例</span></span><br><span class="line">data_rate=pd.cut(data[<span class="string">&#x27;点击_下单转化率&#x27;</span>],[<span class="number">0</span>,<span class="number">0.1</span>,<span class="number">0.4</span>,<span class="number">1</span>]).value_counts()</span><br><span class="line">data_rate/data_rate.<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(0.0, 0.1]   0.961
+(0.1, 0.4]   0.036
+(0.4, 1.0]   0.003
+Name: 点击_下单转化率, dtype: float64
+</code></pre>
+<p>转化率在0.1以下的商品占据了96%，在转化率在0.1-0.4的商品占据了3.6%。</p>
+<h1 id="八、二八理论分析"><a href="#八、二八理论分析" class="headerlink" title="八、二八理论分析"></a>八、二八理论分析</h1><p>二八定理：市场上20%的商品占据了80%的销售额</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>点击</th>
+      <th>收藏</th>
+      <th>加入购物车</th>
+      <th>下单</th>
+      <th>点击_下单转化率</th>
+    </tr>
+    <tr>
+      <th>品类ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>3.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>10.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>976.000</td>
+      <td>9.000</td>
+      <td>4.000</td>
+      <td>4.000</td>
+      <td>0.004</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">value_8 = data[<span class="string">&#x27;下单&#x27;</span>].<span class="built_in">sum</span>()*<span class="number">0.8</span></span><br><span class="line">data =data.sort_values(<span class="string">&#x27;下单&#x27;</span>,ascending=<span class="literal">False</span>)</span><br><span class="line">data[<span class="string">&#x27;累计下单量&#x27;</span>] = data[<span class="string">&#x27;下单&#x27;</span>].cumsum()</span><br><span class="line">data[<span class="string">&#x27;比列&#x27;</span>] = data[<span class="string">&#x27;累计下单量&#x27;</span>].<span class="built_in">map</span>(<span class="keyword">lambda</span> x: <span class="string">&quot;后80%商品&quot;</span> <span class="keyword">if</span> x&gt;value_8 <span class="keyword">else</span> <span class="string">&quot;前20%的商品&quot;</span>)</span><br><span class="line">data</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>点击</th>
+      <th>收藏</th>
+      <th>加入购物车</th>
+      <th>下单</th>
+      <th>点击_下单转化率</th>
+      <th>累计下单量</th>
+      <th>比列</th>
+    </tr>
+    <tr>
+      <th>品类ID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>6344</th>
+      <td>85369.000</td>
+      <td>1660.000</td>
+      <td>3822.000</td>
+      <td>2208.000</td>
+      <td>0.026</td>
+      <td>2208.000</td>
+      <td>前20%的商品</td>
+    </tr>
+    <tr>
+      <th>1863</th>
+      <td>371738.000</td>
+      <td>10200.000</td>
+      <td>9309.000</td>
+      <td>2000.000</td>
+      <td>0.005</td>
+      <td>4208.000</td>
+      <td>前20%的商品</td>
+    </tr>
+    <tr>
+      <th>5232</th>
+      <td>135506.000</td>
+      <td>2597.000</td>
+      <td>4486.000</td>
+      <td>1611.000</td>
+      <td>0.012</td>
+      <td>5819.000</td>
+      <td>前20%的商品</td>
+    </tr>
+    <tr>
+      <th>6977</th>
+      <td>22806.000</td>
+      <td>273.000</td>
+      <td>2007.000</td>
+      <td>1324.000</td>
+      <td>0.058</td>
+      <td>7143.000</td>
+      <td>前20%的商品</td>
+    </tr>
+    <tr>
+      <th>8877</th>
+      <td>63396.000</td>
+      <td>1247.000</td>
+      <td>1974.000</td>
+      <td>1072.000</td>
+      <td>0.017</td>
+      <td>8215.000</td>
+      <td>前20%的商品</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>6299</th>
+      <td>25.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>120205.000</td>
+      <td>后80%商品</td>
+    </tr>
+    <tr>
+      <th>6297</th>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>120205.000</td>
+      <td>后80%商品</td>
+    </tr>
+    <tr>
+      <th>6291</th>
+      <td>4.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>120205.000</td>
+      <td>后80%商品</td>
+    </tr>
+    <tr>
+      <th>6290</th>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>2.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>120205.000</td>
+      <td>后80%商品</td>
+    </tr>
+    <tr>
+      <th>14080</th>
+      <td>86.000</td>
+      <td>3.000</td>
+      <td>1.000</td>
+      <td>0.000</td>
+      <td>0.000</td>
+      <td>120205.000</td>
+      <td>后80%商品</td>
+    </tr>
+  </tbody>
+</table>
+<p>8916 rows × 7 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data[<span class="string">&#x27;比列&#x27;</span>].value_counts()/<span class="number">8916</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>后80%商品    0.919
+前20%的商品   0.081
+Name: 比列, dtype: float64
+</code></pre>
+<p>下单量的80%，由8.1%的商品种类承包，需要注意这些商品的库存及时补给</p>
+]]></content>
+      <categories>
+        <category>数据分析实战</category>
+      </categories>
+  </entry>
 </search>
