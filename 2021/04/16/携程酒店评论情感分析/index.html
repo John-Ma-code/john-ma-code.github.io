@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="情感分析,机器学习,文本挖掘," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、数据的导入与查看">
+<meta property="og:type" content="article">
+<meta property="og:title" content="携程酒店评论情感分析">
+<meta property="og:url" content="http://example.com/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="JohnMa的博客">
+<meta property="og:description" content="一、数据的导入与查看">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_26_0.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_46_1.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_51_0.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_53_1.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_55_1.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_67_1.png">
+<meta property="article:published_time" content="2021-04-16T02:01:22.000Z">
+<meta property="article:modified_time" content="2021-04-16T03:07:05.271Z">
+<meta property="article:author" content="John Ma">
+<meta property="article:tag" content="情感分析">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="文本挖掘">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_26_0.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/04/16/携程酒店评论情感分析/"/>
+
+
+
+
+
+  <title>携程酒店评论情感分析 | JohnMa的博客</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?41fc030db57d5570dd22f78997dc4a7e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">JohnMa的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JohnMa的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">携程酒店评论情感分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-04-16T10:01:22+08:00">
+                2021-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">数据分析实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文总阅读量 <i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4.3k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  21
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、数据的导入与查看"><a href="#一、数据的导入与查看" class="headerlink" title="一、数据的导入与查看"></a>一、数据的导入与查看</h1><span id="more"></span>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> jieba</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data = pd.read_csv(<span class="string">&#x27;ChnSentiCorp_htl_all.csv&#x27;</span>)</span><br><span class="line">data.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>label</th>
+      <th>review</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>距离川沙公路较近,但是公交指示不对,如果是"蔡陆线"的话,会非常麻烦.建议用别的路线.房间较...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>商务大床房，房间很大，床有2M宽，整体感觉经济实惠不错!</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>早餐太差，无论去多少人，那边也不加食品的。酒店应该重视一下这个问题了。房间本身很好。</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>宾馆在小街道上，不大好找，但还好北京热心同胞很多~宾馆设施跟介绍的差不多，房间很小，确实挺小...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>CBD中心,周围没什么店铺,说5星有点勉强.不知道为什么卫生间没有电吹风</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.label.value_counts()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>1    5322
+0    2444
+Name: label, dtype: int64
+</code></pre>
+<p>标签比例差距过大，可考虑采取过采样，欠采样等方式，不能用accuray.</p>
+<h1 id="二、数据处理及可视化"><a href="#二、数据处理及可视化" class="headerlink" title="二、数据处理及可视化"></a>二、数据处理及可视化</h1><h2 id="2-1-数据的基本清洗"><a href="#2-1-数据的基本清洗" class="headerlink" title="2.1 数据的基本清洗"></a>2.1 数据的基本清洗</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data[<span class="string">&quot;review&quot;</span>].duplicated().<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0
+</code></pre>
+<p>没有重复评论,不需要作重复值处理</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 7766 entries, 0 to 7765
+Data columns (total 2 columns):
+ #   Column  Non-Null Count  Dtype 
+---  ------  --------------  ----- 
+ 0   label   7766 non-null   int64 
+ 1   review  7765 non-null   object
+dtypes: int64(1), object(1)
+memory usage: 121.5+ KB
+</code></pre>
+<p>评论列有空值，可以进行删除</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data = data[data[<span class="string">&#x27;review&#x27;</span>].notnull()]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 7765 entries, 0 to 7765
+Data columns (total 2 columns):
+ #   Column  Non-Null Count  Dtype 
+---  ------  --------------  ----- 
+ 0   label   7765 non-null   int64 
+ 1   review  7765 non-null   object
+dtypes: int64(1), object(1)
+memory usage: 182.0+ KB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data[<span class="string">&#x27;分词&#x27;</span>] = data[<span class="string">&#x27;review&#x27;</span>].apply(<span class="keyword">lambda</span> x: jieba.lcut(x))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Building prefix dict from the default dictionary ...
+Loading model from cache C:\Users\huige\AppData\Local\Temp\jieba.cache
+Loading model cost 1.443 seconds.
+Prefix dict has been built successfully.
+</code></pre>
+<h2 id="2-2-读取停用词进行分词处理"><a href="#2-2-读取停用词进行分词处理" class="headerlink" title="2.2 读取停用词进行分词处理"></a>2.2 读取停用词进行分词处理</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;hit_stopwords.txt&#x27;</span>,encoding=<span class="string">&quot;utf8&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    stop_word = f.read()</span><br><span class="line">stop = stop_word.split()+[<span class="string">&quot; &quot;</span>,<span class="string">&quot;\n&quot;</span>,<span class="string">&quot;\t&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data[<span class="string">&#x27;分词_01&#x27;</span>] = data[<span class="string">&#x27;分词&#x27;</span>].apply(<span class="keyword">lambda</span> x:[i <span class="keyword">for</span> i <span class="keyword">in</span> x <span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> stop])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">c=[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> data[<span class="string">&#x27;分词_01&#x27;</span>]:</span><br><span class="line">    c.append(<span class="string">&#x27; &#x27;</span>.join(i))</span><br><span class="line">data[<span class="string">&#x27;分词_02&#x27;</span>] = pd.Series(c)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>label</th>
+      <th>review</th>
+      <th>分词</th>
+      <th>分词_01</th>
+      <th>分词_02</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>距离川沙公路较近,但是公交指示不对,如果是"蔡陆线"的话,会非常麻烦.建议用别的路线.房间较...</td>
+      <td>[距离, 川沙, 公路, 较近, ,, 但是, 公交, 指示, 不, 对, ,, 如果, 是...</td>
+      <td>[距离, 川沙, 公路, 较近, 公交, 指示, 不, 蔡陆线, 会, 非常, 麻烦, 建议...</td>
+      <td>距离 川沙 公路 较近 公交 指示 不 蔡陆线 会 非常 麻烦 建议 路线 房间 较为简单</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>商务大床房，房间很大，床有2M宽，整体感觉经济实惠不错!</td>
+      <td>[商务, 大床, 房, ，, 房间, 很大, ，, 床有, 2M, 宽, ，, 整体, 感觉...</td>
+      <td>[商务, 大床, 房, 房间, 很大, 床有, 2M, 宽, 整体, 感觉, 经济, 实惠,...</td>
+      <td>商务 大床 房 房间 很大 床有 2M 宽 整体 感觉 经济 实惠 不错 !</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>早餐太差，无论去多少人，那边也不加食品的。酒店应该重视一下这个问题了。房间本身很好。</td>
+      <td>[早餐, 太, 差, ，, 无论, 去, 多少, 人, ，, 那边, 也, 不加, 食品, ...</td>
+      <td>[早餐, 太, 差, 去, 人, 不加, 食品, 酒店, 应该, 重视, 一下, 问题, 房...</td>
+      <td>早餐 太 差 去 人 不加 食品 酒店 应该 重视 一下 问题 房间 本身 很 好</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>宾馆在小街道上，不大好找，但还好北京热心同胞很多~宾馆设施跟介绍的差不多，房间很小，确实挺小...</td>
+      <td>[宾馆, 在, 小, 街道, 上, ，, 不大好, 找, ，, 但, 还好, 北京, 热心,...</td>
+      <td>[宾馆, 小, 街道, 上, 不大好, 找, 还好, 北京, 热心, 同胞, 很多, ~, ...</td>
+      <td>宾馆 小 街道 上 不大好 找 还好 北京 热心 同胞 很多 ~ 宾馆 设施 介绍 差不多 ...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>CBD中心,周围没什么店铺,说5星有点勉强.不知道为什么卫生间没有电吹风</td>
+      <td>[CBD, 中心, ,, 周围, 没什么, 店铺, ,, 说, 5, 星, 有点, 勉强, ...</td>
+      <td>[CBD, 中心, 周围, 没什么, 店铺, 说, 5, 星, 有点, 勉强, 不, 知道,...</td>
+      <td>CBD 中心 周围 没什么 店铺 说 5 星 有点 勉强 不 知道 卫生间 没有 电吹风</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<h2 id="2-3-制作词云图"><a href="#2-3-制作词云图" class="headerlink" title="2.3 制作词云图"></a>2.3 制作词云图</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">zzz  =[]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> data[<span class="string">&#x27;分词_01&#x27;</span>]:</span><br><span class="line">    zzz.extend(i)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">word_count = pd.Series(zzz).value_counts()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">word_count.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>酒店    10055
+很      7135
+房间     6981
+不错     3885
+都      3832
+dtype: int64
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 制作mask</span></span><br><span class="line">back_picture = np.array(Image.<span class="built_in">open</span>(<span class="string">&#x27;卡通.png&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wc = WordCloud(</span><br><span class="line">    font_path=<span class="string">&quot;SimHei.ttf&quot;</span>,</span><br><span class="line">    background_color=<span class="string">&quot;white&quot;</span>,</span><br><span class="line">    mask=back_picture,</span><br><span class="line">    max_words=<span class="number">2000</span>,</span><br><span class="line">    max_font_size=<span class="number">200</span>,</span><br><span class="line">    random_state=<span class="number">42</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wc2 = wc.fit_words(word_count)</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">plt.figure(figsize=(<span class="number">16</span>,<span class="number">8</span>))</span><br><span class="line">plt.imshow(wc2)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.show()</span><br><span class="line">wc.to_file(<span class="string">&#x27;ciyun.png&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_26_0.png" alt="png"></p>
+<pre><code>&lt;wordcloud.wordcloud.WordCloud at 0x1ac8a47ea30&gt;
+</code></pre>
+<p>总体来看，顾客的对酒店的评价偏向于正面；”房间”,”设施”,”服务”,”方便”,”价格”等是消费者入住主要考虑的方面。</p>
+<h1 id="三、评论情感倾向预测"><a href="#三、评论情感倾向预测" class="headerlink" title="三、评论情感倾向预测"></a>三、评论情感倾向预测</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 7765 entries, 0 to 7765
+Data columns (total 5 columns):
+ #   Column  Non-Null Count  Dtype 
+---  ------  --------------  ----- 
+ 0   label   7765 non-null   int64 
+ 1   review  7765 non-null   object
+ 2   分词      7765 non-null   object
+ 3   分词_01   7765 non-null   object
+ 4   分词_02   7764 non-null   object
+dtypes: int64(1), object(4)
+memory usage: 364.0+ KB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data =data[data[<span class="string">&#x27;分词_02&#x27;</span>].notnull()]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#显然样本存在严重的不均衡问题，这里考虑两种样本均衡的策略</span></span><br><span class="line"><span class="comment"># 1. 欠采样：正负样本各2000条，一共4000条</span></span><br><span class="line"><span class="comment"># 2. 过采样：正负样本各3000条，一种6000条</span></span><br><span class="line"><span class="comment">#为减少计算量和对比两种均衡策略的效果，这里采用先把整体数据进行处理，在做样本均衡采样</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_balanced_words</span>(<span class="params">size,</span></span></span><br><span class="line"><span class="function"><span class="params">                        positive_comment=data[data[<span class="string">&#x27;label&#x27;</span>]== <span class="number">1</span>],</span></span></span><br><span class="line"><span class="function"><span class="params">                        negtive_comment=data[data[<span class="string">&#x27;label&#x27;</span>]==<span class="number">0</span>]</span>):</span></span><br><span class="line">    word_size = size // <span class="number">2</span></span><br><span class="line">    <span class="comment">#获取正负评论数</span></span><br><span class="line">    num_pos = positive_comment.shape[<span class="number">0</span>]</span><br><span class="line">    num_neg = negtive_comment.shape[<span class="number">0</span>]</span><br><span class="line">    <span class="comment">#   当正（负）品论数中&lt; 采样数量/2时，则进行上采样，否则都是下采样；</span></span><br><span class="line">    <span class="comment">#   其中pandas的sample方法里的replace参数代表是否进行上采样，默认不进行</span></span><br><span class="line"></span><br><span class="line">    balanced_words = pd.concat([</span><br><span class="line">        positive_comment.sample(word_size,</span><br><span class="line">                                replace=num_pos &lt;word_size,</span><br><span class="line">                                random_state=<span class="number">0</span>),</span><br><span class="line">        negtive_comment.sample(word_size,</span><br><span class="line">                                replace=num_neg &lt; word_size,</span><br><span class="line">                                random_state=<span class="number">0</span>)</span><br><span class="line">    ])</span><br><span class="line">    <span class="comment">#    打印样本个数</span></span><br><span class="line">    print(<span class="string">&#x27;样本总数：&#x27;</span>,balanced_words.shape[<span class="number">0</span>])</span><br><span class="line">    print(<span class="string">&#x27;正样本数：&#x27;</span>,balanced_words[data[<span class="string">&#x27;label&#x27;</span>]== <span class="number">1</span>].shape[<span class="number">0</span>])</span><br><span class="line">    print(<span class="string">&#x27;负样本数：&#x27;</span>,balanced_words[data[<span class="string">&#x27;label&#x27;</span>]== <span class="number">0</span>].shape[<span class="number">0</span>])</span><br><span class="line">    print(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> balanced_words</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data_4000 = get_balanced_words(<span class="number">4000</span>) <span class="comment"># 欠采样</span></span><br><span class="line">data_6000 = get_balanced_words(<span class="number">6000</span>) <span class="comment"># 过采样</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>样本总数： 4000
+正样本数： 2000
+负样本数： 2000
+
+样本总数： 6000
+正样本数： 3000
+负样本数： 3000
+
+
+
+&lt;ipython-input-23-c19d02b6f0f5&gt;:21: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  print(&#39;正样本数：&#39;,balanced_words[data[&#39;label&#39;]== 1].shape[0])
+&lt;ipython-input-23-c19d02b6f0f5&gt;:22: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  print(&#39;负样本数：&#39;,balanced_words[data[&#39;label&#39;]== 0].shape[0])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_4000.sample(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>label</th>
+      <th>review</th>
+      <th>分词</th>
+      <th>分词_01</th>
+      <th>分词_02</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>5315</th>
+      <td>1</td>
+      <td>地理位置实在是好。我住的是单人大床房，进屋一看竟然跟套房一样，不过一个小屋有桌子和电视，另一...</td>
+      <td>[地理位置, 实在, 是, 好, 。, 我, 住, 的, 是, 单, 人大, 床房, ，, ...</td>
+      <td>[地理位置, 实在, 好, 住, 单, 人大, 床房, 进屋, 一看, 竟然, 套房, 小屋...</td>
+      <td>地理位置 实在 好 住 单 人大 床房 进屋 一看 竟然 套房 小屋 桌子 电视 小屋 只能...</td>
+    </tr>
+    <tr>
+      <th>2612</th>
+      <td>1</td>
+      <td>酒店的整体服务意识相当好，从办理登记入住、用餐、退房等方面都是五星级的服务。入住当晚我们想外...</td>
+      <td>[酒店, 的, 整体, 服务, 意识, 相当, 好, ，, 从, 办理, 登记, 入住, 、...</td>
+      <td>[酒店, 整体, 服务, 意识, 相当, 好, 办理, 登记, 入住, 用餐, 退房, 方面...</td>
+      <td>酒店 整体 服务 意识 相当 好 办理 登记 入住 用餐 退房 方面 都 五星级 服务 入住...</td>
+    </tr>
+    <tr>
+      <th>241</th>
+      <td>1</td>
+      <td>饭店有些旧但房间干净,住高层向北房间安静,假如下次再去大同会再住.</td>
+      <td>[饭店, 有些, 旧, 但, 房间, 干净, ,, 住, 高层, 向北, 房间, 安静, ,...</td>
+      <td>[饭店, 旧, 房间, 干净, 住, 高层, 向北, 房间, 安静, 下次, 再, 去, 大...</td>
+      <td>饭店 旧 房间 干净 住 高层 向北 房间 安静 下次 再 去 大同 会 再 住</td>
+    </tr>
+    <tr>
+      <th>5557</th>
+      <td>0</td>
+      <td>我觉得这个酒店应该是我住过的能评上四星级酒店最烂最烂最烂的一间了。首先，房间还没进门，过道里...</td>
+      <td>[我, 觉得, 这个, 酒店, 应该, 是, 我, 住, 过, 的, 能, 评上, 四星级,...</td>
+      <td>[觉得, 酒店, 应该, 住, 评上, 四星级, 酒店, 最烂, 最烂, 最烂, 一间, 房...</td>
+      <td>觉得 酒店 应该 住 评上 四星级 酒店 最烂 最烂 最烂 一间 房间 还 没 进门 过道 ...</td>
+    </tr>
+    <tr>
+      <th>6361</th>
+      <td>0</td>
+      <td>之前和你们电话反映了，2个问题。1，不接受携程客户用信用卡。你们和酒店负责人确认后，给我的回...</td>
+      <td>[之前, 和, 你们, 电话, 反映, 了, ，, 2, 个, 问题, 。, 1, ，, 不...</td>
+      <td>[之前, 电话, 反映, 2, 问题, 1, 不, 接受, 携程, 客户, 信用卡, 酒店,...</td>
+      <td>之前 电话 反映 2 问题 1 不 接受 携程 客户 信用卡 酒店 负责人 确认 后 回答 ...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+<h2 id="3-1-欠采样"><a href="#3-1-欠采样" class="headerlink" title="3.1 欠采样"></a>3.1 欠采样</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(data_4000[<span class="string">&#x27;分词_02&#x27;</span>],</span><br><span class="line">                                                    data_4000[<span class="string">&#x27;label&#x27;</span>],</span><br><span class="line">                                                    random_state=<span class="number">1</span>,</span><br><span class="line"><span class="comment">#                                                     test_size=0.2,</span></span><br><span class="line">                                                    shuffle=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X_train.shape</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(3000,)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y_train.shape</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(3000,)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tf_idf =TfidfVectorizer()</span><br><span class="line">X_train_vec = tf_idf.fit_transform(X_train)</span><br><span class="line">X_test_vec = tf_idf.transform(X_test)</span><br><span class="line">print(X_train_vec.shape)</span><br><span class="line">print(X_test_vec.shape)</span><br></pre></td></tr></table></figure>
+
+<pre><code>(3000, 16592)
+(1000, 16592)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">X_trian_vec = X_train_vec.astype(np.float64)   <span class="comment">#   转换为numpy的float类型，便于sklearn处理</span></span><br><span class="line">X_test_vec = X_test_vec.astype(np.float64)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> f_classif</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectKBest</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> classification_report</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> roc_curve, roc_auc_score, confusion_matrix</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> OneHotEncoder</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 降维</span></span><br><span class="line">selector = SelectKBest(f_classif,k=<span class="built_in">min</span>(<span class="number">150</span>,X_trian_vec.shape[<span class="number">1</span>])) <span class="comment">#选择器</span></span><br><span class="line"></span><br><span class="line">selector.fit(X_trian_vec,y_train) <span class="comment">#训练</span></span><br><span class="line"></span><br><span class="line">selected_x_trian = selector.transform(X_trian_vec) <span class="comment"># 转换x_train</span></span><br><span class="line"></span><br><span class="line">selected_x_test = selector.transform(X_test_vec) <span class="comment"># 转换x_test</span></span><br><span class="line"></span><br><span class="line">selected_x_trian.shape</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(3000, 150)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">selected_x_test.shape</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(1000, 150)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">lr = LogisticRegression(C=<span class="number">10</span>)</span><br><span class="line">start = time.time()</span><br><span class="line">lr.fit(selected_x_trian,y_train)</span><br><span class="line"></span><br><span class="line">y_lr = lr.predict(selected_x_test)</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;lr测试集auc:&#x27;</span>,roc_auc_score(y_test,y_lr))</span><br><span class="line">print()</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;lr训练集auc：&#x27;</span>, roc_auc_score(y_train, lr.predict(selected_x_trian)))</span><br><span class="line">end = time.time()</span><br><span class="line">t = end - start</span><br><span class="line">print(<span class="string">&#x27;\n&gt;&gt;&gt;算法消耗时间为：&#x27;</span>, t, <span class="string">&#x27;秒\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>lr测试集auc: 0.8542355889724311
+
+lr训练集auc： 0.8499083078632953
+
+&gt;&gt;&gt;算法消耗时间为： 0.04597115516662598 秒
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> validation_curve</span><br><span class="line">lr_c = LogisticRegression()</span><br><span class="line">param_range = [<span class="number">0.001</span>, <span class="number">0.01</span>, <span class="number">0.1</span>, <span class="number">1.0</span>, <span class="number">10.0</span>, <span class="number">100.0</span>]</span><br><span class="line">train_scores, test_scores = validation_curve(</span><br><span class="line">                estimator=lr_c, </span><br><span class="line">                X=selected_x_trian, </span><br><span class="line">                y=y_train, </span><br><span class="line">                param_name=<span class="string">&#x27;C&#x27;</span>, </span><br><span class="line">                param_range=param_range,</span><br><span class="line">                cv=<span class="number">10</span>)</span><br><span class="line"> </span><br><span class="line">train_mean = np.mean(train_scores, axis=<span class="number">1</span>)</span><br><span class="line">train_std = np.std(train_scores, axis=<span class="number">1</span>)</span><br><span class="line">test_mean = np.mean(test_scores, axis=<span class="number">1</span>)</span><br><span class="line">test_std = np.std(test_scores, axis=<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line">plt.plot(param_range, train_mean, </span><br><span class="line">         color=<span class="string">&#x27;blue&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, </span><br><span class="line">         markersize=<span class="number">5</span>, label=<span class="string">&#x27;training accuracy&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.fill_between(param_range, train_mean + train_std,</span><br><span class="line">                 train_mean - train_std, alpha=<span class="number">0.15</span>,</span><br><span class="line">                 color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.plot(param_range, test_mean, </span><br><span class="line">         color=<span class="string">&#x27;green&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, </span><br><span class="line">         marker=<span class="string">&#x27;s&#x27;</span>, markersize=<span class="number">5</span>, </span><br><span class="line">         label=<span class="string">&#x27;validation accuracy&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.fill_between(param_range, </span><br><span class="line">                 test_mean + test_std,</span><br><span class="line">                 test_mean - test_std, </span><br><span class="line">                 alpha=<span class="number">0.15</span>, color=<span class="string">&#x27;green&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.grid()</span><br><span class="line">plt.xscale(<span class="string">&#x27;log&#x27;</span>)</span><br><span class="line">plt.legend(loc=<span class="string">&#x27;best&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Parameter C&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Accuracy&#x27;</span>)</span><br><span class="line">plt.ylim([<span class="number">0.8</span>, <span class="number">1.0</span>])</span><br><span class="line">plt.tight_layout()</span><br><span class="line"><span class="comment"># plt.savefig(&#x27;./figures/validation_curve.png&#x27;, dpi=300)</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+</code></pre>
+<p><img src="/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_46_1.png" alt="png"></p>
+<p>lr模型的在训练集和测试集上的的auc之间差距不大，模型的泛化能力良好<br>C取10,auc达到0.85</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">xgb = XGBClassifier(n_estimators=<span class="number">60</span>, max_depth=<span class="number">3</span>,) <span class="comment"># 为防止过拟合，采用较为少的树，以及决策树深度</span></span><br><span class="line">start=time.time()</span><br><span class="line">xgb.fit(selected_x_trian, y_train)</span><br><span class="line"></span><br><span class="line">y_xgb = xgb.predict(selected_x_test)</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;xgboost测试集auc：&#x27;</span>, roc_auc_score(y_test, y_xgb))</span><br><span class="line"></span><br><span class="line">print()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;xgboost训练集auc：&#x27;</span>, roc_auc_score(y_train, xgb.predict(selected_x_trian)))</span><br><span class="line">end = time.time()</span><br><span class="line">t = end - start</span><br><span class="line">print(<span class="string">&#x27;\n&gt;&gt;&gt;算法消耗时间为：&#x27;</span>, t, <span class="string">&#x27;秒\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>c:\python38\lib\site-packages\xgboost\sklearn.py:888: UserWarning: The use of label encoder in XGBClassifier is deprecated and will be removed in a future release. To remove this warning, do the following: 1) Pass option use_label_encoder=False when constructing XGBClassifier object; and 2) Encode your labels (y) as integers starting with 0, i.e. 0, 1, 2, ..., [num_class - 1].
+  warnings.warn(label_encoder_deprecation_msg, UserWarning)
+
+
+[19:32:16] WARNING: C:/Users/Administrator/workspace/xgboost-win64_release_1.3.0/src/learner.cc:1061: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+xgboost测试集auc： 0.8300250626566416
+
+xgboost训练集auc： 0.865996110030564
+
+&gt;&gt;&gt;算法消耗时间为： 0.2728400230407715 秒
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lr.predict_proba(selected_x_test)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[0.60622842, 0.39377158],
+       [0.06004111, 0.93995889],
+       [0.6986472 , 0.3013528 ],
+       ...,
+       [0.53782924, 0.46217076],
+       [0.02189445, 0.97810555],
+       [0.41569671, 0.58430329]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.family&#x27;</span>]=<span class="string">&#x27;SimHei&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.style&#x27;</span>] = <span class="string">&#x27;italic&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.size&#x27;</span>] = <span class="number">16</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] =<span class="literal">False</span></span><br><span class="line">fpr_lr_4k, tpr_lr_4k, thresholds = roc_curve(y_test,</span><br><span class="line">                                 lr.predict_proba(selected_x_test)[:, <span class="number">1</span>],</span><br><span class="line">                                 pos_label=<span class="number">1</span>)</span><br><span class="line">fpr_xgb_4k, tpr_xgb_4k, thresholds = roc_curve(y_test,</span><br><span class="line">                                 xgb.predict_proba(selected_x_test)[:, <span class="number">1</span>],</span><br><span class="line">                                 pos_label=<span class="number">1</span>)   </span><br><span class="line">plt.plot(fpr_lr_4k, tpr_lr_4k,label=<span class="string">&#x27;lr&#x27;</span>)</span><br><span class="line">plt.plot(fpr_xgb_4k, tpr_xgb_4k,color=<span class="string">&#x27;red&#x27;</span>,label=<span class="string">&#x27;xgboost&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.legend()</span><br><span class="line">plt.title(<span class="string">&#x27;lr和xgboost在测试集上的表现&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_51_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lr_test_matx = confusion_matrix(y_test, lr.predict(selected_x_test))</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line">sns.heatmap(lr_test_matx,annot=<span class="literal">True</span>,fmt=<span class="string">&quot;d&quot;</span>,cmap=<span class="string">&quot;Blues&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1ac968ce160&gt;
+</code></pre>
+<p><img src="/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_53_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> f1_score</span><br><span class="line">f1_score(y_test, lr.predict(selected_x_test))</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0.8593448940269749
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xgb_test_matx = confusion_matrix(y_test, xgb.predict(selected_x_test))</span><br><span class="line">sns.heatmap(xgb_test_matx,annot=<span class="literal">True</span>,fmt=<span class="string">&quot;d&quot;</span>,cmap=<span class="string">&quot;Blues&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1ac95441070&gt;
+</code></pre>
+<p><img src="/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_55_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f1_score(y_test, xgb.predict(selected_x_test))</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0.832517140058766
+</code></pre>
+<p>在欠采样中，lr的效果要远好于GBDT</p>
+<h2 id="3-2-过采样"><a href="#3-2-过采样" class="headerlink" title="3.2 过采样"></a>3.2 过采样</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># # 数据切分</span></span><br><span class="line"><span class="comment"># x_train, x_test, y_train, y_test = train_test_split(data_6000[&#x27;分词_02&#x27;],</span></span><br><span class="line"><span class="comment">#                                                     data_6000[&#x27;label&#x27;],</span></span><br><span class="line"><span class="comment">#                                                     random_state=1,</span></span><br><span class="line"><span class="comment">#                                                     shuffle=True)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># # 词向量化</span></span><br><span class="line"><span class="comment"># tf_idf = TfidfVectorizer()</span></span><br><span class="line"><span class="comment"># x_trian_vec = tf_idf.fit_transform(x_train)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># x_test_vec = tf_idf.transform(x_test)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># x_trian_vec = x_trian_vec.astype(np.float64)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># x_test_vec = x_test_vec.astype(np.float64)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># # 特征选择</span></span><br><span class="line"><span class="comment"># selector = SelectKBest(f_classif, k=min(150, x_trian_vec.shape[1]))</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># selector.fit(x_trian_vec, y_train)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># selected_x_trian = selector.transform(x_trian_vec)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># selected_x_test = selector.transform(x_test_vec)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># start=time.time()</span></span><br><span class="line"><span class="comment"># lr= LogisticRegression(C=10)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># lr.fit(selected_x_trian, y_train)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># y_hat = lr.predict(selected_x_test)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># print(&#x27;lr测试集auc：&#x27;, roc_auc_score(y_test, y_hat))</span></span><br><span class="line"><span class="comment"># print()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># print(&#x27;lr训练集auc：&#x27;, roc_auc_score(y_train, lr.predict(selected_x_trian)))</span></span><br><span class="line"><span class="comment"># end = time.time()</span></span><br><span class="line"><span class="comment"># t = end - start</span></span><br><span class="line"><span class="comment"># print(&#x27;\n&gt;&gt;&gt;算法消耗时间为：&#x27;, t, &#x27;秒\n&#x27;)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># start = time.time()</span></span><br><span class="line"><span class="comment"># xgb.fit(selected_x_trian, y_train)</span></span><br><span class="line"><span class="comment"># y_hat=xgb.predict(selected_x_test)  </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># print(&#x27;xgboost测试集auc：&#x27;, roc_auc_score(y_test, y_hat))</span></span><br><span class="line"><span class="comment"># print()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># print(&#x27;xgboost训练集auc：&#x27;, roc_auc_score(y_train, xgb.predict(selected_x_trian)))</span></span><br><span class="line"><span class="comment"># end = time.time()</span></span><br><span class="line"><span class="comment"># t = end - start</span></span><br><span class="line"><span class="comment"># print(&#x27;\n&gt;&gt;&gt;算法消耗时间为：&#x27;, t, &#x27;秒\n&#x27;)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fpr_lr_6k, tpr_lr_6k, thresholds = roc_curve(y_test,</span></span><br><span class="line"><span class="comment">#                                  lr.predict_proba(selected_x_test)[:, 1],</span></span><br><span class="line"><span class="comment">#                                  pos_label=1)</span></span><br><span class="line"><span class="comment"># fpr_xgb_6k, tpr_xgb_6k, thresholds = roc_curve(y_test,</span></span><br><span class="line"><span class="comment">#                                  xgb.predict_proba(selected_x_test)[:, 1],</span></span><br><span class="line"><span class="comment">#                                  pos_label=1)   </span></span><br><span class="line"><span class="comment"># plt.plot(fpr_lr_6k, tpr_lr_6k,label=&#x27;lr&#x27;)</span></span><br><span class="line"><span class="comment"># plt.plot(fpr_xgb_6k, tpr_xgb_6k,color=&#x27;red&#x27;,label=&#x27;xgboost&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># plt.legend()</span></span><br><span class="line"><span class="comment"># plt.title(&#x27;lr和xgboost在测试集上的表现&#x27;)</span></span><br><span class="line"><span class="comment"># plt.show()</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># lr_test_matx = confusion_matrix(y_test, lr.predict(selected_x_test))</span></span><br><span class="line"><span class="comment"># sns.heatmap(lr_test_matx,annot=True,fmt=&quot;d&quot;,cmap=&quot;Blues&quot;)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># f1_score(y_test, lr.predict(selected_x_test))</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># xgb_test_matx = confusion_matrix(y_test, xgb.predict(selected_x_test))</span></span><br><span class="line"><span class="comment"># sns.heatmap(xgb_test_matx,annot=True,fmt=&quot;d&quot;,cmap=&quot;Blues&quot;)</span></span><br><span class="line"><span class="comment"># f1_score(y_test, xgb.predict(selected_x_test))</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xgb.fit(selected_x_trian, y_train)</span><br><span class="line">xgb.apply(selected_x_trian).shape</span><br></pre></td></tr></table></figure>
+
+<pre><code>c:\python38\lib\site-packages\xgboost\sklearn.py:888: UserWarning: The use of label encoder in XGBClassifier is deprecated and will be removed in a future release. To remove this warning, do the following: 1) Pass option use_label_encoder=False when constructing XGBClassifier object; and 2) Encode your labels (y) as integers starting with 0, i.e. 0, 1, 2, ..., [num_class - 1].
+  warnings.warn(label_encoder_deprecation_msg, UserWarning)
+
+
+[19:32:19] WARNING: C:/Users/Administrator/workspace/xgboost-win64_release_1.3.0/src/learner.cc:1061: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+
+
+
+
+
+(3000, 60)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">start=time.time()</span><br><span class="line">xgb.fit(selected_x_trian, y_train)</span><br><span class="line"><span class="comment"># 一次将训练集和测试集特征组合结果转换为one_hot编码</span></span><br><span class="line">all_leaf = np.concatenate(</span><br><span class="line">    (xgb.apply(selected_x_trian), xgb.apply(selected_x_test)), axis=<span class="number">0</span>) </span><br><span class="line">enc_leaf = OneHotEncoder()</span><br><span class="line">enc_leaf.fit(all_leaf)</span><br><span class="line">all_leaf = enc_leaf.transform(all_leaf)</span><br><span class="line"><span class="comment"># all_leaf.shape</span></span><br><span class="line">x_train_all = np.hstack((all_leaf[:<span class="number">3000</span>, :].toarray(),</span><br><span class="line">                         selected_x_trian.astype(np.float64).toarray())) <span class="comment">#纵向合并</span></span><br><span class="line">lr1=LogisticRegression(C=<span class="number">0.1</span>)</span><br><span class="line">lr1.fit(x_train_all, y_train)</span><br><span class="line">print(<span class="string">&#x27;xgboost+lr训练集auc：&#x27;</span>, roc_auc_score(y_train, lr1.predict(x_train_all)))</span><br><span class="line">print()</span><br><span class="line"></span><br><span class="line">x_test_all = np.hstack((all_leaf[<span class="number">3000</span>:, :].toarray(),</span><br><span class="line">                        selected_x_test.astype(np.float64).toarray()))</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;xgboost+lr测试集auc：&#x27;</span>, roc_auc_score(y_test, lr1.predict(x_test_all)))</span><br><span class="line">print()</span><br><span class="line"></span><br><span class="line">end = time.time()</span><br><span class="line">t = end - start</span><br><span class="line">print(<span class="string">&#x27;\n&gt;&gt;&gt;算法消耗时间为：&#x27;</span>, t, <span class="string">&#x27;秒\n&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>c:\python38\lib\site-packages\xgboost\sklearn.py:888: UserWarning: The use of label encoder in XGBClassifier is deprecated and will be removed in a future release. To remove this warning, do the following: 1) Pass option use_label_encoder=False when constructing XGBClassifier object; and 2) Encode your labels (y) as integers starting with 0, i.e. 0, 1, 2, ..., [num_class - 1].
+  warnings.warn(label_encoder_deprecation_msg, UserWarning)
+
+
+[19:34:11] WARNING: C:/Users/Administrator/workspace/xgboost-win64_release_1.3.0/src/learner.cc:1061: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+xgboost+lr训练集auc： 0.8760489024729091
+
+xgboost+lr测试集auc： 0.8432581453634086
+
+
+&gt;&gt;&gt;算法消耗时间为： 0.7045953273773193 秒
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lr1_test_matx = confusion_matrix(y_test, lr1.predict(x_test_all))</span><br><span class="line">sns.heatmap(lr1_test_matx,annot=<span class="literal">True</span>,fmt=<span class="string">&quot;d&quot;</span>,cmap=<span class="string">&quot;Blues&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1ac986c92e0&gt;
+</code></pre>
+<p><img src="/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/output_67_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f1_score(y_test, lr1.predict(x_test_all))</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0.8486017357762776
+</code></pre>
+<p>单独的lr要好于xgboodt+lr</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/" rel="tag"># 情感分析</a>
+          
+            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/%E6%96%87%E6%9C%AC%E6%8C%96%E6%8E%98/" rel="tag"># 文本挖掘</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/16/%E6%B7%98%E5%AE%9D%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90/" rel="next" title="淘宝用户行为分析">
+                <i class="fa fa-chevron-left"></i> 淘宝用户行为分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/" rel="prev" title="无监督对客户群体细分">
+                无监督对客户群体细分 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/touxiang.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/john-ma-code" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="884680142@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AF%BC%E5%85%A5%E4%B8%8E%E6%9F%A5%E7%9C%8B"><span class="nav-number">1.</span> <span class="nav-text">一、数据的导入与查看</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%8F%8A%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">二、数据处理及可视化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E6%95%B0%E6%8D%AE%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%B8%85%E6%B4%97"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 数据的基本清洗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E8%AF%BB%E5%8F%96%E5%81%9C%E7%94%A8%E8%AF%8D%E8%BF%9B%E8%A1%8C%E5%88%86%E8%AF%8D%E5%A4%84%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 读取停用词进行分词处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%88%B6%E4%BD%9C%E8%AF%8D%E4%BA%91%E5%9B%BE"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 制作词云图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%80%BE%E5%90%91%E9%A2%84%E6%B5%8B"><span class="nav-number">3.</span> <span class="nav-text">三、评论情感倾向预测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E6%AC%A0%E9%87%87%E6%A0%B7"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 欠采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E8%BF%87%E9%87%87%E6%A0%B7"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 过采样</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Ma</span>
+
+  
+</div>
+
+<!--
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+-->
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数 <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人次
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量 <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_lines.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'xOgk5fLUwO6D21TvD73BQ5Lw-gzGzoHsz',
+        appKey: 'dLXJXlrTkVbzz1qL9zF6SaKf',
+        placeholder: 'Just go go',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

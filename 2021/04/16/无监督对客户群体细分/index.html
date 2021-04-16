@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="客户分群,机器学习," />
 
 
 
@@ -79,22 +79,27 @@
 
 
 
-<meta name="description" content="文章目录">
+<meta name="description" content="一、数据背景数据背景：数据为某商场会员基本信息，包括CustomerID（客户ID），Gender（性别），Age（年龄），Annual Income (k$)（年收入）和Spending Score (1-100)（消费得分：根据顾客消费行为，例如客户行为和购买数据商场的评分），通过已有信息对客户进行细化分类，以便营销运营团队更好的制定策略。 数据来源：kaggle">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pyecharts 饼图 玫瑰图">
-<meta property="og:url" content="http://example.com/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/index.html">
+<meta property="og:title" content="无监督对客户群体细分">
+<meta property="og:url" content="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/index.html">
 <meta property="og:site_name" content="JohnMa的博客">
-<meta property="og:description" content="文章目录">
+<meta property="og:description" content="一、数据背景数据背景：数据为某商场会员基本信息，包括CustomerID（客户ID），Gender（性别），Age（年龄），Annual Income (k$)（年收入）和Spending Score (1-100)（消费得分：根据顾客消费行为，例如客户行为和购买数据商场的评分），通过已有信息对客户进行细化分类，以便营销运营团队更好的制定策略。 数据来源：kaggle">
 <meta property="og:locale">
-<meta property="og:image" content="http://example.com/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E9%A5%BC%E5%9B%BE.png">
-<meta property="og:image" content="http://example.com/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E7%8E%AF%E5%BD%A2%E5%9B%BE.png">
-<meta property="og:image" content="http://example.com/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E7%8E%AB%E7%91%B0%E5%9B%BE.png">
-<meta property="og:image" content="http://example.com/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E5%8D%97%E4%B8%81%E6%A0%BC%E5%B0%94%E7%8E%AB%E7%91%B0%E5%9B%BE.png">
-<meta property="article:published_time" content="2021-03-10T02:21:13.000Z">
-<meta property="article:modified_time" content="2021-03-10T02:48:54.541Z">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_12_1.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_16_0.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_18_0.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_20_0.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_25_1.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_31_0.png">
+<meta property="og:image" content="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_37_1.png">
+<meta property="article:published_time" content="2021-04-16T02:21:12.000Z">
+<meta property="article:modified_time" content="2021-04-16T03:08:32.118Z">
 <meta property="article:author" content="John Ma">
+<meta property="article:tag" content="客户分群">
+<meta property="article:tag" content="机器学习">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E9%A5%BC%E5%9B%BE.png">
+<meta name="twitter:image" content="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_12_1.png">
 
 
 
@@ -124,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2021/03/10/pyecharts饼图 玫瑰图/"/>
+  <link rel="canonical" href="http://example.com/2021/04/16/无监督对客户群体细分/"/>
 
 
 
 
 
-  <title>pyecharts 饼图 玫瑰图 | JohnMa的博客</title>
+  <title>无监督对客户群体细分 | JohnMa的博客</title>
   
 
 
@@ -311,7 +316,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -328,7 +333,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">pyecharts 饼图 玫瑰图</h1>
+          <h1 class="post-title" itemprop="name headline">无监督对客户群体细分</h1>
         
 
         <div class="post-meta">
@@ -340,8 +345,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-10T10:21:13+08:00">
-                2021-03-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-04-16T10:21:12+08:00">
+                2021-04-16
               </time>
             
 
@@ -363,8 +368,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" itemprop="url" rel="index">
-                    <span itemprop="name">数据可视化</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%AE%9E%E6%88%98/" itemprop="url" rel="index">
+                    <span itemprop="name">数据分析实战</span>
                   </a>
                 </span>
 
@@ -381,8 +386,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/" itemprop="commentCount"></span>
+                <a href="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -409,7 +414,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1.1k
+                  1.4k
                 </span>
               
 
@@ -446,71 +451,16 @@
       
 
       
-        <h1 id="文章目录"><a href="#文章目录" class="headerlink" title="文章目录"></a>文章目录</h1><span id="more"></span>
-<h2 id="一、-饼图"><a href="#一、-饼图" class="headerlink" title="一、 饼图"></a>一、 饼图</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts.charts <span class="keyword">import</span> Pie</span><br><span class="line"><span class="keyword">import</span> pyecharts.options <span class="keyword">as</span> opts</span><br></pre></td></tr></table></figure>
+        <h1 id="一、数据背景"><a href="#一、数据背景" class="headerlink" title="一、数据背景"></a>一、数据背景</h1><p>数据背景：数据为某商场会员基本信息，包括CustomerID（客户ID），Gender（性别），Age（年龄），Annual Income (k$)（年收入）和Spending Score (1-100)（消费得分：根据顾客消费行为，例如客户行为和购买数据商场的评分），通过已有信息对客户进行细化分类，以便营销运营团队更好的制定策略。</p>
+<p>数据来源：<a target="_blank" rel="noopener" href="https://www.kaggle.com/vjchoudhary7/customer-segmentation-tutorial-in-python">kaggle</a></p>
+<span id="more"></span>
+<h1 id="二、数据的读取及预处理"><a href="#二、数据的读取及预处理" class="headerlink" title="二、数据的读取及预处理"></a>二、数据的读取及预处理</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts.<span class="built_in">globals</span> <span class="keyword">import</span> CurrentConfig, NotebookType  </span><br><span class="line">CurrentConfig.NOTEBOOK_TYPE = NotebookType.JUPYTER_LAB</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mpl.rcParams[<span class="string">&#x27;font.family&#x27;</span>]=<span class="string">&#x27;SimHei&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.style&#x27;</span>] = <span class="string">&#x27;italic&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.size&#x27;</span>] = <span class="number">16</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] =<span class="literal">False</span></span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x_data = [<span class="string">&quot;深度学习&quot;</span>, <span class="string">&quot;数据分析&quot;</span>, <span class="string">&quot;Web开发&quot;</span>, <span class="string">&quot;爬虫&quot;</span>, <span class="string">&quot;图像处理&quot;</span>]</span><br><span class="line">y_data = [<span class="number">688</span>, <span class="number">888</span>, <span class="number">560</span>, <span class="number">388</span>, <span class="number">480</span>]</span><br><span class="line">data_pair = [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(x_data, y_data)]</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_pair</span><br></pre></td></tr></table></figure>
-
-
-
-
-<pre><code>[[&#39;深度学习&#39;, 688], [&#39;数据分析&#39;, 888], [&#39;Web开发&#39;, 560], [&#39;爬虫&#39;, 388], [&#39;图像处理&#39;, 480]]
-</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_pair.sort(key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_pair</span><br></pre></td></tr></table></figure>
-
-
-
-
-<pre><code>[[&#39;爬虫&#39;, 388], [&#39;图像处理&#39;, 480], [&#39;Web开发&#39;, 560], [&#39;深度学习&#39;, 688], [&#39;数据分析&#39;, 888]]
-</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">pie = (</span><br><span class="line">    Pie(init_opts=opts.InitOpts(width=<span class="string">&quot;1200px&quot;</span>, height=<span class="string">&quot;800px&quot;</span>, bg_color=<span class="string">&quot;#2c343c&quot;</span>))</span><br><span class="line">    .add(</span><br><span class="line">        series_name=<span class="string">&quot;学习方向&quot;</span>, <span class="comment"># 系列名称</span></span><br><span class="line">        data_pair=data_pair, <span class="comment"># 数据格式为[(key1,value1),(key2,value2)]</span></span><br><span class="line">        rosetype=<span class="string">&quot;radius&quot;</span>, <span class="comment"># radius：扇区圆心角展现数据的百分比，半径展现数据的大小</span></span><br><span class="line">        radius=<span class="string">&quot;55%&quot;</span>,             <span class="comment"># 饼图的半径</span></span><br><span class="line">        center=[<span class="string">&quot;50%&quot;</span>, <span class="string">&quot;50%&quot;</span>],    <span class="comment"># 饼图的中心（圆心）坐标，数组的第一项是横坐标，第二项是纵坐标</span></span><br><span class="line">        </span><br><span class="line">    )</span><br><span class="line">    .set_global_opts(</span><br><span class="line">        title_opts=opts.TitleOpts(</span><br><span class="line">            title=<span class="string">&quot;Customized Pie&quot;</span>,</span><br><span class="line">            pos_left=<span class="string">&quot;center&quot;</span>,</span><br><span class="line">            pos_top=<span class="string">&quot;20&quot;</span>,</span><br><span class="line">            title_textstyle_opts=opts.TextStyleOpts(color=<span class="string">&quot;#fff&quot;</span>),</span><br><span class="line">        ),</span><br><span class="line">        legend_opts=opts.LegendOpts(is_show=<span class="literal">False</span>),</span><br><span class="line">    )</span><br><span class="line">    .set_series_opts(</span><br><span class="line">        tooltip_opts=opts.TooltipOpts(</span><br><span class="line">            trigger=<span class="string">&quot;item&quot;</span>, formatter=<span class="string">&quot;&#123;a&#125; &lt;br/&gt;&#123;b&#125;: &#123;c&#125; (&#123;d&#125;%)&quot;</span>  <span class="comment"># &#x27;item&#x27;: 数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用</span></span><br><span class="line">         ),</span><br><span class="line">        label_opts=opts.LabelOpts(color=<span class="string">&quot;rgba(255, 255, 255, 0.3)&quot;</span>),</span><br><span class="line">    )</span><br><span class="line">)</span><br><span class="line">pie.load_javascript()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pie.render_notebook()</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E9%A5%BC%E5%9B%BE.png" alt="图像"></p>
-<h2 id="二、-环形图"><a href="#二、-环形图" class="headerlink" title="二、 环形图"></a>二、 环形图</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pyecharts.faker <span class="keyword">import</span> Faker</span><br><span class="line">c = (</span><br><span class="line">    Pie()</span><br><span class="line">    .add(</span><br><span class="line">        <span class="string">&quot;&quot;</span>,</span><br><span class="line">        [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(Faker.choose(), Faker.values())],</span><br><span class="line">        <span class="comment"># 饼图的半径，数组的第一项是内半径，第二项是外半径</span></span><br><span class="line">        <span class="comment"># 默认设置成百分比，相对于容器高宽中较小的一项的一半</span></span><br><span class="line">        radius=[<span class="string">&quot;40%&quot;</span>, <span class="string">&quot;60%&quot;</span>],</span><br><span class="line">    )</span><br><span class="line">    .set_colors([<span class="string">&quot;blue&quot;</span>, <span class="string">&quot;green&quot;</span>, <span class="string">&quot;	#800000&quot;</span>, <span class="string">&quot;red&quot;</span>, <span class="string">&quot;#000000&quot;</span>, <span class="string">&quot;orange&quot;</span>, <span class="string">&quot;purple&quot;</span>])</span><br><span class="line">    .set_global_opts(</span><br><span class="line">        title_opts=opts.TitleOpts(title=<span class="string">&quot;Pie-Radius&quot;</span>),</span><br><span class="line">        legend_opts=opts.LegendOpts(orient=<span class="string">&quot;vertical&quot;</span>, pos_top=<span class="string">&quot;15%&quot;</span>, pos_left=<span class="string">&quot;2%&quot;</span>),</span><br><span class="line">    )</span><br><span class="line">    .set_series_opts(label_opts=opts.LabelOpts(formatter=<span class="string">&quot;&#123;b&#125;: &#123;c&#125; &quot;</span>))</span><br><span class="line">)</span><br><span class="line">c.load_javascript()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c.render_notebook()</span><br></pre></td></tr></table></figure>
-
-
-
-<p><img src="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E7%8E%AF%E5%BD%A2%E5%9B%BE.png" alt="图像"></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">labels = [<span class="string">&#x27;可乐&#x27;</span>, <span class="string">&#x27;雪碧&#x27;</span>, <span class="string">&#x27;橙汁&#x27;</span>, <span class="string">&#x27;奶茶&#x27;</span>, <span class="string">&#x27;冰啤酒&#x27;</span>, <span class="string">&#x27;柠檬水&#x27;</span>]</span><br><span class="line">values = [<span class="number">6</span>, <span class="number">12</span>, <span class="number">28</span>, <span class="number">52</span>, <span class="number">72</span>, <span class="number">96</span>]</span><br><span class="line">v = Faker.choose()</span><br><span class="line">c = (</span><br><span class="line">    Pie()</span><br><span class="line">    .add(</span><br><span class="line">        <span class="string">&quot;&quot;</span>,</span><br><span class="line">        [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(Faker.choose(), Faker.values())],</span><br><span class="line">        radius=[<span class="string">&quot;40%&quot;</span>, <span class="string">&quot;75%&quot;</span>],</span><br><span class="line">        center=[<span class="string">&quot;22%&quot;</span>, <span class="string">&quot;50%&quot;</span>],</span><br><span class="line">        rosetype=<span class="string">&quot;radius&quot;</span>,</span><br><span class="line">        label_opts=opts.LabelOpts(is_show=<span class="literal">False</span>),</span><br><span class="line">    )</span><br><span class="line">    .add(</span><br><span class="line">        <span class="string">&quot;&quot;</span>,</span><br><span class="line">        [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(Faker.choose(), Faker.values())],</span><br><span class="line">        radius=[<span class="string">&quot;40%&quot;</span>, <span class="string">&quot;75%&quot;</span>],</span><br><span class="line">        center=[<span class="string">&quot;70%&quot;</span>, <span class="string">&quot;50%&quot;</span>],</span><br><span class="line">        rosetype=<span class="string">&quot;area&quot;</span>,</span><br><span class="line">    )</span><br><span class="line">    .set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">&quot;Pie-玫瑰图示例&quot;</span>),</span><br><span class="line">                     legend_opts=opts.LegendOpts(is_show=<span class="literal">False</span>)</span><br><span class="line">                     )</span><br><span class="line">    </span><br><span class="line">)</span><br><span class="line">c.load_javascript()</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c.render()</span><br></pre></td></tr></table></figure>
-
-
-<p><img src="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E7%8E%AB%E7%91%B0%E5%9B%BE.png" alt="图像"></p>
-<h2 id="三、南丁格尔玫瑰图"><a href="#三、南丁格尔玫瑰图" class="headerlink" title="三、南丁格尔玫瑰图"></a>三、南丁格尔玫瑰图</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">provinces = [<span class="string">&#x27;北京&#x27;</span>,<span class="string">&#x27;上海&#x27;</span>,<span class="string">&#x27;黑龙江&#x27;</span>,<span class="string">&#x27;吉林&#x27;</span>,<span class="string">&#x27;辽宁&#x27;</span>,<span class="string">&#x27;内蒙古&#x27;</span>,<span class="string">&#x27;新疆&#x27;</span>,<span class="string">&#x27;西藏&#x27;</span>,<span class="string">&#x27;青海&#x27;</span>,<span class="string">&#x27;四川&#x27;</span>,<span class="string">&#x27;云南&#x27;</span>,<span class="string">&#x27;陕西&#x27;</span>,<span class="string">&#x27;重庆&#x27;</span>,</span><br><span class="line">             <span class="string">&#x27;贵州&#x27;</span>,<span class="string">&#x27;广西&#x27;</span>,<span class="string">&#x27;海南&#x27;</span>,<span class="string">&#x27;澳门&#x27;</span>,<span class="string">&#x27;湖南&#x27;</span>,<span class="string">&#x27;江西&#x27;</span>,<span class="string">&#x27;福建&#x27;</span>,<span class="string">&#x27;安徽&#x27;</span>,<span class="string">&#x27;浙江&#x27;</span>,<span class="string">&#x27;江苏&#x27;</span>,<span class="string">&#x27;宁夏&#x27;</span>,<span class="string">&#x27;山西&#x27;</span>,<span class="string">&#x27;河北&#x27;</span>,<span class="string">&#x27;天津&#x27;</span>]</span><br><span class="line">num = [<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">17</span>,<span class="number">9</span>,<span class="number">22</span>,<span class="number">23</span>,<span class="number">42</span>,<span class="number">35</span>,<span class="number">7</span>,<span class="number">20</span>,<span class="number">21</span>,<span class="number">16</span>,<span class="number">24</span>,<span class="number">16</span>,<span class="number">21</span>,<span class="number">37</span>,<span class="number">12</span>,<span class="number">13</span>,<span class="number">14</span>,<span class="number">13</span>,<span class="number">7</span>,<span class="number">22</span>,<span class="number">8</span>,<span class="number">16</span>,<span class="number">13</span>,<span class="number">13</span>]</span><br><span class="line">color_series = [<span class="string">&#x27;#FAE927&#x27;</span>,<span class="string">&#x27;#E9E416&#x27;</span>,<span class="string">&#x27;#C9DA36&#x27;</span>,<span class="string">&#x27;#9ECB3C&#x27;</span>,<span class="string">&#x27;#6DBC49&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;#37B44E&#x27;</span>,<span class="string">&#x27;#3DBA78&#x27;</span>,<span class="string">&#x27;#14ADCF&#x27;</span>,<span class="string">&#x27;#209AC9&#x27;</span>,<span class="string">&#x27;#1E91CA&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;#2C6BA0&#x27;</span>,<span class="string">&#x27;#2B55A1&#x27;</span>,<span class="string">&#x27;#2D3D8E&#x27;</span>,<span class="string">&#x27;#44388E&#x27;</span>,<span class="string">&#x27;#6A368B&#x27;</span></span><br><span class="line">                <span class="string">&#x27;#7D3990&#x27;</span>,<span class="string">&#x27;#A63F98&#x27;</span>,<span class="string">&#x27;#C31C88&#x27;</span>,<span class="string">&#x27;#D52178&#x27;</span>,<span class="string">&#x27;#D5225B&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;#D02C2A&#x27;</span>,<span class="string">&#x27;#D44C2D&#x27;</span>,<span class="string">&#x27;#F57A34&#x27;</span>,<span class="string">&#x27;#FA8F2F&#x27;</span>,<span class="string">&#x27;#D99D21&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;#CF7B25&#x27;</span>,<span class="string">&#x27;#CF7B25&#x27;</span>,<span class="string">&#x27;#CF7B25&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建DataFrame</span></span><br><span class="line">df = pd.DataFrame(&#123;<span class="string">&#x27;provinces&#x27;</span>: provinces, <span class="string">&#x27;num&#x27;</span>: num&#125;)</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cust_df = pd.read_csv(<span class="string">&#x27;Mall_Customers.csv&#x27;</span>)</span><br><span class="line">cust_df.head()</span><br></pre></td></tr></table></figure>
 
 
 
@@ -534,35 +484,53 @@
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>provinces</th>
-      <th>num</th>
+      <th>CustomerID</th>
+      <th>Gender</th>
+      <th>Age</th>
+      <th>Annual Income (k$)</th>
+      <th>Spending Score (1-100)</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>北京</td>
       <td>1</td>
+      <td>Male</td>
+      <td>19</td>
+      <td>15</td>
+      <td>39</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>上海</td>
-      <td>1</td>
+      <td>2</td>
+      <td>Male</td>
+      <td>21</td>
+      <td>15</td>
+      <td>81</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>黑龙江</td>
-      <td>1</td>
+      <td>3</td>
+      <td>Female</td>
+      <td>20</td>
+      <td>16</td>
+      <td>6</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>吉林</td>
-      <td>17</td>
+      <td>4</td>
+      <td>Female</td>
+      <td>23</td>
+      <td>16</td>
+      <td>77</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>辽宁</td>
-      <td>9</td>
+      <td>5</td>
+      <td>Female</td>
+      <td>31</td>
+      <td>17</td>
+      <td>40</td>
     </tr>
   </tbody>
 </table>
@@ -571,17 +539,238 @@
 
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.sort_values(by=<span class="string">&quot;num&quot;</span>,ascending=<span class="literal">True</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cust_df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 200 entries, 0 to 199
+Data columns (total 5 columns):
+ #   Column                  Non-Null Count  Dtype 
+---  ------                  --------------  ----- 
+ 0   CustomerID              200 non-null    int64 
+ 1   Gender                  200 non-null    object
+ 2   Age                     200 non-null    int64 
+ 3   Annual Income (k$)      200 non-null    int64 
+ 4   Spending Score (1-100)  200 non-null    int64 
+dtypes: int64(4), object(1)
+memory usage: 7.9+ KB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cust_df.duplicated().<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 提取数据</span></span><br><span class="line">v = df[<span class="string">&#x27;provinces&#x27;</span>].values.tolist()</span><br><span class="line">d = df[<span class="string">&#x27;num&#x27;</span>].values.tolist()</span><br></pre></td></tr></table></figure>
 
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 绘制饼图</span></span><br><span class="line">pie1 = Pie(init_opts=opts.InitOpts(width=<span class="string">&#x27;1250px&#x27;</span>, height=<span class="string">&#x27;750px&#x27;</span>))</span><br><span class="line"><span class="comment"># 设置颜色</span></span><br><span class="line">pie1.set_colors(color_series)</span><br><span class="line"></span><br><span class="line">pie1.add(<span class="string">&quot;&quot;</span>, [<span class="built_in">list</span>(z) <span class="keyword">for</span> z <span class="keyword">in</span> <span class="built_in">zip</span>(v, d)],</span><br><span class="line">        radius=[<span class="string">&quot;30%&quot;</span>, <span class="string">&quot;100%&quot;</span>],</span><br><span class="line">        center=[<span class="string">&quot;50%&quot;</span>, <span class="string">&quot;50%&quot;</span>],</span><br><span class="line">        rosetype=<span class="string">&quot;area&quot;</span></span><br><span class="line">        )</span><br><span class="line"><span class="comment"># 设置全局配置项</span></span><br><span class="line">pie1.set_global_opts(title_opts=opts.TitleOpts(title=<span class="string">&#x27;多省区市\n确诊病例连续多日&#x27;</span>,subtitle=<span class="string">&#x27;零新增&#x27;</span>,</span><br><span class="line">                                               title_textstyle_opts=opts.TextStyleOpts(font_size=<span class="number">25</span>,color= <span class="string">&#x27;#0085c3&#x27;</span>),</span><br><span class="line">                                               subtitle_textstyle_opts= opts.TextStyleOpts(font_size=<span class="number">50</span>,color= <span class="string">&#x27;#003399&#x27;</span>),</span><br><span class="line">                                               pos_right= <span class="string">&#x27;center&#x27;</span>,pos_left= <span class="string">&#x27;center&#x27;</span>,pos_top=<span class="string">&#x27;42%&#x27;</span>,pos_bottom=<span class="string">&#x27;center&#x27;</span></span><br><span class="line">                                              ),</span><br><span class="line">                     legend_opts=opts.LegendOpts(is_show=<span class="literal">False</span>),</span><br><span class="line">                     toolbox_opts=opts.ToolboxOpts())</span><br><span class="line"><span class="comment"># 设置系列配置项</span></span><br><span class="line">pie1.set_series_opts(label_opts=opts.LabelOpts(is_show=<span class="literal">True</span>, position=<span class="string">&quot;inside&quot;</span>, font_size=<span class="number">12</span>,</span><br><span class="line">                                               formatter=<span class="string">&quot;&#123;b&#125;:&#123;c&#125;天&quot;</span>, font_style=<span class="string">&quot;italic&quot;</span>,</span><br><span class="line">                                               font_weight=<span class="string">&quot;bold&quot;</span>, font_family=<span class="string">&quot;SimHei&quot;</span></span><br><span class="line">                                               ),</span><br><span class="line">                     )</span><br><span class="line">pie1.load_javascript()</span><br></pre></td></tr></table></figure>
+<pre><code>0
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cust_df[<span class="string">&#x27;Gender&#x27;</span>].value_counts()</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pie1.render_notebook()</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2021/03/10/pyecharts%E9%A5%BC%E5%9B%BE%20%E7%8E%AB%E7%91%B0%E5%9B%BE/%E5%8D%97%E4%B8%81%E6%A0%BC%E5%B0%94%E7%8E%AB%E7%91%B0%E5%9B%BE.png" alt="图像"></p>
+
+
+<pre><code>Female    112
+Male       88
+Name: Gender, dtype: int64
+</code></pre>
+<p><em><strong>没有空值，没有重复数据</strong></em></p>
+<h1 id="三、数据可视化"><a href="#三、数据可视化" class="headerlink" title="三、数据可视化"></a>三、数据可视化</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sns.pairplot(cust_df)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;seaborn.axisgrid.PairGrid at 0x24eaf217670&gt;
+</code></pre>
+<p><img src="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_12_1.png" alt="png"></p>
+<p>客户ID与年收入存在明显的正相关关系</p>
+<h2 id="3-2-不同性别在个变量之间的关系"><a href="#3-2-不同性别在个变量之间的关系" class="headerlink" title="3.2 不同性别在个变量之间的关系"></a>3.2 不同性别在个变量之间的关系</h2><ul>
+<li>不同性别，年龄与收入之间的关系</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">sns.scatterplot(data=cust_df,x=<span class="string">&quot;Age&quot;</span>,y=<span class="string">&quot;Annual Income (k$)&quot;</span>,hue=<span class="string">&#x27;Gender&#x27;</span>,alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_16_0.png" alt="png"></p>
+<ul>
+<li>不同性别，年龄与积分之间的关系</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">sns.scatterplot(data=cust_df,x=<span class="string">&quot;Age&quot;</span>,y=<span class="string">&quot;Spending Score (1-100)&quot;</span>,hue=<span class="string">&#x27;Gender&#x27;</span>,alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_18_0.png" alt="png"></p>
+<ul>
+<li><ul>
+<li>不同性别，年收入与积分之间的关系</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">8</span>),dpi=<span class="number">80</span>)</span><br><span class="line">sns.scatterplot(data=cust_df,x=<span class="string">&quot;Annual Income (k$)&quot;</span>,y=<span class="string">&quot;Spending Score (1-100)&quot;</span>,hue=<span class="string">&#x27;Gender&#x27;</span>,alpha=<span class="number">0.5</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_20_0.png" alt="png"></p>
+<h1 id="四、K-means聚类分析"><a href="#四、K-means聚类分析" class="headerlink" title="四、K-means聚类分析"></a>四、K-means聚类分析</h1><h2 id="3-1-寻找最佳聚类个数——The-Elbow-Method手肘法则"><a href="#3-1-寻找最佳聚类个数——The-Elbow-Method手肘法则" class="headerlink" title="3.1 寻找最佳聚类个数——The Elbow Method手肘法则"></a>3.1 寻找最佳聚类个数——The Elbow Method手肘法则</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cust_values = cust_df[[<span class="string">&#x27;Age&#x27;</span> , <span class="string">&#x27;Annual Income (k$)&#x27;</span> ,<span class="string">&#x27;Spending Score (1-100)&#x27;</span>]].values</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">inertia = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">11</span>):</span><br><span class="line">    model = KMeans(n_clusters=i,init=<span class="string">&#x27;k-means++&#x27;</span>,max_iter=<span class="number">300</span>,n_init=<span class="number">10</span>,random_state=<span class="number">0</span>)</span><br><span class="line">    model.fit(cust_values)</span><br><span class="line">    inertia.append(model.inertia_)</span><br><span class="line">plt.plot(<span class="built_in">range</span>(<span class="number">1</span>,<span class="number">11</span>),inertia,<span class="string">&#x27;o--&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[&lt;matplotlib.lines.Line2D at 0x24eb21f7700&gt;]
+</code></pre>
+<p><img src="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_25_1.png" alt="png"></p>
+<p>利用手肘法，通过图形发现，拐点在6这个位置，即最佳聚类个数为6</p>
+<h2 id="3-2-降维"><a href="#3-2-降维" class="headerlink" title="3.2 降维"></a>3.2 降维</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cluster = KMeans(n_clusters=<span class="number">6</span>)</span><br><span class="line">cluster.fit(cust_values)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>KMeans(n_clusters=6)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> manifold </span><br><span class="line">tsne = manifold.TSNE()   <span class="comment">#将关系数据降维二维</span></span><br><span class="line">tsne_data = tsne.fit_transform(cust_values)</span><br><span class="line">tsne_df = pd.DataFrame(tsne_data,columns=[<span class="string">&#x27;col1&#x27;</span>,<span class="string">&#x27;col2&#x27;</span>])</span><br><span class="line">tsne_df</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>col1</th>
+      <th>col2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-1.265233</td>
+      <td>-9.259246</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5.900995</td>
+      <td>-5.130991</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-1.991404</td>
+      <td>-11.693021</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>5.524348</td>
+      <td>-4.871716</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-1.658740</td>
+      <td>-9.383090</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>195</th>
+      <td>7.973668</td>
+      <td>17.204592</td>
+    </tr>
+    <tr>
+      <th>196</th>
+      <td>-5.796427</td>
+      <td>7.081119</td>
+    </tr>
+    <tr>
+      <th>197</th>
+      <td>7.431481</td>
+      <td>17.882927</td>
+    </tr>
+    <tr>
+      <th>198</th>
+      <td>-5.909324</td>
+      <td>7.454984</td>
+    </tr>
+    <tr>
+      <th>199</th>
+      <td>7.340686</td>
+      <td>18.012049</td>
+    </tr>
+  </tbody>
+</table>
+<p>200 rows × 2 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tsne_df[<span class="string">&#x27;label&#x27;</span>] = cluster.predict(cust_values)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns.scatterplot(data=tsne_df,x=<span class="string">&#x27;col1&#x27;</span>,y=<span class="string">&#x27;col2&#x27;</span>,hue=<span class="string">&#x27;label&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_31_0.png" alt="png"></p>
+<p>通过降维，将三维立体图降维为平面图，上图6个不同颜色代表6个不同的人群，因为K-Means是无监督学习，主要负责把特征比较明显的用户归为一类，具体每一类分别代表什么群体，需要我们自己进行分析，下面会有讲述。</p>
+<h2 id="3-3-聚类效果评估"><a href="#3-3-聚类效果评估" class="headerlink" title="3.3 聚类效果评估"></a>3.3 聚类效果评估</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> metrics</span><br><span class="line">score = metrics.silhouette_score(cust_values,tsne_df[<span class="string">&#x27;label&#x27;</span>])</span><br><span class="line">print(<span class="string">&#x27;聚类个数为6时，轮廓函数:&#x27;</span> , score)</span><br></pre></td></tr></table></figure>
+
+<pre><code>聚类个数为6时，轮廓函数: 0.4523443947724053
+</code></pre>
+<p>轮廓函数为：0.45，聚类效果较好。</p>
+<p>PS：轮廓系数取值为[-1, 1]，其值越大越好，且当值为负时，表明样本被分配到错误的簇中，聚类结果不可接受。对于接近0的结果，则表明聚类结果有重叠的情况。</p>
+<h2 id="3-4-聚类人群"><a href="#3-4-聚类人群" class="headerlink" title="3.4 聚类人群"></a>3.4 聚类人群</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">result =pd.DataFrame(cluster.cluster_centers_,columns=[<span class="string">&#x27;Age&#x27;</span> , <span class="string">&#x27;Annual Income (k$)&#x27;</span> ,<span class="string">&#x27;Spending Score (1-100)&#x27;</span>])</span><br><span class="line">result.plot(kind=<span class="string">&#x27;bar&#x27;</span>,color=[<span class="string">&#x27;C1&#x27;</span>,<span class="string">&#x27;C2&#x27;</span>,<span class="string">&#x27;C3&#x27;</span>],clip_on=<span class="literal">False</span>,alpha = <span class="number">0.5</span>,figsize=(<span class="number">20</span>,<span class="number">8</span>))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>&lt;Figure size 720x576 with 0 Axes&gt;
+</code></pre>
+<p><img src="/2021/04/16/%E6%97%A0%E7%9B%91%E7%9D%A3%E5%AF%B9%E5%AE%A2%E6%88%B7%E7%BE%A4%E4%BD%93%E7%BB%86%E5%88%86/output_37_1.png" alt="png"></p>
+<ul>
+<li><p>0组：平均年龄55岁左右，收入55K$左右，消费50积分(属于重要保持人群：以中老年为主，收入和消费居中)   </p>
+</li>
+<li><p>1组：平均年龄45岁左右，收入在90k$左右，消费20积分（属于谨慎消费人群：以中年为主，收入很高，但消费很低） </p>
+</li>
+<li><p>2组：平均年龄在25岁左右，收入在69K$左右，消费50积分（属于重要发展人群：青年为主，收入消费得分居中，潜力巨大） </p>
+</li>
+<li><p>3组：平均年龄在5哦左右，收入消费均偏低（一般价值人群）</p>
+</li>
+<li><p>4组：平均年龄在30岁左右，收入&gt;80K$，消费&gt;80积分(重要价值人群：中年为主，收入和消费得分都很高，属于最优客户群体)</p>
+</li>
+<li><p>5组：平均年龄在25岁左右，收入25K$左右，消费积分&gt;80(冲动消费人群：青年为主，收入一般但消费得分较高）</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cust_df[<span class="string">&#x27;label&#x27;</span>] = cluster.labels_</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cust_df[<span class="string">&#x27;label&#x27;</span>].value_counts(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0    0.225
+4    0.195
+2    0.190
+1    0.175
+5    0.110
+3    0.105
+Name: label, dtype: float64
+</code></pre>
+<p>结果得到，2组（重要保持客户）人数最多，占比22.5%；5组（一般价值客户）人数最少，占比10.5%。</p>
+<p><strong>至此我们已经把所有客户细分为6类，针对不同客户特征，可以制定不同的营销运营策略，使运营效果最大化。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -596,6 +785,14 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%AE%A2%E6%88%B7%E5%88%86%E7%BE%A4/" rel="tag"># 客户分群</a>
+          
+            <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          
+        </div>
       
 
       
@@ -621,8 +818,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2021/03/09/seaborn%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" rel="next" title="seaborn的基本使用">
-                <i class="fa fa-chevron-left"></i> seaborn的基本使用
+              <a href="/2021/04/16/%E6%90%BA%E7%A8%8B%E9%85%92%E5%BA%97%E8%AF%84%E8%AE%BA%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/" rel="next" title="携程酒店评论情感分析">
+                <i class="fa fa-chevron-left"></i> 携程酒店评论情感分析
               </a>
             
           </div>
@@ -631,8 +828,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2021/03/10/python%E7%88%AC%E5%8F%96%E7%93%9C%E5%AD%90%E4%BA%8C%E6%89%8B%E8%BD%A6/" rel="prev" title="python爬取瓜子二手车">
-                python爬取瓜子二手车 <i class="fa fa-chevron-right"></i>
+              <a href="/2021/04/16/%E5%9F%BA%E4%BA%8ERFM%E6%A8%A1%E5%9E%8B%E7%9A%84%E7%94%B5%E5%95%86%E7%94%A8%E6%88%B7%E4%BB%B7%E5%80%BC%E6%8C%96%E6%8E%98/" rel="prev" title="基于RFM模型的电商用户价值挖掘">
+                基于RFM模型的电商用户价值挖掘 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -826,7 +1023,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%87%E7%AB%A0%E7%9B%AE%E5%BD%95"><span class="nav-number">1.</span> <span class="nav-text">文章目录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E9%A5%BC%E5%9B%BE"><span class="nav-number">1.1.</span> <span class="nav-text">一、 饼图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E7%8E%AF%E5%BD%A2%E5%9B%BE"><span class="nav-number">1.2.</span> <span class="nav-text">二、 环形图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%8D%97%E4%B8%81%E6%A0%BC%E5%B0%94%E7%8E%AB%E7%91%B0%E5%9B%BE"><span class="nav-number">1.3.</span> <span class="nav-text">三、南丁格尔玫瑰图</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%95%B0%E6%8D%AE%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">一、数据背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AF%BB%E5%8F%96%E5%8F%8A%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">二、数据的读取及预处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">三、数据可视化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E4%B8%8D%E5%90%8C%E6%80%A7%E5%88%AB%E5%9C%A8%E4%B8%AA%E5%8F%98%E9%87%8F%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.1.</span> <span class="nav-text">3.2 不同性别在个变量之间的关系</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81K-means%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">四、K-means聚类分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E5%AF%BB%E6%89%BE%E6%9C%80%E4%BD%B3%E8%81%9A%E7%B1%BB%E4%B8%AA%E6%95%B0%E2%80%94%E2%80%94The-Elbow-Method%E6%89%8B%E8%82%98%E6%B3%95%E5%88%99"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 寻找最佳聚类个数——The Elbow Method手肘法则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E9%99%8D%E7%BB%B4"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 降维</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E8%81%9A%E7%B1%BB%E6%95%88%E6%9E%9C%E8%AF%84%E4%BC%B0"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 聚类效果评估</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E8%81%9A%E7%B1%BB%E4%BA%BA%E7%BE%A4"><span class="nav-number">4.4.</span> <span class="nav-text">3.4 聚类人群</span></a></li></ol></li></ol></div>
             
 
           </div>
