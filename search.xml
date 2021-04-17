@@ -3,7 +3,7 @@
   <entry>
     <title>还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图</title>
     <url>/2021/03/07/pyecharts%E9%9B%B7%E8%BE%BE%E5%9B%BE/</url>
-    <content><![CDATA[<h1 id="还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图"><a href="#还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图" class="headerlink" title="还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图"></a>还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图</h1><h3 id="首先，来介绍一下Pyecharts"><a href="#首先，来介绍一下Pyecharts" class="headerlink" title="首先，来介绍一下Pyecharts."></a>首先，来介绍一下Pyecharts.</h3><p>Pyecharts是我国开发人员开发的，相比较Matplotlib、Seaborn等可视化，Pyehcarts十分符合国内用户的习惯。<br>Pyecharts的目的是实现Echarts与Python的对接，以便在Python中使用Echarts生成图表。<br>Echarts是Apache软件基金会的一个数据可视化JavaScript库，生成图的可视化效果非常好，其凭借良好的交互性，精巧的图表设计，得到众多开发者的认可。</p>
+    <content><![CDATA[<h1 id="还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图"><a href="#还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图" class="headerlink" title="还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图"></a>还在用Tableau画雷达图吗？用Pyecharts库，只需几行代码瞬间搞定雷达图</h1><h3 id="Pyecharts"><a href="#Pyecharts" class="headerlink" title="Pyecharts."></a>Pyecharts.</h3><p>Pyecharts是我国开发人员开发的，相比较Matplotlib、Seaborn等可视化，Pyehcarts十分符合国内用户的习惯。<br>Pyecharts的目的是实现Echarts与Python的对接，以便在Python中使用Echarts生成图表。<br>Echarts是Apache软件基金会的一个数据可视化JavaScript库，生成图的可视化效果非常好，其凭借良好的交互性，精巧的图表设计，得到众多开发者的认可。</p>
 <span id="more"></span>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">ld_pict = pd.read_excel(<span class="string">&quot;雷达图数据.xlsx&quot;</span>,index_col=<span class="number">0</span>)</span><br><span class="line">ld_pict.head()</span><br></pre></td></tr></table></figure>
 
@@ -370,7 +370,7 @@
   <entry>
     <title>seaborn的基本使用</title>
     <url>/2021/03/09/seaborn%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<p>介绍python一种常用的的绘图库，他是对matplotlib的基本封装，并进行了美化，由于其调用起来<br>比较方便，所以还是有必要学习一下的。</p>
+    <content><![CDATA[<p>介绍python一种常用的的绘图库，他是对matplotlib的基本封装，并进行了美化，其调用起来<br>比较方便，所以还是有必要学习一下的。</p>
 <span id="more"></span>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> mpl</span><br><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br></pre></td></tr></table></figure>
 
@@ -5440,6 +5440,1358 @@ Name: label, dtype: float64
   <entry>
     <title>电商用户画像实战</title>
     <url>/2021/04/16/%E7%94%B5%E5%95%86%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E5%AE%9E%E6%88%98/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h1 id="一、项目背景"><a href="#一、项目背景" class="headerlink" title="一、项目背景"></a>一、项目背景</h1><p>你是某电商平台的数据分析师，你的运营同事找到你，最近某家电类目的订单数量，浏览量有所下降<br>平台想做一些促销活动，给用户发放优惠券，希望你能对本次活动提出一些建议。</p>
+<span id="more"></span>
+<p>促销活动需要哪几个部分的信息？</p>
+<ul>
+<li>促销活动的受众群体</li>
+<li>促销活动的上线时间</li>
+<li>促销活动覆盖的产品</li>
+<li>………</li>
+</ul>
+<p>主要用到的工具：</p>
+<ul>
+<li>pandas </li>
+<li>pyecharts</li>
+<li>tableau</li>
+</ul>
+<h1 id="二、数据来源"><a href="#二、数据来源" class="headerlink" title="二、数据来源"></a>二、数据来源</h1><p>数据来源某电商平台2020年8月12日-2020年8月19日某家电类目脱敏订单数据</p>
+<h1 id="三、数据预处理"><a href="#三、数据预处理" class="headerlink" title="三、数据预处理"></a>三、数据预处理</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">user_df = pd.read_csv(<span class="string">&#x27;xjd_user_info.csv&#x27;</span>,sep=<span class="string">&quot;\t&quot;</span>)</span><br><span class="line">order_df = pd.read_csv(<span class="string">&#x27;xjd_order_d.csv&#x27;</span>,sep=<span class="string">&quot;\t&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">user_df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>user_log_acct</th>
+      <th>ulp_base_sex</th>
+      <th>ulp_base_age</th>
+      <th>ulp_base_income</th>
+      <th>ulp_base_education</th>
+      <th>ulp_base_regprovince</th>
+      <th>ulp_base_regcity</th>
+      <th>ulp_user_reg_source_det</th>
+      <th>ulp_user_reg_days</th>
+      <th>ulp_base_regtime</th>
+      <th>...</th>
+      <th>cvl_glob_values</th>
+      <th>cvl_glob_loyalty</th>
+      <th>cvl_glob_platform</th>
+      <th>cfv_sens_promotion</th>
+      <th>cfv_sens_comment</th>
+      <th>reg_user_type_cd</th>
+      <th>member_reg_gender</th>
+      <th>reg_birthday</th>
+      <th>last_login_tm</th>
+      <th>factory_user_flag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1030914909</td>
+      <td>0</td>
+      <td>3</td>
+      <td>-1</td>
+      <td>3</td>
+      <td>-1</td>
+      <td>闵行区</td>
+      <td>NaN</td>
+      <td>3164</td>
+      <td>2011-12</td>
+      <td>...</td>
+      <td>0.648078</td>
+      <td>中度-忠诚型</td>
+      <td>-1.000000</td>
+      <td>L1-3</td>
+      <td>L1-4</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>NaN</td>
+      <td>2019-06-08 22:18:32.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>103385299</td>
+      <td>1</td>
+      <td>3</td>
+      <td>-1</td>
+      <td>4</td>
+      <td>-1</td>
+      <td>温州市</td>
+      <td>NaN</td>
+      <td>3969</td>
+      <td>2009-10</td>
+      <td>...</td>
+      <td>4.023711</td>
+      <td>高度-忠诚型</td>
+      <td>-1.000000</td>
+      <td>L1-4</td>
+      <td>L1-4</td>
+      <td>44.0</td>
+      <td>0.0</td>
+      <td>1991-9-9</td>
+      <td>2020-08-13 18:32:57.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>10638747-707577</td>
+      <td>1</td>
+      <td>3</td>
+      <td>-1</td>
+      <td>3</td>
+      <td>-1</td>
+      <td>朝阳区</td>
+      <td>NaN</td>
+      <td>2637</td>
+      <td>2013-05</td>
+      <td>...</td>
+      <td>1.620113</td>
+      <td>高度-忠诚型</td>
+      <td>43.389526</td>
+      <td>L1-2</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1992-4-3</td>
+      <td>2020-06-20 17:11:33.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1087096-78471807</td>
+      <td>1</td>
+      <td>4</td>
+      <td>-1</td>
+      <td>4</td>
+      <td>-1</td>
+      <td>-1</td>
+      <td>NaN</td>
+      <td>3740</td>
+      <td>2010-05</td>
+      <td>...</td>
+      <td>15.702956</td>
+      <td>高度-忠诚型</td>
+      <td>-1.000000</td>
+      <td>L1-3</td>
+      <td>L1-4</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>2014-1-1</td>
+      <td>2020-08-13 12:16:12.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1090625252_m</td>
+      <td>1</td>
+      <td>6</td>
+      <td>-1</td>
+      <td>2</td>
+      <td>-1</td>
+      <td>-1</td>
+      <td>NaN</td>
+      <td>2379</td>
+      <td>2014-02</td>
+      <td>...</td>
+      <td>1.328761</td>
+      <td>近期-普通型</td>
+      <td>-1.000000</td>
+      <td>L1-4</td>
+      <td>L1-3</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>2019-09-28 10:29:32.0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 39 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">order_df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>user_log_acct</th>
+      <th>parent_sale_ord_id</th>
+      <th>sale_ord_id</th>
+      <th>sale_ord_tm</th>
+      <th>sale_ord_dt</th>
+      <th>item_sku_id</th>
+      <th>item_name</th>
+      <th>brandname</th>
+      <th>sale_qtty</th>
+      <th>item_first_cate_name</th>
+      <th>...</th>
+      <th>cancel_flag</th>
+      <th>check_account_tm</th>
+      <th>total_offer_amount</th>
+      <th>self_ord_flag</th>
+      <th>user_site_city_id</th>
+      <th>user_site_province_id</th>
+      <th>user_lv_cd</th>
+      <th>rev_addr_province_id</th>
+      <th>rev_addr_city_id</th>
+      <th>wait_check_account_flag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>------1289</td>
+      <td>130704863113</td>
+      <td>124906164828</td>
+      <td>2020-08-18 00:02:10.0</td>
+      <td>2020-08-18</td>
+      <td>100009149228</td>
+      <td>飞利浦 (PHILIPS)蒸汽电熨斗家用 熨烫机 GC4902/28</td>
+      <td>飞利浦（PHILIPS）</td>
+      <td>2</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>1</td>
+      <td>2020-08-18 00:02:25.0</td>
+      <td>639.4</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>50</td>
+      <td>1</td>
+      <td>2809</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>------1289</td>
+      <td>130704863113</td>
+      <td>124903359952</td>
+      <td>2020-08-18 00:02:10.0</td>
+      <td>2020-08-18</td>
+      <td>4559760</td>
+      <td>德尔玛（Deerma） 加湿器 5L大容量 家用卧室静音  迷你香薰空气加湿 DEM-F60...</td>
+      <td>德尔玛（Deerma）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>1</td>
+      <td>2020-08-18 00:02:25.0</td>
+      <td>36.8</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>50</td>
+      <td>1</td>
+      <td>2809</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>------1289</td>
+      <td>130704863113</td>
+      <td>130704863113</td>
+      <td>2020-08-18 00:02:10.0</td>
+      <td>2020-08-18</td>
+      <td>100009149228</td>
+      <td>飞利浦 (PHILIPS)蒸汽电熨斗家用 熨烫机 GC4902/28</td>
+      <td>飞利浦（PHILIPS）</td>
+      <td>2</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>0</td>
+      <td>2020-08-18 00:02:23.0</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>50</td>
+      <td>1</td>
+      <td>2809</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>------1289</td>
+      <td>130699964163</td>
+      <td>130699964163</td>
+      <td>2020-08-18 00:00:16.0</td>
+      <td>2020-08-18</td>
+      <td>100011967276</td>
+      <td>爱丽思(IRIS OHYAMA)日本 吸尘器 无线家用充电手持轻便智能吸尘机IC-SDC2C（粉）</td>
+      <td>IRIS OHYAMA</td>
+      <td>3</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>1</td>
+      <td>2020-08-18 00:00:25.0</td>
+      <td>478.8</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>50</td>
+      <td>1</td>
+      <td>2809</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>------1289</td>
+      <td>130704863113</td>
+      <td>124903359952</td>
+      <td>2020-08-18 00:02:10.0</td>
+      <td>2020-08-18</td>
+      <td>100006533674</td>
+      <td>德尔玛（Deerma）加湿器净水盒 水箱专用 通用 银离子净水盒</td>
+      <td>德尔玛（Deerma）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>1</td>
+      <td>2020-08-18 00:02:25.0</td>
+      <td>0.0</td>
+      <td>1</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>50</td>
+      <td>1</td>
+      <td>2809</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 26 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">user_df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 215090 entries, 0 to 215089
+Data columns (total 39 columns):
+ #   Column                   Non-Null Count   Dtype  
+---  ------                   --------------   -----  
+ 0   user_log_acct            215090 non-null  object 
+ 1   ulp_base_sex             215090 non-null  int64  
+ 2   ulp_base_age             215090 non-null  int64  
+ 3   ulp_base_income          215090 non-null  int64  
+ 4   ulp_base_education       215090 non-null  int64  
+ 5   ulp_base_regprovince     215090 non-null  int64  
+ 6   ulp_base_regcity         215090 non-null  object 
+ 7   ulp_user_reg_source_det  0 non-null       float64
+ 8   ulp_user_reg_days        215090 non-null  int64  
+ 9   ulp_base_regtime         215090 non-null  object 
+ 10  ulp_base_ulevel          215090 non-null  int64  
+ 11  ulp_jd_jx_value          215090 non-null  int64  
+ 12  ulp_is_plus_member       215090 non-null  int64  
+ 13  ulp_is_student_customer  215090 non-null  int64  
+ 14  ulp_base_profession      215090 non-null  object 
+ 15  ulp_addr_province        215090 non-null  object 
+ 16  ulp_addr_city            215090 non-null  object 
+ 17  ulp_addr_county          215090 non-null  object 
+ 18  ulp_site_province_name   215090 non-null  int64  
+ 19  ulp_site_city_name       215090 non-null  int64  
+ 20  ulp_base_marriage        215090 non-null  int64  
+ 21  ulp_base_child           215090 non-null  object 
+ 22  ulp_seni_childage        215090 non-null  object 
+ 23  ulp_seni_childsex        215090 non-null  int64  
+ 24  ulp_seni_hascar          215090 non-null  int64  
+ 25  ulp_tmsale_3m_pctatm     215090 non-null  float64
+ 26  ulp_old                  215090 non-null  object 
+ 27  ulp_plus_used            215090 non-null  int64  
+ 28  cvl_glob_valuegrp        215090 non-null  object 
+ 29  cvl_glob_values          215090 non-null  float64
+ 30  cvl_glob_loyalty         215090 non-null  object 
+ 31  cvl_glob_platform        215090 non-null  float64
+ 32  cfv_sens_promotion       215090 non-null  object 
+ 33  cfv_sens_comment         215090 non-null  object 
+ 34  reg_user_type_cd         98111 non-null   float64
+ 35  member_reg_gender        214310 non-null  float64
+ 36  reg_birthday             70394 non-null   object 
+ 37  last_login_tm            201671 non-null  object 
+ 38  factory_user_flag        215090 non-null  int64  
+dtypes: float64(6), int64(17), object(16)
+memory usage: 64.0+ MB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">user_df[<span class="string">&#x27;user_log_acct&#x27;</span>].duplicated().<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0
+</code></pre>
+<p><strong>没有重复用户</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">order_df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 607712 entries, 0 to 607711
+Data columns (total 26 columns):
+ #   Column                   Non-Null Count   Dtype  
+---  ------                   --------------   -----  
+ 0   user_log_acct            607712 non-null  object 
+ 1   parent_sale_ord_id       607712 non-null  int64  
+ 2   sale_ord_id              607712 non-null  int64  
+ 3   sale_ord_tm              607712 non-null  object 
+ 4   sale_ord_dt              607712 non-null  object 
+ 5   item_sku_id              607712 non-null  int64  
+ 6   item_name                607712 non-null  object 
+ 7   brandname                607712 non-null  object 
+ 8   sale_qtty                607712 non-null  int64  
+ 9   item_first_cate_name     607712 non-null  object 
+ 10  item_second_cate_name    607712 non-null  object 
+ 11  item_third_cate_name     607712 non-null  object 
+ 12  before_prefr_unit_price  607712 non-null  float64
+ 13  after_prefr_unit_price   607712 non-null  float64
+ 14  user_actual_pay_amount   607712 non-null  float64
+ 15  sale_ord_valid_flag      607712 non-null  int64  
+ 16  cancel_flag              607712 non-null  int64  
+ 17  check_account_tm         507505 non-null  object 
+ 18  total_offer_amount       607712 non-null  float64
+ 19  self_ord_flag            607712 non-null  int64  
+ 20  user_site_city_id        430092 non-null  float64
+ 21  user_site_province_id    430224 non-null  float64
+ 22  user_lv_cd               607712 non-null  int64  
+ 23  rev_addr_province_id     607712 non-null  int64  
+ 24  rev_addr_city_id         607712 non-null  int64  
+ 25  wait_check_account_flag  607712 non-null  int64  
+dtypes: float64(6), int64(11), object(9)
+memory usage: 120.5+ MB
+</code></pre>
+<p>订单表无空值</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 连接两个表，看一下都有哪些用户购买了商品</span></span><br><span class="line">user_order_df = pd.merge(order_df,user_df,on=<span class="string">&quot;user_log_acct&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">user_order_df</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>user_log_acct</th>
+      <th>parent_sale_ord_id</th>
+      <th>sale_ord_id</th>
+      <th>sale_ord_tm</th>
+      <th>sale_ord_dt</th>
+      <th>item_sku_id</th>
+      <th>item_name</th>
+      <th>brandname</th>
+      <th>sale_qtty</th>
+      <th>item_first_cate_name</th>
+      <th>...</th>
+      <th>cvl_glob_values</th>
+      <th>cvl_glob_loyalty</th>
+      <th>cvl_glob_platform</th>
+      <th>cfv_sens_promotion</th>
+      <th>cfv_sens_comment</th>
+      <th>reg_user_type_cd</th>
+      <th>member_reg_gender</th>
+      <th>reg_birthday</th>
+      <th>last_login_tm</th>
+      <th>factory_user_flag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>------1289</td>
+      <td>130704863113</td>
+      <td>124906164828</td>
+      <td>2020-08-18 00:02:10.0</td>
+      <td>2020-08-18</td>
+      <td>100009149228</td>
+      <td>飞利浦 (PHILIPS)蒸汽电熨斗家用 熨烫机 GC4902/28</td>
+      <td>飞利浦（PHILIPS）</td>
+      <td>2</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.037542</td>
+      <td>高度-忠诚型</td>
+      <td>77.973809</td>
+      <td>L1-4</td>
+      <td>L1-4</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1997-2-10</td>
+      <td>2020-08-11 22:55:05.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>------1289</td>
+      <td>130704863113</td>
+      <td>124903359952</td>
+      <td>2020-08-18 00:02:10.0</td>
+      <td>2020-08-18</td>
+      <td>4559760</td>
+      <td>德尔玛（Deerma） 加湿器 5L大容量 家用卧室静音  迷你香薰空气加湿 DEM-F60...</td>
+      <td>德尔玛（Deerma）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.037542</td>
+      <td>高度-忠诚型</td>
+      <td>77.973809</td>
+      <td>L1-4</td>
+      <td>L1-4</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1997-2-10</td>
+      <td>2020-08-11 22:55:05.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>------1289</td>
+      <td>130704863113</td>
+      <td>130704863113</td>
+      <td>2020-08-18 00:02:10.0</td>
+      <td>2020-08-18</td>
+      <td>100009149228</td>
+      <td>飞利浦 (PHILIPS)蒸汽电熨斗家用 熨烫机 GC4902/28</td>
+      <td>飞利浦（PHILIPS）</td>
+      <td>2</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.037542</td>
+      <td>高度-忠诚型</td>
+      <td>77.973809</td>
+      <td>L1-4</td>
+      <td>L1-4</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1997-2-10</td>
+      <td>2020-08-11 22:55:05.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>------1289</td>
+      <td>130699964163</td>
+      <td>130699964163</td>
+      <td>2020-08-18 00:00:16.0</td>
+      <td>2020-08-18</td>
+      <td>100011967276</td>
+      <td>爱丽思(IRIS OHYAMA)日本 吸尘器 无线家用充电手持轻便智能吸尘机IC-SDC2C（粉）</td>
+      <td>IRIS OHYAMA</td>
+      <td>3</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.037542</td>
+      <td>高度-忠诚型</td>
+      <td>77.973809</td>
+      <td>L1-4</td>
+      <td>L1-4</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1997-2-10</td>
+      <td>2020-08-11 22:55:05.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>------1289</td>
+      <td>130704863113</td>
+      <td>124903359952</td>
+      <td>2020-08-18 00:02:10.0</td>
+      <td>2020-08-18</td>
+      <td>100006533674</td>
+      <td>德尔玛（Deerma）加湿器净水盒 水箱专用 通用 银离子净水盒</td>
+      <td>德尔玛（Deerma）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.037542</td>
+      <td>高度-忠诚型</td>
+      <td>77.973809</td>
+      <td>L1-4</td>
+      <td>L1-4</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1997-2-10</td>
+      <td>2020-08-11 22:55:05.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>607707</th>
+      <td>龚天睿</td>
+      <td>124772876191</td>
+      <td>124772404564</td>
+      <td>2020-08-15 11:03:24.0</td>
+      <td>2020-08-15</td>
+      <td>5149351</td>
+      <td>碧然德（BRITA）家用净水壶 滤水壶滤芯 MAXTRA+LE 去水垢专家滤芯 3枚装</td>
+      <td>碧然德</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.442311</td>
+      <td>高度-忠诚型</td>
+      <td>74.562119</td>
+      <td>L1-4</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>2011-1-1</td>
+      <td>2019-12-04 22:35:59.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>607708</th>
+      <td>龚天睿</td>
+      <td>124772876191</td>
+      <td>124770096176</td>
+      <td>2020-08-15 11:03:24.0</td>
+      <td>2020-08-15</td>
+      <td>5149351</td>
+      <td>碧然德（BRITA）家用净水壶 滤水壶滤芯 MAXTRA+LE 去水垢专家滤芯 3枚装</td>
+      <td>碧然德</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.442311</td>
+      <td>高度-忠诚型</td>
+      <td>74.562119</td>
+      <td>L1-4</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>2011-1-1</td>
+      <td>2019-12-04 22:35:59.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>607709</th>
+      <td>龚天睿</td>
+      <td>124772876191</td>
+      <td>124772876191</td>
+      <td>2020-08-15 11:03:24.0</td>
+      <td>2020-08-15</td>
+      <td>5149351</td>
+      <td>碧然德（BRITA）家用净水壶 滤水壶滤芯 MAXTRA+LE 去水垢专家滤芯 3枚装</td>
+      <td>碧然德</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.442311</td>
+      <td>高度-忠诚型</td>
+      <td>74.562119</td>
+      <td>L1-4</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>2011-1-1</td>
+      <td>2019-12-04 22:35:59.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>607710</th>
+      <td>龚思嘉</td>
+      <td>124875168188</td>
+      <td>124875168188</td>
+      <td>2020-08-17 12:35:34.0</td>
+      <td>2020-08-17</td>
+      <td>4460778</td>
+      <td>沁园（TRULIVA）家用净水器 即滤型超滤机 长寿命滤芯 无废水 矿物质净水机 QJ-UF...</td>
+      <td>沁园（TRULIVA）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>7.002889</td>
+      <td>高度-忠诚型</td>
+      <td>15.897320</td>
+      <td>L1-4</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>0001-1-1</td>
+      <td>2019-11-02 09:57:09.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>607711</th>
+      <td>龚磊gonglei31550</td>
+      <td>130817561991</td>
+      <td>130817561991</td>
+      <td>2020-08-19 18:14:21.0</td>
+      <td>2020-08-19</td>
+      <td>61063726440</td>
+      <td>杉贝电话机助响器 座机铃声放大器 固定手机响铃器声音扩音器超大特大</td>
+      <td>杉贝</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>1.537553</td>
+      <td>高度-忠诚型</td>
+      <td>-1.000000</td>
+      <td>L1-4</td>
+      <td>L1-3</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1989-12-30</td>
+      <td>2020-03-28 18:08:50.0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>607712 rows × 64 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">user_info_df = user_order_df.drop_duplicates(<span class="string">&quot;user_log_acct&quot;</span>,keep=<span class="string">&#x27;first&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">user_info_df</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>user_log_acct</th>
+      <th>parent_sale_ord_id</th>
+      <th>sale_ord_id</th>
+      <th>sale_ord_tm</th>
+      <th>sale_ord_dt</th>
+      <th>item_sku_id</th>
+      <th>item_name</th>
+      <th>brandname</th>
+      <th>sale_qtty</th>
+      <th>item_first_cate_name</th>
+      <th>...</th>
+      <th>cvl_glob_values</th>
+      <th>cvl_glob_loyalty</th>
+      <th>cvl_glob_platform</th>
+      <th>cfv_sens_promotion</th>
+      <th>cfv_sens_comment</th>
+      <th>reg_user_type_cd</th>
+      <th>member_reg_gender</th>
+      <th>reg_birthday</th>
+      <th>last_login_tm</th>
+      <th>factory_user_flag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>------1289</td>
+      <td>130704863113</td>
+      <td>124906164828</td>
+      <td>2020-08-18 00:02:10.0</td>
+      <td>2020-08-18</td>
+      <td>100009149228</td>
+      <td>飞利浦 (PHILIPS)蒸汽电熨斗家用 熨烫机 GC4902/28</td>
+      <td>飞利浦（PHILIPS）</td>
+      <td>2</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.037542</td>
+      <td>高度-忠诚型</td>
+      <td>77.973809</td>
+      <td>L1-4</td>
+      <td>L1-4</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1997-2-10</td>
+      <td>2020-08-11 22:55:05.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>---刺猬</td>
+      <td>130744622338</td>
+      <td>130744622338</td>
+      <td>2020-08-18 18:11:35.0</td>
+      <td>2020-08-18</td>
+      <td>100001679413</td>
+      <td>安吉尔（Angel）茶吧机立式家用办公室饮水机多功能自动上水柜式茶吧机下置水桶式CB2705...</td>
+      <td>安吉尔（Angel）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>1.859163</td>
+      <td>高度-忠诚型</td>
+      <td>79.137988</td>
+      <td>L1-2</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>2019-12-11 18:29:44.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>--寂</td>
+      <td>124775599894</td>
+      <td>124775599894</td>
+      <td>2020-08-15 12:49:06.0</td>
+      <td>2020-08-15</td>
+      <td>2392546</td>
+      <td>赛亿（Shinee）小风扇 台扇/台夹扇 壁扇 迷你静音学生宿舍床头办公室桌面换气电风扇FJ...</td>
+      <td>赛亿（Shinee）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>3.187507</td>
+      <td>高度-忠诚型</td>
+      <td>-1.000000</td>
+      <td>L1-4</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>2020-02-25 15:01:41.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>-love明-</td>
+      <td>130503457517</td>
+      <td>130501451054</td>
+      <td>2020-08-15 19:47:49.0</td>
+      <td>2020-08-15</td>
+      <td>3085665</td>
+      <td>松下（Panasonic）吸尘器MC-WF350手持式真空吸尘器家用超大吸力手提式系列吸尘器...</td>
+      <td>松下（Panasonic）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>9.721487</td>
+      <td>高度-忠诚型</td>
+      <td>69.125353</td>
+      <td>L1-4</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1988-1-17</td>
+      <td>2020-08-08 20:34:47.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>-zhongzhong</td>
+      <td>124778603709</td>
+      <td>130550058117</td>
+      <td>2020-08-15 12:53:08.0</td>
+      <td>2020-08-15</td>
+      <td>100012373764</td>
+      <td>格力 （GREE）新品家用智能遥控定时电风扇/塔式落地扇/直流变频电扇/立式塔扇/无叶风扇F...</td>
+      <td>格力（GREE）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>18.505648</td>
+      <td>高度-忠诚型</td>
+      <td>63.646321</td>
+      <td>L1-3</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1986-10-22</td>
+      <td>2020-08-12 14:24:47.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>607704</th>
+      <td>龙龙豆豆1988</td>
+      <td>124905744754</td>
+      <td>124905744754</td>
+      <td>2020-08-18 01:43:56.0</td>
+      <td>2020-08-18</td>
+      <td>5149337</td>
+      <td>碧然德（BRITA）家用净水壶 滤水壶滤芯 MAXTRA+LE 去水垢专家滤芯 6枚装</td>
+      <td>碧然德</td>
+      <td>3</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>6.162832</td>
+      <td>高度-忠诚型</td>
+      <td>85.796222</td>
+      <td>L1-4</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>1.0</td>
+      <td>1988-12-13</td>
+      <td>2020-08-06 10:15:03.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>607706</th>
+      <td>龚凤波</td>
+      <td>124863599292</td>
+      <td>124863599292</td>
+      <td>2020-08-17 08:13:19.0</td>
+      <td>2020-08-17</td>
+      <td>100005221904</td>
+      <td>康佳（KONKA）大型家用商用空调扇 制冷风扇 冷风机 冷风扇 车间食堂餐厅网吧大排档移动工...</td>
+      <td>康佳（KONKA）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>3.911795</td>
+      <td>高度-忠诚型</td>
+      <td>-1.000000</td>
+      <td>L1-2</td>
+      <td>L1-3</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>NaN</td>
+      <td>2017-04-28 14:18:32.0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>607707</th>
+      <td>龚天睿</td>
+      <td>124772876191</td>
+      <td>124772404564</td>
+      <td>2020-08-15 11:03:24.0</td>
+      <td>2020-08-15</td>
+      <td>5149351</td>
+      <td>碧然德（BRITA）家用净水壶 滤水壶滤芯 MAXTRA+LE 去水垢专家滤芯 3枚装</td>
+      <td>碧然德</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>2.442311</td>
+      <td>高度-忠诚型</td>
+      <td>74.562119</td>
+      <td>L1-4</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>2011-1-1</td>
+      <td>2019-12-04 22:35:59.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>607710</th>
+      <td>龚思嘉</td>
+      <td>124875168188</td>
+      <td>124875168188</td>
+      <td>2020-08-17 12:35:34.0</td>
+      <td>2020-08-17</td>
+      <td>4460778</td>
+      <td>沁园（TRULIVA）家用净水器 即滤型超滤机 长寿命滤芯 无废水 矿物质净水机 QJ-UF...</td>
+      <td>沁园（TRULIVA）</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>7.002889</td>
+      <td>高度-忠诚型</td>
+      <td>15.897320</td>
+      <td>L1-4</td>
+      <td>L1-5</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>0001-1-1</td>
+      <td>2019-11-02 09:57:09.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>607711</th>
+      <td>龚磊gonglei31550</td>
+      <td>130817561991</td>
+      <td>130817561991</td>
+      <td>2020-08-19 18:14:21.0</td>
+      <td>2020-08-19</td>
+      <td>61063726440</td>
+      <td>杉贝电话机助响器 座机铃声放大器 固定手机响铃器声音扩音器超大特大</td>
+      <td>杉贝</td>
+      <td>1</td>
+      <td>家用电器</td>
+      <td>...</td>
+      <td>1.537553</td>
+      <td>高度-忠诚型</td>
+      <td>-1.000000</td>
+      <td>L1-4</td>
+      <td>L1-3</td>
+      <td>NaN</td>
+      <td>0.0</td>
+      <td>1989-12-30</td>
+      <td>2020-03-28 18:08:50.0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>215090 rows × 64 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># user_info_df.to_csv(&quot;user_info_df.csv&quot;,index=0)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">vaild_order_user_df = user_order_df[(user_order_df[<span class="string">&#x27;sale_ord_valid_flag&#x27;</span>] == <span class="number">1</span>)</span><br><span class="line">                          &amp;(user_order_df[<span class="string">&#x27;cancel_flag&#x27;</span>] == <span class="number">0</span>)</span><br><span class="line">                          &amp;(user_order_df[<span class="string">&#x27;check_account_tm&#x27;</span>] != <span class="number">0</span>)</span><br><span class="line">                          &amp;(user_order_df[<span class="string">&#x27;before_prefr_unit_price&#x27;</span>] != <span class="number">0</span>)</span><br><span class="line">                          &amp;(user_order_df[<span class="string">&#x27;user_actual_pay_amount&#x27;</span>] != <span class="number">0</span>)]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">vaild_order_user_df = vaild_order_user_df.infer_objects()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">vaild_order_user_df[<span class="string">&#x27;sale_ord_tm&#x27;</span>] = pd.to_datetime(vaild_order_user_df[<span class="string">&#x27;sale_ord_tm&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">vaild_order_user_df[<span class="string">&#x27;order_time_hms&#x27;</span>] = vaild_order_user_df[<span class="string">&#x27;sale_ord_tm&#x27;</span>].apply(<span class="keyword">lambda</span> x:x.strftime(<span class="string">&#x27;%H:00:00&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<h1 id="三、分析用户的基本特征"><a href="#三、分析用户的基本特征" class="headerlink" title="三、分析用户的基本特征"></a>三、分析用户的基本特征</h1><h2 id="3-1-用户性别和年龄分布"><a href="#3-1-用户性别和年龄分布" class="headerlink" title="3.1 用户性别和年龄分布"></a>3.1 用户性别和年龄分布</h2><p><img src="/2021/04/16/%E7%94%B5%E5%95%86%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E5%AE%9E%E6%88%98/%E7%94%A8%E6%88%B7%E6%80%A7%E5%88%AB%E5%88%86%E5%B8%83.jpg" alt="用户性别分布"></p>
+<p><img src="/2021/04/16/%E7%94%B5%E5%95%86%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E5%AE%9E%E6%88%98/%E7%94%A8%E6%88%B7%E5%B9%B4%E9%BE%84%E5%88%86%E5%B8%83.jpg" alt="用户年龄分布"></p>
+<p>从数据来看，用户消费没有明显的性别偏好，男性用户稍微多一点，用户的年龄集中在25-35岁之间，25岁以下以及45岁以上的用户数较少。</p>
+<p>25岁以下的用户多为在校学生，对于家电类目的购买需求低</p>
+<p>45岁以上的用户多为中年人员，家电类目需求低，同时手机网购的比例低</p>
+<h2 id="3-2-用户的地域分布"><a href="#3-2-用户的地域分布" class="headerlink" title="3.2 用户的地域分布"></a>3.2 用户的地域分布</h2><p><img src="/2021/04/16/%E7%94%B5%E5%95%86%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E5%AE%9E%E6%88%98/%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9F%9F%E5%88%86%E5%B8%83.jpg" alt="地域"></p>
+<p><img src="/2021/04/16/%E7%94%B5%E5%95%86%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E5%AE%9E%E6%88%98/%E7%94%A8%E6%88%B7%E5%9F%8E%E5%B8%82%E5%88%86%E5%B8%83.jpg" alt="城市"></p>
+<p>用户在城市分布上具有一定的集中性，大多集中在一线和新一线城市，因为一线城市对年轻人有很强的吸引力，因此城市分布和用户的年龄分布也相符合.</p>
+<h2 id="3-3-用户的婚育状况、学历和职业分布"><a href="#3-3-用户的婚育状况、学历和职业分布" class="headerlink" title="3.3 用户的婚育状况、学历和职业分布"></a>3.3 用户的婚育状况、学历和职业分布</h2><p><img src="/2021/04/16/%E7%94%B5%E5%95%86%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E5%AE%9E%E6%88%98/%E7%94%A8%E6%88%B7%E5%9F%BA%E6%9C%AC%E7%89%B9%E5%BE%8102.jpg" alt="婚姻"></p>
+<p>从图中的数据来看，近70%的小家电用户都是已婚，超过60%的用户有小孩的可能性高</p>
+<p>通过用户的基础属性的研判来看，小家电的典型用户为：</p>
+<ul>
+<li>男性，年龄在28-30岁左右，已婚且有孩子</li>
+<li>他在一线城市居中，本科学历，在一家互联网公司任职，有比较稳定的收入</li>
+<li>因为还刚进入婚姻，因此有一定的生活品质追求，同时比较关注家庭生活</li>
+</ul>
+<p>因此，我们给运营同事的建议是，文案不用过于个性，促销的商品要重点突出家庭品质生活属性，同时强调家电的健康与安全</p>
+<h1 id="四、用户的行为特征"><a href="#四、用户的行为特征" class="headerlink" title="四、用户的行为特征"></a>四、用户的行为特征</h1><p><img src="/2021/04/16/%E7%94%B5%E5%95%86%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E5%AE%9E%E6%88%98/%E7%94%A8%E6%88%B7%E8%A1%8C%E4%B8%BA%E7%89%B9%E5%BE%81.jpg" alt="image.png"></p>
+<p><img src="/2021/04/16/%E7%94%B5%E5%95%86%E7%94%A8%E6%88%B7%E7%94%BB%E5%83%8F%E5%AE%9E%E6%88%98/%E6%97%B6%E9%97%B4%E5%88%86%E5%B8%83%E6%8A%98%E7%BA%BF%E5%9B%BE.png" alt="image.png"></p>
+<p>用户购买商品的类目是用户的行为数据，从图中的数据来看，最受欢迎的电器是电风扇，<br>考虑到这个数据采集的时间是8月12日，用户购买电风扇的需求得到了释放，在即将进入秋天，因此应该对其它商品 比如净水器，加湿器等商品进行促销</p>
+<p>从日期和时间维度来看，订单成交的高峰在周二和周六，从每天的时间来看，早上10点-11点，晚上20点-22点有较大的成交量。</p>
+<p>推测形成的原因，每周的周二和周六用户更喜欢访问电商网站，并在早上10点左右下单，或者晚上10准备上床休息时下单。</p>
+<p>通过用户敏感度分析来看，用户对价格较为敏感，同时对评论极度敏感，因此促销活动的商品需要选择有较好口碑的商品，才能提升活动的转化率</p>
+<h1 id="四、建议"><a href="#四、建议" class="headerlink" title="四、建议"></a>四、建议</h1><p>因此我们给运营同事的建议是：</p>
+<p>促销活动的文案最好采用中性风格，促销的商品要重点突出家庭品质生活属性，同时强调家电的健康与安全<br>促销的商品以夏末秋初需求旺盛的商品，如净水器，饮水机，加湿器等产品入手<br>促销广告投放的时间，最好选择在每周的周二和周六这2个时间段，同时在早上9点和晚上9点提高广告的频率<br>促销的商品需要选择评论口碑较好的产品，可以在广告中对商品的口碑进行介绍</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># user_order_hms_df = vaild_order_user_df.groupby(&#x27;order_time_hms&#x27;,as_index=False)[&#x27;sale_ord_id&#x27;].agg(&#123;&#x27;hms_count&#x27;:&#x27;count&#x27;&#125;)</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># user_order_hms_df</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>order_time_hms</th>
+      <th>hms_count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>00:00:00</td>
+      <td>13212</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>01:00:00</td>
+      <td>4087</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>02:00:00</td>
+      <td>1919</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>03:00:00</td>
+      <td>1242</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>04:00:00</td>
+      <td>892</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>05:00:00</td>
+      <td>1216</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>06:00:00</td>
+      <td>3052</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>07:00:00</td>
+      <td>5946</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>08:00:00</td>
+      <td>10058</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>09:00:00</td>
+      <td>13550</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10:00:00</td>
+      <td>15344</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11:00:00</td>
+      <td>14861</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12:00:00</td>
+      <td>13881</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13:00:00</td>
+      <td>12522</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14:00:00</td>
+      <td>13919</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15:00:00</td>
+      <td>12638</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16:00:00</td>
+      <td>12384</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17:00:00</td>
+      <td>11662</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18:00:00</td>
+      <td>10339</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19:00:00</td>
+      <td>9730</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>20:00:00</td>
+      <td>11665</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>21:00:00</td>
+      <td>12868</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>22:00:00</td>
+      <td>14251</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>23:00:00</td>
+      <td>11361</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># from pyecharts import options as opts</span></span><br><span class="line"><span class="comment"># from pyecharts.charts import Line</span></span><br><span class="line"><span class="comment"># from pyecharts.globals import CurrentConfig, NotebookType  </span></span><br><span class="line"><span class="comment"># CurrentConfig.NOTEBOOK_TYPE = NotebookType.JUPYTER_LAB</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># user_order_hms_df.values.tolist()</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[[&#39;00:00:00&#39;, 13212],
+ [&#39;01:00:00&#39;, 4087],
+ [&#39;02:00:00&#39;, 1919],
+ [&#39;03:00:00&#39;, 1242],
+ [&#39;04:00:00&#39;, 892],
+ [&#39;05:00:00&#39;, 1216],
+ [&#39;06:00:00&#39;, 3052],
+ [&#39;07:00:00&#39;, 5946],
+ [&#39;08:00:00&#39;, 10058],
+ [&#39;09:00:00&#39;, 13550],
+ [&#39;10:00:00&#39;, 15344],
+ [&#39;11:00:00&#39;, 14861],
+ [&#39;12:00:00&#39;, 13881],
+ [&#39;13:00:00&#39;, 12522],
+ [&#39;14:00:00&#39;, 13919],
+ [&#39;15:00:00&#39;, 12638],
+ [&#39;16:00:00&#39;, 12384],
+ [&#39;17:00:00&#39;, 11662],
+ [&#39;18:00:00&#39;, 10339],
+ [&#39;19:00:00&#39;, 9730],
+ [&#39;20:00:00&#39;, 11665],
+ [&#39;21:00:00&#39;, 12868],
+ [&#39;22:00:00&#39;, 14251],
+ [&#39;23:00:00&#39;, 11361]]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># line = (Line()</span></span><br><span class="line"><span class="comment">#     .set_global_opts(</span></span><br><span class="line"><span class="comment">#         toolbox_opts=opts.ToolboxOpts(is_show=True),</span></span><br><span class="line"><span class="comment">#         title_opts=opts.TitleOpts(title=&quot;时间分布折线图&quot;),</span></span><br><span class="line">        </span><br><span class="line"><span class="comment">#     )</span></span><br><span class="line"><span class="comment">#     .add_xaxis(xaxis_data=user_order_hms_df[&quot;order_time_hms&quot;].values.tolist())</span></span><br><span class="line"><span class="comment">#     .add_yaxis(</span></span><br><span class="line"><span class="comment">#         series_name=&#x27;时间分布折线图&#x27;,</span></span><br><span class="line"><span class="comment">#         y_axis=user_order_hms_df[&quot;hms_count&quot;].values.tolist(),</span></span><br><span class="line"><span class="comment">#         is_smooth=True,</span></span><br><span class="line"><span class="comment">#         markpoint_opts=opts.MarkPointOpts(</span></span><br><span class="line"><span class="comment">#             data=[</span></span><br><span class="line"><span class="comment">#                 opts.MarkPointItem(type_=&quot;max&quot;, name=&quot;最大值&quot;),</span></span><br><span class="line"><span class="comment">#                 opts.MarkPointItem(type_=&quot;min&quot;, name=&quot;最小值&quot;),</span></span><br><span class="line"><span class="comment">#             ]</span></span><br><span class="line"><span class="comment">#         )</span></span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line"><span class="comment">#     )</span></span><br><span class="line"><span class="comment">#        )</span></span><br><span class="line"><span class="comment"># line.load_javascript()</span></span><br><span class="line"><span class="comment"># line.render_notebook()</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>数据分析实战</category>
+      </categories>
   </entry>
 </search>
