@@ -6794,4 +6794,2988 @@ memory usage: 120.5+ MB
         <category>数据分析实战</category>
       </categories>
   </entry>
+  <entry>
+    <title>用户流失预测(上)</title>
+    <url>/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/</url>
+    <content><![CDATA[<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><p>文章分为以下五部分</p>
+<ul>
+<li>项目介绍</li>
+<li>数据准备</li>
+<li>数据处理</li>
+<li>数据分析</li>
+<li>总结</li>
+</ul>
+<h1 id="一、项目介绍"><a href="#一、项目介绍" class="headerlink" title="一、项目介绍"></a>一、项目介绍</h1><p>衡量一个产品的好坏的重要标准是用户的流失率，也是各行各业经常面临的问题。<br>本文利用Kaggle上某电信公司的用户数据，借此数据集进行分析。</p>
+<p>分析目的：对流失的用户进行用户画像，分析其流失的原因，寻找解决方案，帮助提高留存率。</p>
+<span id="more"></span>
+
+<h1 id="二、数据准备"><a href="#二、数据准备" class="headerlink" title="二、数据准备"></a>二、数据准备</h1><h2 id="2-1-数据集地址"><a href="#2-1-数据集地址" class="headerlink" title="2.1 数据集地址"></a>2.1 数据集地址</h2><p><a href="https://www.kaggle.com/blastchar/telco-customer-churn">telco-customer-churn</a></p>
+<h2 id="2-2-字段描述"><a href="#2-2-字段描述" class="headerlink" title="2.2 字段描述"></a>2.2 字段描述</h2><p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/image.png" alt="image.png"></p>
+<h1 id="三、数据处理"><a href="#三、数据处理" class="headerlink" title="三、数据处理"></a>三、数据处理</h1><h2 id="3-1-导入数据"><a href="#3-1-导入数据" class="headerlink" title="3.1 导入数据"></a>3.1 导入数据</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">customer_churn_df = pd.read_csv(<span class="string">&#x27;Telco-Customer-Churn.csv&#x27;</span>)</span><br><span class="line">customer_churn_df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>customerID</th>
+      <th>gender</th>
+      <th>SeniorCitizen</th>
+      <th>Partner</th>
+      <th>Dependents</th>
+      <th>tenure</th>
+      <th>PhoneService</th>
+      <th>MultipleLines</th>
+      <th>InternetService</th>
+      <th>OnlineSecurity</th>
+      <th>...</th>
+      <th>DeviceProtection</th>
+      <th>TechSupport</th>
+      <th>StreamingTV</th>
+      <th>StreamingMovies</th>
+      <th>Contract</th>
+      <th>PaperlessBilling</th>
+      <th>PaymentMethod</th>
+      <th>MonthlyCharges</th>
+      <th>TotalCharges</th>
+      <th>Churn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7590-VHVEG</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>1</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>No</td>
+      <td>...</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Electronic check</td>
+      <td>29.85</td>
+      <td>29.85</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5575-GNVDE</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>34</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>One year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>56.95</td>
+      <td>1889.5</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3668-QPYBK</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>2</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Mailed check</td>
+      <td>53.85</td>
+      <td>108.15</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7795-CFOCW</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>45</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>One year</td>
+      <td>No</td>
+      <td>Bank transfer (automatic)</td>
+      <td>42.30</td>
+      <td>1840.75</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>9237-HQITU</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>2</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Fiber optic</td>
+      <td>No</td>
+      <td>...</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Electronic check</td>
+      <td>70.70</td>
+      <td>151.65</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 21 columns</p>
+</div>
+
+
+
+<h2 id="3-2-查看数据类型"><a href="#3-2-查看数据类型" class="headerlink" title="3.2 查看数据类型"></a>3.2 查看数据类型</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">customer_churn_df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 7043 entries, 0 to 7042
+Data columns (total 21 columns):
+ #   Column            Non-Null Count  Dtype  
+---  ------            --------------  -----  
+ 0   customerID        7043 non-null   object 
+ 1   gender            7043 non-null   object 
+ 2   SeniorCitizen     7043 non-null   int64  
+ 3   Partner           7043 non-null   object 
+ 4   Dependents        7043 non-null   object 
+ 5   tenure            7043 non-null   int64  
+ 6   PhoneService      7043 non-null   object 
+ 7   MultipleLines     7043 non-null   object 
+ 8   InternetService   7043 non-null   object 
+ 9   OnlineSecurity    7043 non-null   object 
+ 10  OnlineBackup      7043 non-null   object 
+ 11  DeviceProtection  7043 non-null   object 
+ 12  TechSupport       7043 non-null   object 
+ 13  StreamingTV       7043 non-null   object 
+ 14  StreamingMovies   7043 non-null   object 
+ 15  Contract          7043 non-null   object 
+ 16  PaperlessBilling  7043 non-null   object 
+ 17  PaymentMethod     7043 non-null   object 
+ 18  MonthlyCharges    7043 non-null   float64
+ 19  TotalCharges      7043 non-null   object 
+ 20  Churn             7043 non-null   object 
+dtypes: float64(1), int64(2), object(18)
+memory usage: 1.1+ MB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line">warnings.filterwarnings(<span class="string">&#x27;ignore&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">customer_churn_df.duplicated().<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0
+</code></pre>
+<p>无重复值</p>
+<p>这里MonthlyCharges和TotalCharges这里都是小数，应该为数值型数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">customer_churn_df[<span class="string">&#x27;TotalCharges&#x27;</span>] = customer_churn_df[<span class="string">&#x27;TotalCharges&#x27;</span>].apply(pd.to_numeric,errors=<span class="string">&quot;coerce&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看缺失值状况</span></span><br><span class="line">customer_churn_df.isnull().<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>customerID           0
+gender               0
+SeniorCitizen        0
+Partner              0
+Dependents           0
+tenure               0
+PhoneService         0
+MultipleLines        0
+InternetService      0
+OnlineSecurity       0
+OnlineBackup         0
+DeviceProtection     0
+TechSupport          0
+StreamingTV          0
+StreamingMovies      0
+Contract             0
+PaperlessBilling     0
+PaymentMethod        0
+MonthlyCharges       0
+TotalCharges        11
+Churn                0
+dtype: int64
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">customer_churn_df[customer_churn_df[<span class="string">&#x27;TotalCharges&#x27;</span>].isnull()]</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>customerID</th>
+      <th>gender</th>
+      <th>SeniorCitizen</th>
+      <th>Partner</th>
+      <th>Dependents</th>
+      <th>tenure</th>
+      <th>PhoneService</th>
+      <th>MultipleLines</th>
+      <th>InternetService</th>
+      <th>OnlineSecurity</th>
+      <th>...</th>
+      <th>DeviceProtection</th>
+      <th>TechSupport</th>
+      <th>StreamingTV</th>
+      <th>StreamingMovies</th>
+      <th>Contract</th>
+      <th>PaperlessBilling</th>
+      <th>PaymentMethod</th>
+      <th>MonthlyCharges</th>
+      <th>TotalCharges</th>
+      <th>Churn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>488</th>
+      <td>4472-LVYGI</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Two year</td>
+      <td>Yes</td>
+      <td>Bank transfer (automatic)</td>
+      <td>52.55</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>753</th>
+      <td>3115-CZMZD</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>20.25</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>936</th>
+      <td>5709-LVOEQ</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>80.85</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1082</th>
+      <td>4367-NUYAO</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>25.75</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1340</th>
+      <td>1371-DWPAZ</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Credit card (automatic)</td>
+      <td>56.05</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>3331</th>
+      <td>7644-OMVMY</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>19.85</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>3826</th>
+      <td>3213-VVOLG</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>25.35</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>4380</th>
+      <td>2520-SGTTA</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>20.00</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>5218</th>
+      <td>2923-ARZLG</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>One year</td>
+      <td>Yes</td>
+      <td>Mailed check</td>
+      <td>19.70</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>6670</th>
+      <td>4075-WKNIU</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>DSL</td>
+      <td>No</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>73.35</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>6754</th>
+      <td>2775-SEFEE</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Two year</td>
+      <td>Yes</td>
+      <td>Bank transfer (automatic)</td>
+      <td>61.90</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+<p>11 rows × 21 columns</p>
+</div>
+
+
+
+<p>发现11个用户的入网时长为0，推测为当月新用户。已产出MonthlyCharges(月费用),我们将月费用填入到（TotalCharges）总费用中</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">customer_churn_df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 7043 entries, 0 to 7042
+Data columns (total 21 columns):
+ #   Column            Non-Null Count  Dtype  
+---  ------            --------------  -----  
+ 0   customerID        7043 non-null   object 
+ 1   gender            7043 non-null   object 
+ 2   SeniorCitizen     7043 non-null   int64  
+ 3   Partner           7043 non-null   object 
+ 4   Dependents        7043 non-null   object 
+ 5   tenure            7043 non-null   int64  
+ 6   PhoneService      7043 non-null   object 
+ 7   MultipleLines     7043 non-null   object 
+ 8   InternetService   7043 non-null   object 
+ 9   OnlineSecurity    7043 non-null   object 
+ 10  OnlineBackup      7043 non-null   object 
+ 11  DeviceProtection  7043 non-null   object 
+ 12  TechSupport       7043 non-null   object 
+ 13  StreamingTV       7043 non-null   object 
+ 14  StreamingMovies   7043 non-null   object 
+ 15  Contract          7043 non-null   object 
+ 16  PaperlessBilling  7043 non-null   object 
+ 17  PaymentMethod     7043 non-null   object 
+ 18  MonthlyCharges    7043 non-null   float64
+ 19  TotalCharges      7032 non-null   float64
+ 20  Churn             7043 non-null   object 
+dtypes: float64(2), int64(2), object(17)
+memory usage: 1.1+ MB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将总消费额填充为月消费额</span></span><br><span class="line">customer_churn_df[<span class="string">&#x27;TotalCharges&#x27;</span>] = np.where(customer_churn_df[<span class="string">&#x27;TotalCharges&#x27;</span>].isnull(),customer_churn_df[<span class="string">&#x27;MonthlyCharges&#x27;</span>],customer_churn_df[<span class="string">&#x27;TotalCharges&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看填充是否成功</span></span><br><span class="line">customer_churn_df.isnull().<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>customerID          0
+gender              0
+SeniorCitizen       0
+Partner             0
+Dependents          0
+tenure              0
+PhoneService        0
+MultipleLines       0
+InternetService     0
+OnlineSecurity      0
+OnlineBackup        0
+DeviceProtection    0
+TechSupport         0
+StreamingTV         0
+StreamingMovies     0
+Contract            0
+PaperlessBilling    0
+PaymentMethod       0
+MonthlyCharges      0
+TotalCharges        0
+Churn               0
+dtype: int64
+</code></pre>
+<h1 id="四、数据分析"><a href="#四、数据分析" class="headerlink" title="四、数据分析"></a>四、数据分析</h1><p>根据用户的主要特征，将用户属性分为三类，用户属性、服务属性及合同属性。下面也会从这三个属性分别进行可视化分析。</p>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/image_01.jpg" alt="image.png"></p>
+<p>先查看用户的总体流失情况</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mpl.rcParams[<span class="string">&#x27;font.family&#x27;</span>]=<span class="string">&#x27;SimHei&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.style&#x27;</span>] = <span class="string">&#x27;italic&#x27;</span></span><br><span class="line"><span class="comment"># mpl.rcParams[&#x27;font.size&#x27;] = 16</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] =<span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.pie(customer_churn_df[<span class="string">&#x27;Churn&#x27;</span>].value_counts(),labels=[<span class="string">&#x27;未流失&#x27;</span>,<span class="string">&quot;已流失&quot;</span>],colors=[<span class="string">&quot;whitesmoke&quot;</span>,<span class="string">&quot;cyan&quot;</span>],explode=(<span class="number">0.1</span>,<span class="number">0</span>),</span><br><span class="line">       autopct=<span class="string">&#x27;%.2f%%&#x27;</span>,shadow=<span class="literal">True</span></span><br><span class="line">       )</span><br><span class="line">plt.title(<span class="string">&#x27;客户流失比例&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/output_31_0.png" alt="png"></p>
+<h2 id="4-1-用户属性"><a href="#4-1-用户属性" class="headerlink" title="4.1 用户属性"></a>4.1 用户属性</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.subplots(nrows=<span class="number">2</span>,ncols=<span class="number">2</span>,figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>)</span><br><span class="line">sns.countplot(x=<span class="string">&#x27;gender&#x27;</span>,hue=<span class="string">&#x27;Churn&#x27;</span>,data=customer_churn_df,palette=<span class="string">&#x27;Pastel2&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;性别&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Churn by Gender&quot;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>)</span><br><span class="line">sns.countplot(x=<span class="string">&#x27;SeniorCitizen&#x27;</span>,hue=<span class="string">&#x27;Churn&#x27;</span>,data=customer_churn_df,palette=<span class="string">&#x27;Pastel2&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;年龄（0代表是年轻人，1代表是老年人）&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Churn by SeniorCitizen&quot;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">sns.countplot(x=<span class="string">&#x27;Partner&#x27;</span>,hue=<span class="string">&#x27;Churn&#x27;</span>,data=customer_churn_df,palette=<span class="string">&#x27;Pastel2&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;婚姻状况&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Churn by Partner&quot;</span>)</span><br><span class="line"></span><br><span class="line">plt.subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">4</span>)</span><br><span class="line">sns.countplot(x=<span class="string">&#x27;Dependents&#x27;</span>,hue=<span class="string">&#x27;Churn&#x27;</span>,data=customer_churn_df,palette=<span class="string">&#x27;Pastel2&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;经济独立状况&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Churn by Dependents&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>Text(0.5, 1.0, &#39;Churn by Dependents&#39;)
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/output_33_1.png" alt="png"></p>
+<ul>
+<li>用户流失与性别基本无关，差异性较小；</li>
+<li>年老客户用户量相对较少，但流失率较高；</li>
+<li>未婚用户流失率高于已婚用户；</li>
+<li>经济能力未独立的用户流失率高于经济能力独立用户。</li>
+</ul>
+<h2 id="4-2-服务属性"><a href="#4-2-服务属性" class="headerlink" title="4.2 服务属性"></a>4.2 服务属性</h2><p>查看网络安全服务、在线备份业务、设备保护业务、技术支持服务、网络电视、网络电影对客户流失率的影响。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">covariables = [</span><br><span class="line"> <span class="string">&#x27;OnlineSecurity&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;OnlineBackup&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;DeviceProtection&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;TechSupport&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;StreamingTV&#x27;</span>,</span><br><span class="line"> <span class="string">&#x27;StreamingMovies&#x27;</span>]</span><br><span class="line">plt.subplots(ncols=<span class="number">3</span>,nrows=<span class="number">2</span>,figsize=(<span class="number">16</span>,<span class="number">10</span>))</span><br><span class="line"><span class="keyword">for</span> i,item <span class="keyword">in</span> <span class="built_in">enumerate</span>(covariables):</span><br><span class="line">    </span><br><span class="line">    plt.subplot(<span class="number">3</span>,<span class="number">3</span>,i+<span class="number">1</span>)</span><br><span class="line">    sns.countplot(x=item,hue=<span class="string">&#x27;Churn&#x27;</span>,data=customer_churn_df,palette=<span class="string">&quot;Pastel2&quot;</span>,order=[<span class="string">&quot;Yes&quot;</span>,<span class="string">&quot;No&quot;</span>,<span class="string">&quot;No internet service&quot;</span>])</span><br><span class="line"><span class="comment">#     plt.title(&#x27;Churn by &#x27;+str(item))</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/output_37_0.png" alt="png"></p>
+<p>在这六个服务属性中，开通相关服务的用户流失率较低，说明有这些方面需求的客户对此服务还比较满意，客户群体也比较稳定。</p>
+<p>No internetserive这部分客户群体流失率值基本相同，且相对较低。</p>
+<h2 id="4-3-合同属性"><a href="#4-3-合同属性" class="headerlink" title="4.3 合同属性"></a>4.3 合同属性</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">customer_churn_df[<span class="string">&#x27;Churn&#x27;</span>] = customer_churn_df[<span class="string">&#x27;Churn&#x27;</span>].replace(<span class="string">&#x27;Yes&#x27;</span>,<span class="number">1</span>).replace(<span class="string">&#x27;No&#x27;</span>,<span class="number">0</span>)</span><br><span class="line"><span class="comment"># 查看合同属性对用户流失的影响</span></span><br><span class="line">sns.barplot(x=<span class="string">&quot;Contract&quot;</span>,y=<span class="string">&quot;Churn&quot;</span>, data=customer_churn_df, palette=<span class="string">&quot;Pastel1&quot;</span>, order= [<span class="string">&#x27;Month-to-month&#x27;</span>, <span class="string">&#x27;One year&#x27;</span>, <span class="string">&#x27;Two year&#x27;</span>])</span><br><span class="line">plt.title(<span class="string">&quot;Churn by Contract type&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>Text(0.5, 1.0, &#39;Churn by Contract type&#39;)
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/output_40_1.png" alt="png"></p>
+<p>从柱状图中看出，合同期限越长，流失率越低，一部分原因是选择长期合同的客户原本就比较稳定，另外一个原因是长期合同具有长期约束率，在客户签订合同时，可以针对一次签订长期合同的客户进行优惠促销。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看付款方式对用户流失率的影响</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>,<span class="number">5</span>))</span><br><span class="line">sns.barplot(x=<span class="string">&quot;PaymentMethod&quot;</span>,y=<span class="string">&quot;Churn&quot;</span>, data=customer_churn_df, palette=<span class="string">&quot;Pastel1&quot;</span>, order= [<span class="string">&#x27;Bank transfer (automatic)&#x27;</span>, <span class="string">&#x27;Credit card (automatic)&#x27;</span>, <span class="string">&#x27;Electronic check&#x27;</span>,<span class="string">&#x27;Mailed check&#x27;</span>])</span><br><span class="line">plt.title(<span class="string">&quot;Churn by PaymentMethod type&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>Text(0.5, 1.0, &#39;Churn by PaymentMethod type&#39;)
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/output_42_1.png" alt="png"></p>
+<p>从柱状图中看出，选择electronic check电子账单的用户流失率最高。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看正常用户与流失用户在月消费金额上的差别</span></span><br><span class="line">g=sns.FacetGrid(data=customer_churn_df,hue=<span class="string">&#x27;Churn&#x27;</span>,height=<span class="number">4</span>,aspect=<span class="number">3</span>)</span><br><span class="line">g.<span class="built_in">map</span>(sns.distplot,<span class="string">&#x27;MonthlyCharges&#x27;</span>,norm_hist=<span class="literal">True</span>)</span><br><span class="line">g.add_legend()</span><br><span class="line">plt.ylabel(<span class="string">&#x27;density&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;MonthlyCharges&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/output_44_0.png" alt="png"></p>
+<p>从上图看出，月消费额大约在70-110这个区间内的用户流失率相对较高。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#查看正常用户与流失用户在总消费金额上的差别</span></span><br><span class="line">g = sns.FacetGrid(data = customer_churn_df,hue = <span class="string">&#x27;Churn&#x27;</span>, height=<span class="number">4</span>, aspect=<span class="number">3</span>)</span><br><span class="line">g.<span class="built_in">map</span>(sns.distplot,<span class="string">&#x27;TotalCharges&#x27;</span>,norm_hist=<span class="literal">True</span>)</span><br><span class="line">g.add_legend()</span><br><span class="line">plt.ylabel(<span class="string">&#x27;density&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;TotalCharges&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%8A/output_46_0.png" alt="png"></p>
+<p>从上图看出，总消费金额越多，客户流失率会相对较低，说明当客户对此产品形成一定消费习惯后，忠诚度会升高。</p>
+<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><p>流失用户特征：</p>
+<ul>
+<li>用户属性：老年用户、未婚用户、经济未独立的用户更容易流失</li>
+<li>服务属性：没有开通附加增值服务的用户更容易流失</li>
+<li>合同属性：签订的合同期较短，电子账单支付、月租费约70-110元的客户容易流失。</li>
+</ul>
+<p>建议：</p>
+<ul>
+<li>用户属性：针对老年用户，未婚用户及家庭用户这部分群体，根据用户特征喜好制定专属套餐，提升用户体验，从而降低流失率；</li>
+<li>服务属性：针对新用户，可以在购买时赠送增值服务体验资格，增强用户对增值服务的认知度；对存量<br>老用户，可以根据用户的行为特征，对有购买这部分服务潜在用户，进行重点宣传推广，促使用户进一步购买，增强用户对产品的粘性；</li>
+<li>合同属性： 在客户签订合同时，可以对签订长期合同的用户进行价格优惠，如签订半年期总价格9.5折，两年期额外赠送2个月等优惠，促使用户在选择合同时选择长期合同期限；同时，应该重点关注电子账单支付的方式，可以问卷形式收集意见，积极改善此功能，或者引导客户宣传其他支付方式，提高用户体验。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>数据分析</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用户流失预测(中)</title>
+    <url>/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%AD/</url>
+    <content><![CDATA[<p>本篇主要利用逻辑回归模型对即将流失的用户预测，判断那些客户会流失。</p>
+<h1 id="一、数据的导入与预处理"><a href="#一、数据的导入与预处理" class="headerlink" title="一、数据的导入与预处理"></a>一、数据的导入与预处理</h1><h2 id="1-1-数据的导入"><a href="#1-1-数据的导入" class="headerlink" title="1.1 数据的导入"></a>1.1 数据的导入</h2><span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.family&#x27;</span>]=<span class="string">&#x27;SimHei&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.style&#x27;</span>] = <span class="string">&#x27;italic&#x27;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] =<span class="literal">False</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df = pd.read_csv(<span class="string">&#x27;Telco-Customer-Churn.csv&#x27;</span>)</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>customerID</th>
+      <th>gender</th>
+      <th>SeniorCitizen</th>
+      <th>Partner</th>
+      <th>Dependents</th>
+      <th>tenure</th>
+      <th>PhoneService</th>
+      <th>MultipleLines</th>
+      <th>InternetService</th>
+      <th>OnlineSecurity</th>
+      <th>...</th>
+      <th>DeviceProtection</th>
+      <th>TechSupport</th>
+      <th>StreamingTV</th>
+      <th>StreamingMovies</th>
+      <th>Contract</th>
+      <th>PaperlessBilling</th>
+      <th>PaymentMethod</th>
+      <th>MonthlyCharges</th>
+      <th>TotalCharges</th>
+      <th>Churn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7590-VHVEG</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>1</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>No</td>
+      <td>...</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Electronic check</td>
+      <td>29.85</td>
+      <td>29.85</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5575-GNVDE</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>34</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>One year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>56.95</td>
+      <td>1889.5</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3668-QPYBK</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>2</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Mailed check</td>
+      <td>53.85</td>
+      <td>108.15</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7795-CFOCW</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>45</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>One year</td>
+      <td>No</td>
+      <td>Bank transfer (automatic)</td>
+      <td>42.30</td>
+      <td>1840.75</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>9237-HQITU</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>2</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Fiber optic</td>
+      <td>No</td>
+      <td>...</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Electronic check</td>
+      <td>70.70</td>
+      <td>151.65</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 21 columns</p>
+</div>
+
+
+
+<h2 id="1-2-数据预处理"><a href="#1-2-数据预处理" class="headerlink" title="1.2 数据预处理"></a>1.2 数据预处理</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 7043 entries, 0 to 7042
+Data columns (total 21 columns):
+ #   Column            Non-Null Count  Dtype  
+---  ------            --------------  -----  
+ 0   customerID        7043 non-null   object 
+ 1   gender            7043 non-null   object 
+ 2   SeniorCitizen     7043 non-null   int64  
+ 3   Partner           7043 non-null   object 
+ 4   Dependents        7043 non-null   object 
+ 5   tenure            7043 non-null   int64  
+ 6   PhoneService      7043 non-null   object 
+ 7   MultipleLines     7043 non-null   object 
+ 8   InternetService   7043 non-null   object 
+ 9   OnlineSecurity    7043 non-null   object 
+ 10  OnlineBackup      7043 non-null   object 
+ 11  DeviceProtection  7043 non-null   object 
+ 12  TechSupport       7043 non-null   object 
+ 13  StreamingTV       7043 non-null   object 
+ 14  StreamingMovies   7043 non-null   object 
+ 15  Contract          7043 non-null   object 
+ 16  PaperlessBilling  7043 non-null   object 
+ 17  PaymentMethod     7043 non-null   object 
+ 18  MonthlyCharges    7043 non-null   float64
+ 19  TotalCharges      7043 non-null   object 
+ 20  Churn             7043 non-null   object 
+dtypes: float64(1), int64(2), object(18)
+memory usage: 1.1+ MB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[<span class="string">&#x27;TotalCharges&#x27;</span>] =df[<span class="string">&#x27;TotalCharges&#x27;</span>].apply(pd.to_numeric,errors=<span class="string">&quot;coerce&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.isnull().<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>customerID           0
+gender               0
+SeniorCitizen        0
+Partner              0
+Dependents           0
+tenure               0
+PhoneService         0
+MultipleLines        0
+InternetService      0
+OnlineSecurity       0
+OnlineBackup         0
+DeviceProtection     0
+TechSupport          0
+StreamingTV          0
+StreamingMovies      0
+Contract             0
+PaperlessBilling     0
+PaymentMethod        0
+MonthlyCharges       0
+TotalCharges        11
+Churn                0
+dtype: int64
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将总消费额填充为月消费额</span></span><br><span class="line">df[<span class="string">&#x27;TotalCharges&#x27;</span>] = np.where(df[<span class="string">&#x27;TotalCharges&#x27;</span>].isnull(),df[<span class="string">&#x27;MonthlyCharges&#x27;</span>],df[<span class="string">&#x27;TotalCharges&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df= df.infer_objects()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 7043 entries, 0 to 7042
+Data columns (total 21 columns):
+ #   Column            Non-Null Count  Dtype  
+---  ------            --------------  -----  
+ 0   customerID        7043 non-null   object 
+ 1   gender            7043 non-null   object 
+ 2   SeniorCitizen     7043 non-null   int64  
+ 3   Partner           7043 non-null   object 
+ 4   Dependents        7043 non-null   object 
+ 5   tenure            7043 non-null   int64  
+ 6   PhoneService      7043 non-null   object 
+ 7   MultipleLines     7043 non-null   object 
+ 8   InternetService   7043 non-null   object 
+ 9   OnlineSecurity    7043 non-null   object 
+ 10  OnlineBackup      7043 non-null   object 
+ 11  DeviceProtection  7043 non-null   object 
+ 12  TechSupport       7043 non-null   object 
+ 13  StreamingTV       7043 non-null   object 
+ 14  StreamingMovies   7043 non-null   object 
+ 15  Contract          7043 non-null   object 
+ 16  PaperlessBilling  7043 non-null   object 
+ 17  PaymentMethod     7043 non-null   object 
+ 18  MonthlyCharges    7043 non-null   float64
+ 19  TotalCharges      7043 non-null   float64
+ 20  Churn             7043 non-null   object 
+dtypes: float64(2), int64(2), object(17)
+memory usage: 1.1+ MB
+</code></pre>
+<h1 id="1-3-特征编码及标准化"><a href="#1-3-特征编码及标准化" class="headerlink" title="1.3 特征编码及标准化"></a>1.3 特征编码及标准化</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看对象类型字段中存在的值</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">uni</span>(<span class="params">columnlabel</span>):</span></span><br><span class="line">    print(columnlabel,<span class="string">&quot;--&quot;</span> ,df[columnlabel].unique())  <span class="comment"># unique函数去除其中重复的元素，返回唯一值</span></span><br><span class="line">    </span><br><span class="line">dfobject=df.select_dtypes([<span class="string">&#x27;object&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> dfobject.columns.to_list():</span><br><span class="line">    uni(i)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<pre><code>customerID -- [&#39;7590-VHVEG&#39; &#39;5575-GNVDE&#39; &#39;3668-QPYBK&#39; ... &#39;4801-JZAZL&#39; &#39;8361-LTMKD&#39;
+ &#39;3186-AJIEK&#39;]
+gender -- [&#39;Female&#39; &#39;Male&#39;]
+Partner -- [&#39;Yes&#39; &#39;No&#39;]
+Dependents -- [&#39;No&#39; &#39;Yes&#39;]
+PhoneService -- [&#39;No&#39; &#39;Yes&#39;]
+MultipleLines -- [&#39;No phone service&#39; &#39;No&#39; &#39;Yes&#39;]
+InternetService -- [&#39;DSL&#39; &#39;Fiber optic&#39; &#39;No&#39;]
+OnlineSecurity -- [&#39;No&#39; &#39;Yes&#39; &#39;No internet service&#39;]
+OnlineBackup -- [&#39;Yes&#39; &#39;No&#39; &#39;No internet service&#39;]
+DeviceProtection -- [&#39;No&#39; &#39;Yes&#39; &#39;No internet service&#39;]
+TechSupport -- [&#39;No&#39; &#39;Yes&#39; &#39;No internet service&#39;]
+StreamingTV -- [&#39;No&#39; &#39;Yes&#39; &#39;No internet service&#39;]
+StreamingMovies -- [&#39;No&#39; &#39;Yes&#39; &#39;No internet service&#39;]
+Contract -- [&#39;Month-to-month&#39; &#39;One year&#39; &#39;Two year&#39;]
+PaperlessBilling -- [&#39;Yes&#39; &#39;No&#39;]
+PaymentMethod -- [&#39;Electronic check&#39; &#39;Mailed check&#39; &#39;Bank transfer (automatic)&#39;
+ &#39;Credit card (automatic)&#39;]
+Churn -- [&#39;No&#39; &#39;Yes&#39;]
+</code></pre>
+<p>结合上篇文章4.2节服务属性，发现No internet service（无互联网服务）对客户流失率影响很小，和No基本一致，这里失用No代替No internet service。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.replace(<span class="string">&#x27;No internet service&#x27;</span>,<span class="string">&#x27;No&#x27;</span>,inplace=<span class="literal">True</span>)</span><br><span class="line">df.replace(<span class="string">&#x27;No phone service&#x27;</span>,<span class="string">&#x27;No&#x27;</span>,inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> dfobject.columns.to_list():</span><br><span class="line">    uni(i)</span><br></pre></td></tr></table></figure>
+
+<pre><code>customerID -- [&#39;7590-VHVEG&#39; &#39;5575-GNVDE&#39; &#39;3668-QPYBK&#39; ... &#39;4801-JZAZL&#39; &#39;8361-LTMKD&#39;
+ &#39;3186-AJIEK&#39;]
+gender -- [&#39;Female&#39; &#39;Male&#39;]
+Partner -- [&#39;Yes&#39; &#39;No&#39;]
+Dependents -- [&#39;No&#39; &#39;Yes&#39;]
+PhoneService -- [&#39;No&#39; &#39;Yes&#39;]
+MultipleLines -- [&#39;No&#39; &#39;Yes&#39;]
+InternetService -- [&#39;DSL&#39; &#39;Fiber optic&#39; &#39;No&#39;]
+OnlineSecurity -- [&#39;No&#39; &#39;Yes&#39;]
+OnlineBackup -- [&#39;Yes&#39; &#39;No&#39;]
+DeviceProtection -- [&#39;No&#39; &#39;Yes&#39;]
+TechSupport -- [&#39;No&#39; &#39;Yes&#39;]
+StreamingTV -- [&#39;No&#39; &#39;Yes&#39;]
+StreamingMovies -- [&#39;No&#39; &#39;Yes&#39;]
+Contract -- [&#39;Month-to-month&#39; &#39;One year&#39; &#39;Two year&#39;]
+PaperlessBilling -- [&#39;Yes&#39; &#39;No&#39;]
+PaymentMethod -- [&#39;Electronic check&#39; &#39;Mailed check&#39; &#39;Bank transfer (automatic)&#39;
+ &#39;Credit card (automatic)&#39;]
+Churn -- [&#39;No&#39; &#39;Yes&#39;]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X = df.loc[:,<span class="string">&#x27;gender&#x27;</span>:<span class="string">&#x27;TotalCharges&#x27;</span>]</span><br><span class="line">y = df[<span class="string">&#x27;Churn&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>gender</th>
+      <th>SeniorCitizen</th>
+      <th>Partner</th>
+      <th>Dependents</th>
+      <th>tenure</th>
+      <th>PhoneService</th>
+      <th>MultipleLines</th>
+      <th>InternetService</th>
+      <th>OnlineSecurity</th>
+      <th>OnlineBackup</th>
+      <th>DeviceProtection</th>
+      <th>TechSupport</th>
+      <th>StreamingTV</th>
+      <th>StreamingMovies</th>
+      <th>Contract</th>
+      <th>PaperlessBilling</th>
+      <th>PaymentMethod</th>
+      <th>MonthlyCharges</th>
+      <th>TotalCharges</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>1</td>
+      <td>No</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Electronic check</td>
+      <td>29.85</td>
+      <td>29.85</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>34</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>One year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>56.95</td>
+      <td>1889.50</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>2</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Mailed check</td>
+      <td>53.85</td>
+      <td>108.15</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>45</td>
+      <td>No</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>One year</td>
+      <td>No</td>
+      <td>Bank transfer (automatic)</td>
+      <td>42.30</td>
+      <td>1840.75</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Female</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>2</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Fiber optic</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Electronic check</td>
+      <td>70.70</td>
+      <td>151.65</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>7038</th>
+      <td>Male</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>24</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>One year</td>
+      <td>Yes</td>
+      <td>Mailed check</td>
+      <td>84.80</td>
+      <td>1990.50</td>
+    </tr>
+    <tr>
+      <th>7039</th>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>72</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Fiber optic</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>One year</td>
+      <td>Yes</td>
+      <td>Credit card (automatic)</td>
+      <td>103.20</td>
+      <td>7362.90</td>
+    </tr>
+    <tr>
+      <th>7040</th>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>11</td>
+      <td>No</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Electronic check</td>
+      <td>29.60</td>
+      <td>346.45</td>
+    </tr>
+    <tr>
+      <th>7041</th>
+      <td>Male</td>
+      <td>1</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>4</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Fiber optic</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Mailed check</td>
+      <td>74.40</td>
+      <td>306.60</td>
+    </tr>
+    <tr>
+      <th>7042</th>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>66</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Fiber optic</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Two year</td>
+      <td>Yes</td>
+      <td>Bank transfer (automatic)</td>
+      <td>105.65</td>
+      <td>6844.50</td>
+    </tr>
+  </tbody>
+</table>
+<p>7043 rows × 19 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 测试</span></span><br><span class="line"><span class="comment"># X_cat = X.select_dtypes([&#x27;object&#x27;])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ord_encoder = OrdinalEncoder()</span></span><br><span class="line"><span class="comment"># X_cat_encoded = ord_encoder.fit_transform(X_cat)</span></span><br><span class="line"><span class="comment"># X_cat_encoded[:10]</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X[<span class="string">&#x27;SeniorCitizen&#x27;</span>] = X[<span class="string">&#x27;SeniorCitizen&#x27;</span>].astype(<span class="string">&#x27;object&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler,OrdinalEncoder</span><br><span class="line"><span class="keyword">from</span> sklearn.compose <span class="keyword">import</span> ColumnTransformer</span><br><span class="line">num_pipline = Pipeline([</span><br><span class="line">    (<span class="string">&#x27;std_scaler&#x27;</span>,StandardScaler())</span><br><span class="line">])</span><br><span class="line">num_attribs = [<span class="string">&#x27;tenure&#x27;</span>,<span class="string">&#x27;MonthlyCharges&#x27;</span>,<span class="string">&#x27;TotalCharges&#x27;</span>]</span><br><span class="line">cat_attribs = X.select_dtypes([<span class="string">&#x27;object&#x27;</span>]).columns.to_list()</span><br><span class="line">full_pipeline = ColumnTransformer([</span><br><span class="line">    (<span class="string">&#x27;num&#x27;</span>,num_pipline,num_attribs),</span><br><span class="line">    (<span class="string">&#x27;cat&#x27;</span>,OrdinalEncoder(),cat_attribs)</span><br><span class="line">])</span><br><span class="line">X_prepared = full_pipeline.fit_transform(X)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X_prepared.shape</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(7043, 19)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X_prepared[:<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>array([[-1.27744458, -1.16032292, -0.99266722,  0.        ,  0.        ,
+         1.        ,  0.        ,  0.        ,  0.        ,  0.        ,
+         0.        ,  1.        ,  0.        ,  0.        ,  0.        ,
+         0.        ,  0.        ,  1.        ,  2.        ],
+       [ 0.06632742, -0.25962894, -0.17219813,  1.        ,  0.        ,
+         0.        ,  0.        ,  1.        ,  0.        ,  0.        ,
+         1.        ,  0.        ,  1.        ,  0.        ,  0.        ,
+         0.        ,  1.        ,  0.        ,  3.        ]])
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">col_name = num_attribs + cat_attribs</span><br><span class="line">X_prepared_df = pd.DataFrame(X_prepared,columns=col_name)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X_prepared_df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>tenure</th>
+      <th>MonthlyCharges</th>
+      <th>TotalCharges</th>
+      <th>gender</th>
+      <th>SeniorCitizen</th>
+      <th>Partner</th>
+      <th>Dependents</th>
+      <th>PhoneService</th>
+      <th>MultipleLines</th>
+      <th>InternetService</th>
+      <th>OnlineSecurity</th>
+      <th>OnlineBackup</th>
+      <th>DeviceProtection</th>
+      <th>TechSupport</th>
+      <th>StreamingTV</th>
+      <th>StreamingMovies</th>
+      <th>Contract</th>
+      <th>PaperlessBilling</th>
+      <th>PaymentMethod</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-1.277445</td>
+      <td>-1.160323</td>
+      <td>-0.992667</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.066327</td>
+      <td>-0.259629</td>
+      <td>-0.172198</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-1.236724</td>
+      <td>-0.362660</td>
+      <td>-0.958122</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.514251</td>
+      <td>-0.746535</td>
+      <td>-0.193706</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-1.236724</td>
+      <td>0.197365</td>
+      <td>-0.938930</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>2.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y.replace(<span class="string">&#x27;Yes&#x27;</span>,<span class="number">1</span>,inplace=<span class="literal">True</span>)</span><br><span class="line">y.replace(<span class="string">&#x27;No&#x27;</span>,<span class="number">0</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y.dtype</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>dtype(&#39;int64&#39;)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y.shape</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(7043,)
+</code></pre>
+<h2 id="1-4-数据相关性分析"><a href="#1-4-数据相关性分析" class="headerlink" title="1.4 数据相关性分析"></a>1.4 数据相关性分析</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> pandas_profiling <span class="keyword">import</span> ProfileReport</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">profile = ProfileReport(pd.concat([X_prepared_df,y],axis=<span class="number">1</span>),explorative=<span class="literal">True</span>)</span><br><span class="line">profile.to_file(<span class="string">&#x27;report.html&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<pre><code>HBox(children=(FloatProgress(value=0.0, description=&#39;Summarize dataset&#39;, max=33.0, style=ProgressStyle(descrip…
+
+
+
+
+
+
+HBox(children=(FloatProgress(value=0.0, description=&#39;Generate report structure&#39;, max=1.0, style=ProgressStyle(…
+
+
+
+
+
+
+HBox(children=(FloatProgress(value=0.0, description=&#39;Render HTML&#39;, max=1.0, style=ProgressStyle(description_wi…
+
+
+
+
+
+
+HBox(children=(FloatProgress(value=0.0, description=&#39;Export report to file&#39;, max=1.0, style=ProgressStyle(desc…
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">new_df = pd.concat([X_prepared_df,y],axis=<span class="number">1</span>)</span><br><span class="line">plt.figure(figsize=(<span class="number">15</span>,<span class="number">8</span>))</span><br><span class="line">sns.heatmap(new_df.corr(),annot=<span class="literal">True</span>,fmt=<span class="string">&quot;.2f&quot;</span>)           </span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1a1ee9a1400&gt;
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%AD/output_31_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">15</span>,<span class="number">8</span>))</span><br><span class="line">new_df.corr()[<span class="string">&#x27;Churn&#x27;</span>].sort_values(ascending = <span class="literal">False</span>).plot(kind=<span class="string">&quot;bar&quot;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Correlations between Churn and variables&quot;</span>)</span><br><span class="line">plt.plot()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[]
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%AD/output_32_1.png" alt="png"></p>
+<p>从上图可以直观看出，PhoneService 、gender这两个变量与churn目标变量相关性最弱。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X_prepared_df.drop([<span class="string">&#x27;PhoneService&#x27;</span>,<span class="string">&#x27;gender&#x27;</span>],axis=<span class="number">1</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<h1 id="二、构建模型"><a href="#二、构建模型" class="headerlink" title="二、构建模型"></a>二、构建模型</h1><h1 id="2-1-样本不均衡处理"><a href="#2-1-样本不均衡处理" class="headerlink" title="2.1 样本不均衡处理"></a>2.1 样本不均衡处理</h1><p>查看正常用户和流失用户数量分布</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">count_Churn = pd.value_counts(new_df[<span class="string">&#x27;Churn&#x27;</span>], sort = <span class="literal">True</span>).sort_index()</span><br><span class="line">count_Churn.plot(kind = <span class="string">&#x27;bar&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&quot;Churn histogram&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Churn&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Frequency&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>Text(0, 0.5, &#39;Frequency&#39;)
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%AD/output_38_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">new_df[<span class="string">&#x27;Churn&#x27;</span>].value_counts(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0    0.73463
+1    0.26537
+Name: Churn, dtype: float64
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 划分训练集和测试集</span></span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X_prepared,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">0</span>)</span><br><span class="line">print(<span class="string">&quot;Before oversampling:&quot;</span>,<span class="built_in">sum</span>(y_train==<span class="number">0</span>),<span class="built_in">sum</span>(y_train==<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Before oversampling: 4133 1501
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 过采样</span></span><br><span class="line"><span class="keyword">from</span> imblearn.over_sampling <span class="keyword">import</span> SMOTE</span><br><span class="line">smote = SMOTE()</span><br><span class="line">X_train_smote,y_train_smote = smote.fit_resample(X_train,y_train)</span><br><span class="line">print(<span class="string">&quot;After oversampling:&quot;</span>,<span class="built_in">sum</span>(y_train_smote==<span class="number">0</span>),<span class="built_in">sum</span>(y_train_smote==<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>After oversampling: 4133 4133
+</code></pre>
+<h2 id="2-2-逻辑回归模型"><a href="#2-2-逻辑回归模型" class="headerlink" title="2.2 逻辑回归模型"></a>2.2 逻辑回归模型</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 采用逻辑回归模型参数选择</span></span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> validation_curve</span><br><span class="line">lr_c = LogisticRegression()</span><br><span class="line">param_range = [<span class="number">0.001</span>, <span class="number">0.01</span>, <span class="number">0.1</span>, <span class="number">1.0</span>, <span class="number">10.0</span>, <span class="number">100.0</span>]</span><br><span class="line">train_scores, test_scores = validation_curve(</span><br><span class="line">                estimator=lr_c, </span><br><span class="line">                X=X_train_smote, </span><br><span class="line">                y=y_train_smote, </span><br><span class="line">                param_name=<span class="string">&#x27;C&#x27;</span>, </span><br><span class="line">                param_range=param_range,</span><br><span class="line">                cv=<span class="number">10</span>)</span><br><span class="line"> </span><br><span class="line">train_mean = np.mean(train_scores, axis=<span class="number">1</span>)</span><br><span class="line">train_std = np.std(train_scores, axis=<span class="number">1</span>)</span><br><span class="line">test_mean = np.mean(test_scores, axis=<span class="number">1</span>)</span><br><span class="line">test_std = np.std(test_scores, axis=<span class="number">1</span>)</span><br><span class="line"> </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">mpl.rcParams[<span class="string">&#x27;font.size&#x27;</span>] = <span class="number">16</span></span><br><span class="line">plt.plot(param_range, train_mean, </span><br><span class="line">         color=<span class="string">&#x27;blue&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, </span><br><span class="line">         markersize=<span class="number">5</span>, label=<span class="string">&#x27;training accuracy&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.fill_between(param_range, train_mean + train_std,</span><br><span class="line">                 train_mean - train_std, alpha=<span class="number">0.15</span>,</span><br><span class="line">                 color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.plot(param_range, test_mean, </span><br><span class="line">         color=<span class="string">&#x27;green&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, </span><br><span class="line">         marker=<span class="string">&#x27;s&#x27;</span>, markersize=<span class="number">5</span>, </span><br><span class="line">         label=<span class="string">&#x27;validation accuracy&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.fill_between(param_range, </span><br><span class="line">                 test_mean + test_std,</span><br><span class="line">                 test_mean - test_std, </span><br><span class="line">                 alpha=<span class="number">0.15</span>, color=<span class="string">&#x27;green&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.grid()</span><br><span class="line">plt.xscale(<span class="string">&#x27;log&#x27;</span>)</span><br><span class="line">plt.legend(loc=<span class="string">&#x27;best&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Parameter C&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Accuracy&#x27;</span>)</span><br><span class="line">plt.ylim([<span class="number">0.75</span>, <span class="number">0.8</span>])</span><br><span class="line">plt.tight_layout()</span><br><span class="line"><span class="comment"># plt.savefig(&#x27;./figures/validation_curve.png&#x27;, dpi=300)</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%AD/output_44_1.png" alt="png"></p>
+<p>C=0.1模型性能最好</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 逻辑回归模型训练</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> roc_auc_score</span><br><span class="line">lr = LogisticRegression(C=<span class="number">0.1</span>)</span><br><span class="line">lr.fit(X_train_smote,y_train_smote)</span><br><span class="line">y_lr = lr.predict(X_test)</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;lr测试集auc:&#x27;</span>,roc_auc_score(y_test,y_lr))</span><br><span class="line">print()</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;lr训练集auc：&#x27;</span>, roc_auc_score(y_train_smote, lr.predict(X_train_smote)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>lr测试集auc: 0.7557754354090966
+
+lr训练集auc： 0.7757077183643842
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix</span><br><span class="line">lr_test_matx = confusion_matrix(y_test, lr.predict(X_test))</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line">sns.heatmap(lr_test_matx,annot=<span class="literal">True</span>,fmt=<span class="string">&quot;d&quot;</span>,cmap=<span class="string">&quot;Blues&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1a185b74be0&gt;
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%8F%8A%E9%A2%84%E6%B5%8B-%E4%B8%AD/output_47_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> f1_score,recall_score</span><br><span class="line">print(<span class="string">&#x27;召回率：&#x27;</span>,recall_score(y_test, lr.predict(X_test)))</span><br><span class="line">print(<span class="string">&#x27;f1：&#x27;</span>,f1_score(y_test, lr.predict(X_test)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>召回率： 0.7853260869565217
+f1： 0.613588110403397
+</code></pre>
+<p>在预测客户流失中，理想状态时，所有的流失用户都被预测到，这样我们就可以提前对这部分客户进行精细化运营，有效阻止客户流失，提高客户留存率；同时，也不存在正常用户被误判断为流失用户，减少运营成本，提高用户体验。但两者很难兼得，具体阈值调整需要结合实际业务，从实际业务出发，选择最优阈值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>逻辑回归</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用户流失预测(下)</title>
+    <url>/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E9%A2%84%E6%B5%8B-%E4%B8%8B/</url>
+    <content><![CDATA[<p><strong>本篇将分类变量作独热编码，利用逻辑回归，随机森林，xgboost进行客户流失预测</strong></p>
+<span id="more"></span>
+<h1 id="一、数据的导入，查看及基本处理"><a href="#一、数据的导入，查看及基本处理" class="headerlink" title="一、数据的导入，查看及基本处理"></a>一、数据的导入，查看及基本处理</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> matplotlib <span class="keyword">as</span> mpl</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.family&#x27;</span>]=<span class="string">&#x27;SimHei&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.style&#x27;</span>] = <span class="string">&#x27;italic&#x27;</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;font.size&#x27;</span>] = <span class="number">16</span></span><br><span class="line">mpl.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] =<span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df = pd.read_csv(<span class="string">&#x27;Telco-Customer-Churn.csv&#x27;</span>)</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>customerID</th>
+      <th>gender</th>
+      <th>SeniorCitizen</th>
+      <th>Partner</th>
+      <th>Dependents</th>
+      <th>tenure</th>
+      <th>PhoneService</th>
+      <th>MultipleLines</th>
+      <th>InternetService</th>
+      <th>OnlineSecurity</th>
+      <th>...</th>
+      <th>DeviceProtection</th>
+      <th>TechSupport</th>
+      <th>StreamingTV</th>
+      <th>StreamingMovies</th>
+      <th>Contract</th>
+      <th>PaperlessBilling</th>
+      <th>PaymentMethod</th>
+      <th>MonthlyCharges</th>
+      <th>TotalCharges</th>
+      <th>Churn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7590-VHVEG</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>1</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>No</td>
+      <td>...</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Electronic check</td>
+      <td>29.85</td>
+      <td>29.85</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5575-GNVDE</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>34</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>One year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>56.95</td>
+      <td>1889.5</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3668-QPYBK</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>2</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Mailed check</td>
+      <td>53.85</td>
+      <td>108.15</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7795-CFOCW</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>45</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>One year</td>
+      <td>No</td>
+      <td>Bank transfer (automatic)</td>
+      <td>42.30</td>
+      <td>1840.75</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>9237-HQITU</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No</td>
+      <td>2</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Fiber optic</td>
+      <td>No</td>
+      <td>...</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Month-to-month</td>
+      <td>Yes</td>
+      <td>Electronic check</td>
+      <td>70.70</td>
+      <td>151.65</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 21 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.duplicated().<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df = df.infer_objects()</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 7043 entries, 0 to 7042
+Data columns (total 21 columns):
+ #   Column            Non-Null Count  Dtype  
+---  ------            --------------  -----  
+ 0   customerID        7043 non-null   object 
+ 1   gender            7043 non-null   object 
+ 2   SeniorCitizen     7043 non-null   int64  
+ 3   Partner           7043 non-null   object 
+ 4   Dependents        7043 non-null   object 
+ 5   tenure            7043 non-null   int64  
+ 6   PhoneService      7043 non-null   object 
+ 7   MultipleLines     7043 non-null   object 
+ 8   InternetService   7043 non-null   object 
+ 9   OnlineSecurity    7043 non-null   object 
+ 10  OnlineBackup      7043 non-null   object 
+ 11  DeviceProtection  7043 non-null   object 
+ 12  TechSupport       7043 non-null   object 
+ 13  StreamingTV       7043 non-null   object 
+ 14  StreamingMovies   7043 non-null   object 
+ 15  Contract          7043 non-null   object 
+ 16  PaperlessBilling  7043 non-null   object 
+ 17  PaymentMethod     7043 non-null   object 
+ 18  MonthlyCharges    7043 non-null   float64
+ 19  TotalCharges      7043 non-null   object 
+ 20  Churn             7043 non-null   object 
+dtypes: float64(1), int64(2), object(18)
+memory usage: 1.1+ MB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[<span class="string">&#x27;TotalCharges&#x27;</span>] = pd.to_numeric(df[<span class="string">&#x27;TotalCharges&#x27;</span>],errors=<span class="string">&#x27;coerce&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 7043 entries, 0 to 7042
+Data columns (total 21 columns):
+ #   Column            Non-Null Count  Dtype  
+---  ------            --------------  -----  
+ 0   customerID        7043 non-null   object 
+ 1   gender            7043 non-null   object 
+ 2   SeniorCitizen     7043 non-null   int64  
+ 3   Partner           7043 non-null   object 
+ 4   Dependents        7043 non-null   object 
+ 5   tenure            7043 non-null   int64  
+ 6   PhoneService      7043 non-null   object 
+ 7   MultipleLines     7043 non-null   object 
+ 8   InternetService   7043 non-null   object 
+ 9   OnlineSecurity    7043 non-null   object 
+ 10  OnlineBackup      7043 non-null   object 
+ 11  DeviceProtection  7043 non-null   object 
+ 12  TechSupport       7043 non-null   object 
+ 13  StreamingTV       7043 non-null   object 
+ 14  StreamingMovies   7043 non-null   object 
+ 15  Contract          7043 non-null   object 
+ 16  PaperlessBilling  7043 non-null   object 
+ 17  PaymentMethod     7043 non-null   object 
+ 18  MonthlyCharges    7043 non-null   float64
+ 19  TotalCharges      7032 non-null   float64
+ 20  Churn             7043 non-null   object 
+dtypes: float64(2), int64(2), object(17)
+memory usage: 1.1+ MB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[df[<span class="string">&#x27;TotalCharges&#x27;</span>].isnull()]</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>customerID</th>
+      <th>gender</th>
+      <th>SeniorCitizen</th>
+      <th>Partner</th>
+      <th>Dependents</th>
+      <th>tenure</th>
+      <th>PhoneService</th>
+      <th>MultipleLines</th>
+      <th>InternetService</th>
+      <th>OnlineSecurity</th>
+      <th>...</th>
+      <th>DeviceProtection</th>
+      <th>TechSupport</th>
+      <th>StreamingTV</th>
+      <th>StreamingMovies</th>
+      <th>Contract</th>
+      <th>PaperlessBilling</th>
+      <th>PaymentMethod</th>
+      <th>MonthlyCharges</th>
+      <th>TotalCharges</th>
+      <th>Churn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>488</th>
+      <td>4472-LVYGI</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Two year</td>
+      <td>Yes</td>
+      <td>Bank transfer (automatic)</td>
+      <td>52.55</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>753</th>
+      <td>3115-CZMZD</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>20.25</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>936</th>
+      <td>5709-LVOEQ</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>80.85</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1082</th>
+      <td>4367-NUYAO</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>25.75</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1340</th>
+      <td>1371-DWPAZ</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>No</td>
+      <td>No phone service</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Credit card (automatic)</td>
+      <td>56.05</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>3331</th>
+      <td>7644-OMVMY</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>19.85</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>3826</th>
+      <td>3213-VVOLG</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>25.35</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>4380</th>
+      <td>2520-SGTTA</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>20.00</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>5218</th>
+      <td>2923-ARZLG</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>No internet service</td>
+      <td>...</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>No internet service</td>
+      <td>One year</td>
+      <td>Yes</td>
+      <td>Mailed check</td>
+      <td>19.70</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>6670</th>
+      <td>4075-WKNIU</td>
+      <td>Female</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>DSL</td>
+      <td>No</td>
+      <td>...</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>Two year</td>
+      <td>No</td>
+      <td>Mailed check</td>
+      <td>73.35</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>6754</th>
+      <td>2775-SEFEE</td>
+      <td>Male</td>
+      <td>0</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>0</td>
+      <td>Yes</td>
+      <td>Yes</td>
+      <td>DSL</td>
+      <td>Yes</td>
+      <td>...</td>
+      <td>No</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+      <td>Two year</td>
+      <td>Yes</td>
+      <td>Bank transfer (automatic)</td>
+      <td>61.90</td>
+      <td>NaN</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+<p>11 rows × 21 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[<span class="string">&#x27;TotalCharges&#x27;</span>] = np.where(df[<span class="string">&#x27;tenure&#x27;</span>]==<span class="number">0</span>,df[<span class="string">&#x27;MonthlyCharges&#x27;</span>],df[<span class="string">&#x27;TotalCharges&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.info()</span><br></pre></td></tr></table></figure>
+
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 7043 entries, 0 to 7042
+Data columns (total 21 columns):
+ #   Column            Non-Null Count  Dtype  
+---  ------            --------------  -----  
+ 0   customerID        7043 non-null   object 
+ 1   gender            7043 non-null   object 
+ 2   SeniorCitizen     7043 non-null   int64  
+ 3   Partner           7043 non-null   object 
+ 4   Dependents        7043 non-null   object 
+ 5   tenure            7043 non-null   int64  
+ 6   PhoneService      7043 non-null   object 
+ 7   MultipleLines     7043 non-null   object 
+ 8   InternetService   7043 non-null   object 
+ 9   OnlineSecurity    7043 non-null   object 
+ 10  OnlineBackup      7043 non-null   object 
+ 11  DeviceProtection  7043 non-null   object 
+ 12  TechSupport       7043 non-null   object 
+ 13  StreamingTV       7043 non-null   object 
+ 14  StreamingMovies   7043 non-null   object 
+ 15  Contract          7043 non-null   object 
+ 16  PaperlessBilling  7043 non-null   object 
+ 17  PaymentMethod     7043 non-null   object 
+ 18  MonthlyCharges    7043 non-null   float64
+ 19  TotalCharges      7043 non-null   float64
+ 20  Churn             7043 non-null   object 
+dtypes: float64(2), int64(2), object(17)
+memory usage: 1.1+ MB
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[<span class="string">&#x27;SeniorCitizen&#x27;</span>] = df[<span class="string">&#x27;SeniorCitizen&#x27;</span>].replace(<span class="number">0</span>,<span class="string">&quot;No&quot;</span>).replace(<span class="number">1</span>,<span class="string">&#x27;Yes&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_object = df.select_dtypes(<span class="string">&#x27;object&#x27;</span>).iloc[:,<span class="number">1</span>:]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_object.apply(<span class="keyword">lambda</span> x : x.unique())</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>gender                                                 [Female, Male]
+SeniorCitizen                                               [No, Yes]
+Partner                                                     [Yes, No]
+Dependents                                                  [No, Yes]
+PhoneService                                                [No, Yes]
+MultipleLines                             [No phone service, No, Yes]
+InternetService                                [DSL, Fiber optic, No]
+OnlineSecurity                         [No, Yes, No internet service]
+OnlineBackup                           [Yes, No, No internet service]
+DeviceProtection                       [No, Yes, No internet service]
+TechSupport                            [No, Yes, No internet service]
+StreamingTV                            [No, Yes, No internet service]
+StreamingMovies                        [No, Yes, No internet service]
+Contract                         [Month-to-month, One year, Two year]
+PaperlessBilling                                            [Yes, No]
+PaymentMethod       [Electronic check, Mailed check, Bank transfer...
+Churn                                                       [No, Yes]
+dtype: object
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df.drop([<span class="string">&#x27;gender&#x27;</span>,<span class="string">&#x27;PhoneService&#x27;</span>],axis=<span class="number">1</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_object.drop([<span class="string">&#x27;gender&#x27;</span>,<span class="string">&#x27;PhoneService&#x27;</span>],axis=<span class="number">1</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df[<span class="string">&#x27;Dependents&#x27;</span>].<span class="built_in">str</span>.endswith(<span class="string">&#x27;No&#x27;</span>).<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>4933
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> df_object.columns.to_list()[:-<span class="number">1</span>]:</span><br><span class="line">    df[i] = np.where(df[i].<span class="built_in">str</span>.endswith(<span class="string">&#x27;No&#x27;</span>),df[i].<span class="built_in">str</span>.replace(<span class="string">&#x27;No&#x27;</span>,<span class="string">&#x27;No_&#x27;</span>+<span class="built_in">str</span>(i)),df[i])</span><br><span class="line">    df[i] = np.where(df[i].<span class="built_in">str</span>.endswith(<span class="string">&#x27;Yes&#x27;</span>),df[i].<span class="built_in">str</span>.replace(<span class="string">&#x27;Yes&#x27;</span>,<span class="string">&#x27;Yes_&#x27;</span>+<span class="built_in">str</span>(i)),df[i])</span><br><span class="line">    df[i] = np.where(df[i].<span class="built_in">str</span>.endswith(<span class="string">&#x27;vice&#x27;</span>),df[i].<span class="built_in">str</span>.replace(<span class="string">&#x27;No internet service&#x27;</span>,<span class="string">&#x27;No_sevice_&#x27;</span>+<span class="built_in">str</span>(i)),df[i])</span><br><span class="line">    df[i] = np.where(df[i].<span class="built_in">str</span>.endswith(<span class="string">&#x27;vice&#x27;</span>),df[i].<span class="built_in">str</span>.replace(<span class="string">&#x27;No phone service&#x27;</span>,<span class="string">&#x27;No_phone_&#x27;</span>+<span class="built_in">str</span>(i)),df[i])</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>customerID</th>
+      <th>SeniorCitizen</th>
+      <th>Partner</th>
+      <th>Dependents</th>
+      <th>tenure</th>
+      <th>MultipleLines</th>
+      <th>InternetService</th>
+      <th>OnlineSecurity</th>
+      <th>OnlineBackup</th>
+      <th>DeviceProtection</th>
+      <th>TechSupport</th>
+      <th>StreamingTV</th>
+      <th>StreamingMovies</th>
+      <th>Contract</th>
+      <th>PaperlessBilling</th>
+      <th>PaymentMethod</th>
+      <th>MonthlyCharges</th>
+      <th>TotalCharges</th>
+      <th>Churn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7590-VHVEG</td>
+      <td>No_SeniorCitizen</td>
+      <td>Yes_Partner</td>
+      <td>No_Dependents</td>
+      <td>1</td>
+      <td>No_phone_MultipleLines</td>
+      <td>DSL</td>
+      <td>No_OnlineSecurity</td>
+      <td>Yes_OnlineBackup</td>
+      <td>No_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>Month-to-month</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Electronic check</td>
+      <td>29.85</td>
+      <td>29.85</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>5575-GNVDE</td>
+      <td>No_SeniorCitizen</td>
+      <td>No_Partner</td>
+      <td>No_Dependents</td>
+      <td>34</td>
+      <td>No_MultipleLines</td>
+      <td>DSL</td>
+      <td>Yes_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>Yes_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>One year</td>
+      <td>No_PaperlessBilling</td>
+      <td>Mailed check</td>
+      <td>56.95</td>
+      <td>1889.50</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3668-QPYBK</td>
+      <td>No_SeniorCitizen</td>
+      <td>No_Partner</td>
+      <td>No_Dependents</td>
+      <td>2</td>
+      <td>No_MultipleLines</td>
+      <td>DSL</td>
+      <td>Yes_OnlineSecurity</td>
+      <td>Yes_OnlineBackup</td>
+      <td>No_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>Month-to-month</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Mailed check</td>
+      <td>53.85</td>
+      <td>108.15</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7795-CFOCW</td>
+      <td>No_SeniorCitizen</td>
+      <td>No_Partner</td>
+      <td>No_Dependents</td>
+      <td>45</td>
+      <td>No_phone_MultipleLines</td>
+      <td>DSL</td>
+      <td>Yes_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>Yes_DeviceProtection</td>
+      <td>Yes_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>One year</td>
+      <td>No_PaperlessBilling</td>
+      <td>Bank transfer (automatic)</td>
+      <td>42.30</td>
+      <td>1840.75</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>9237-HQITU</td>
+      <td>No_SeniorCitizen</td>
+      <td>No_Partner</td>
+      <td>No_Dependents</td>
+      <td>2</td>
+      <td>No_MultipleLines</td>
+      <td>Fiber optic</td>
+      <td>No_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>No_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>Month-to-month</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Electronic check</td>
+      <td>70.70</td>
+      <td>151.65</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>7038</th>
+      <td>6840-RESVB</td>
+      <td>No_SeniorCitizen</td>
+      <td>Yes_Partner</td>
+      <td>Yes_Dependents</td>
+      <td>24</td>
+      <td>Yes_MultipleLines</td>
+      <td>DSL</td>
+      <td>Yes_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>Yes_DeviceProtection</td>
+      <td>Yes_TechSupport</td>
+      <td>Yes_StreamingTV</td>
+      <td>Yes_StreamingMovies</td>
+      <td>One year</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Mailed check</td>
+      <td>84.80</td>
+      <td>1990.50</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>7039</th>
+      <td>2234-XADUH</td>
+      <td>No_SeniorCitizen</td>
+      <td>Yes_Partner</td>
+      <td>Yes_Dependents</td>
+      <td>72</td>
+      <td>Yes_MultipleLines</td>
+      <td>Fiber optic</td>
+      <td>No_OnlineSecurity</td>
+      <td>Yes_OnlineBackup</td>
+      <td>Yes_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>Yes_StreamingTV</td>
+      <td>Yes_StreamingMovies</td>
+      <td>One year</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Credit card (automatic)</td>
+      <td>103.20</td>
+      <td>7362.90</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>7040</th>
+      <td>4801-JZAZL</td>
+      <td>No_SeniorCitizen</td>
+      <td>Yes_Partner</td>
+      <td>Yes_Dependents</td>
+      <td>11</td>
+      <td>No_phone_MultipleLines</td>
+      <td>DSL</td>
+      <td>Yes_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>No_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>Month-to-month</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Electronic check</td>
+      <td>29.60</td>
+      <td>346.45</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <th>7041</th>
+      <td>8361-LTMKD</td>
+      <td>Yes_SeniorCitizen</td>
+      <td>Yes_Partner</td>
+      <td>No_Dependents</td>
+      <td>4</td>
+      <td>Yes_MultipleLines</td>
+      <td>Fiber optic</td>
+      <td>No_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>No_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>Month-to-month</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Mailed check</td>
+      <td>74.40</td>
+      <td>306.60</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>7042</th>
+      <td>3186-AJIEK</td>
+      <td>No_SeniorCitizen</td>
+      <td>No_Partner</td>
+      <td>No_Dependents</td>
+      <td>66</td>
+      <td>No_MultipleLines</td>
+      <td>Fiber optic</td>
+      <td>Yes_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>Yes_DeviceProtection</td>
+      <td>Yes_TechSupport</td>
+      <td>Yes_StreamingTV</td>
+      <td>Yes_StreamingMovies</td>
+      <td>Two year</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Bank transfer (automatic)</td>
+      <td>105.65</td>
+      <td>6844.50</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+<p>7043 rows × 19 columns</p>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_new_object = df.select_dtypes(<span class="string">&#x27;object&#x27;</span>).iloc[:,<span class="number">1</span>:]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df_new_object.apply(<span class="keyword">lambda</span> x : x.unique())</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>SeniorCitizen                   [No_SeniorCitizen, Yes_SeniorCitizen]
+Partner                                     [Yes_Partner, No_Partner]
+Dependents                            [No_Dependents, Yes_Dependents]
+MultipleLines       [No_phone_MultipleLines, No_MultipleLines, Yes...
+InternetService                [DSL, Fiber optic, No_InternetService]
+OnlineSecurity      [No_OnlineSecurity, Yes_OnlineSecurity, No_sev...
+OnlineBackup        [Yes_OnlineBackup, No_OnlineBackup, No_sevice_...
+DeviceProtection    [No_DeviceProtection, Yes_DeviceProtection, No...
+TechSupport         [No_TechSupport, Yes_TechSupport, No_sevice_Te...
+StreamingTV         [No_StreamingTV, Yes_StreamingTV, No_sevice_St...
+StreamingMovies     [No_StreamingMovies, Yes_StreamingMovies, No_s...
+Contract                         [Month-to-month, One year, Two year]
+PaperlessBilling          [Yes_PaperlessBilling, No_PaperlessBilling]
+PaymentMethod       [Electronic check, Mailed check, Bank transfer...
+Churn                                                       [No, Yes]
+dtype: object
+</code></pre>
+<h1 id="二、编码及数据不平衡处理"><a href="#二、编码及数据不平衡处理" class="headerlink" title="二、编码及数据不平衡处理"></a>二、编码及数据不平衡处理</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X = df.iloc[:,<span class="number">1</span>:-<span class="number">1</span>]</span><br><span class="line">X.head()</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+<pre><code>.dataframe tbody tr th &#123;
+    vertical-align: top;
+&#125;
+
+.dataframe thead th &#123;
+    text-align: right;
+&#125;
+</code></pre>
+<p></style><p></p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SeniorCitizen</th>
+      <th>Partner</th>
+      <th>Dependents</th>
+      <th>tenure</th>
+      <th>MultipleLines</th>
+      <th>InternetService</th>
+      <th>OnlineSecurity</th>
+      <th>OnlineBackup</th>
+      <th>DeviceProtection</th>
+      <th>TechSupport</th>
+      <th>StreamingTV</th>
+      <th>StreamingMovies</th>
+      <th>Contract</th>
+      <th>PaperlessBilling</th>
+      <th>PaymentMethod</th>
+      <th>MonthlyCharges</th>
+      <th>TotalCharges</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>No_SeniorCitizen</td>
+      <td>Yes_Partner</td>
+      <td>No_Dependents</td>
+      <td>1</td>
+      <td>No_phone_MultipleLines</td>
+      <td>DSL</td>
+      <td>No_OnlineSecurity</td>
+      <td>Yes_OnlineBackup</td>
+      <td>No_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>Month-to-month</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Electronic check</td>
+      <td>29.85</td>
+      <td>29.85</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>No_SeniorCitizen</td>
+      <td>No_Partner</td>
+      <td>No_Dependents</td>
+      <td>34</td>
+      <td>No_MultipleLines</td>
+      <td>DSL</td>
+      <td>Yes_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>Yes_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>One year</td>
+      <td>No_PaperlessBilling</td>
+      <td>Mailed check</td>
+      <td>56.95</td>
+      <td>1889.50</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>No_SeniorCitizen</td>
+      <td>No_Partner</td>
+      <td>No_Dependents</td>
+      <td>2</td>
+      <td>No_MultipleLines</td>
+      <td>DSL</td>
+      <td>Yes_OnlineSecurity</td>
+      <td>Yes_OnlineBackup</td>
+      <td>No_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>Month-to-month</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Mailed check</td>
+      <td>53.85</td>
+      <td>108.15</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>No_SeniorCitizen</td>
+      <td>No_Partner</td>
+      <td>No_Dependents</td>
+      <td>45</td>
+      <td>No_phone_MultipleLines</td>
+      <td>DSL</td>
+      <td>Yes_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>Yes_DeviceProtection</td>
+      <td>Yes_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>One year</td>
+      <td>No_PaperlessBilling</td>
+      <td>Bank transfer (automatic)</td>
+      <td>42.30</td>
+      <td>1840.75</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>No_SeniorCitizen</td>
+      <td>No_Partner</td>
+      <td>No_Dependents</td>
+      <td>2</td>
+      <td>No_MultipleLines</td>
+      <td>Fiber optic</td>
+      <td>No_OnlineSecurity</td>
+      <td>No_OnlineBackup</td>
+      <td>No_DeviceProtection</td>
+      <td>No_TechSupport</td>
+      <td>No_StreamingTV</td>
+      <td>No_StreamingMovies</td>
+      <td>Month-to-month</td>
+      <td>Yes_PaperlessBilling</td>
+      <td>Electronic check</td>
+      <td>70.70</td>
+      <td>151.65</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y= df[<span class="string">&#x27;Churn&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cat_names = df_new_object.columns.tolist()[:-<span class="number">1</span>]</span><br><span class="line">cat_names</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>[&#39;SeniorCitizen&#39;,
+ &#39;Partner&#39;,
+ &#39;Dependents&#39;,
+ &#39;MultipleLines&#39;,
+ &#39;InternetService&#39;,
+ &#39;OnlineSecurity&#39;,
+ &#39;OnlineBackup&#39;,
+ &#39;DeviceProtection&#39;,
+ &#39;TechSupport&#39;,
+ &#39;StreamingTV&#39;,
+ &#39;StreamingMovies&#39;,
+ &#39;Contract&#39;,
+ &#39;PaperlessBilling&#39;,
+ &#39;PaymentMethod&#39;]
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">num_names = <span class="built_in">list</span>(<span class="built_in">set</span>(X.columns.to_list())-<span class="built_in">set</span>(cat_names))</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler,OneHotEncoder</span><br><span class="line"><span class="keyword">from</span> sklearn.compose <span class="keyword">import</span> ColumnTransformer</span><br><span class="line">num_pipline = Pipeline([</span><br><span class="line">    (<span class="string">&#x27;std_scaler&#x27;</span>,StandardScaler())</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">full_pipeline = ColumnTransformer([</span><br><span class="line">    (<span class="string">&#x27;num&#x27;</span>,num_pipline,num_names),</span><br><span class="line">    (<span class="string">&#x27;cat&#x27;</span>,OneHotEncoder(),cat_names)</span><br><span class="line">])</span><br><span class="line">X_prepared = full_pipeline.fit_transform(X)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">X_prepared.shape</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>(7043, 42)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y.replace(<span class="string">&#x27;Yes&#x27;</span>,<span class="number">1</span>,inplace=<span class="literal">True</span>)</span><br><span class="line">y.replace(<span class="string">&#x27;No&#x27;</span>,<span class="number">0</span>,inplace=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 划分训练集和测试集</span></span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(X_prepared,y,test_size=<span class="number">0.2</span>,random_state=<span class="number">0</span>)</span><br><span class="line">print(<span class="string">&quot;Before oversampling:&quot;</span>,<span class="built_in">sum</span>(y_train==<span class="number">0</span>),<span class="built_in">sum</span>(y_train==<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>Before oversampling: 4133 1501
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 过采样</span></span><br><span class="line"><span class="keyword">from</span> imblearn.over_sampling <span class="keyword">import</span> SMOTE</span><br><span class="line">smote = SMOTE()</span><br><span class="line">X_train_smote,y_train_smote = smote.fit_resample(X_train,y_train)</span><br><span class="line">print(<span class="string">&quot;After oversampling:&quot;</span>,<span class="built_in">sum</span>(y_train_smote==<span class="number">0</span>),<span class="built_in">sum</span>(y_train_smote==<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<pre><code>After oversampling: 4133 4133
+</code></pre>
+<h1 id="三、模型训练"><a href="#三、模型训练" class="headerlink" title="三、模型训练"></a>三、模型训练</h1><h2 id="3-1-逻辑回归"><a href="#3-1-逻辑回归" class="headerlink" title="3.1 逻辑回归"></a>3.1 逻辑回归</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 采用逻辑回归模型参数选择</span></span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> validation_curve</span><br><span class="line">lr_c = LogisticRegression()</span><br><span class="line">param_range = [<span class="number">0.001</span>, <span class="number">0.01</span>, <span class="number">0.1</span>, <span class="number">1.0</span>, <span class="number">10.0</span>, <span class="number">100.0</span>]</span><br><span class="line">train_scores, test_scores = validation_curve(</span><br><span class="line">                estimator=lr_c, </span><br><span class="line">                X=X_train_smote, </span><br><span class="line">                y=y_train_smote, </span><br><span class="line">                param_name=<span class="string">&#x27;C&#x27;</span>, </span><br><span class="line">                param_range=param_range,</span><br><span class="line">                cv=<span class="number">10</span>)</span><br><span class="line"> </span><br><span class="line">train_mean = np.mean(train_scores, axis=<span class="number">1</span>)</span><br><span class="line">train_std = np.std(train_scores, axis=<span class="number">1</span>)</span><br><span class="line">test_mean = np.mean(test_scores, axis=<span class="number">1</span>)</span><br><span class="line">test_std = np.std(test_scores, axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<pre><code>c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+c:\python38\lib\site-packages\sklearn\linear_model\_logistic.py:763: ConvergenceWarning: lbfgs failed to converge (status=1):
+STOP: TOTAL NO. of ITERATIONS REACHED LIMIT.
+
+Increase the number of iterations (max_iter) or scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.plot(param_range, train_mean, </span><br><span class="line">         color=<span class="string">&#x27;blue&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, </span><br><span class="line">         markersize=<span class="number">5</span>, label=<span class="string">&#x27;training accuracy&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.fill_between(param_range, train_mean + train_std,</span><br><span class="line">                 train_mean - train_std, alpha=<span class="number">0.15</span>,</span><br><span class="line">                 color=<span class="string">&#x27;blue&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.plot(param_range, test_mean, </span><br><span class="line">         color=<span class="string">&#x27;green&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, </span><br><span class="line">         marker=<span class="string">&#x27;s&#x27;</span>, markersize=<span class="number">5</span>, </span><br><span class="line">         label=<span class="string">&#x27;validation accuracy&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.fill_between(param_range, </span><br><span class="line">                 test_mean + test_std,</span><br><span class="line">                 test_mean - test_std, </span><br><span class="line">                 alpha=<span class="number">0.15</span>, color=<span class="string">&#x27;green&#x27;</span>)</span><br><span class="line"> </span><br><span class="line">plt.grid()</span><br><span class="line">plt.xscale(<span class="string">&#x27;log&#x27;</span>)</span><br><span class="line">plt.legend(loc=<span class="string">&#x27;best&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Parameter C&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Accuracy&#x27;</span>)</span><br><span class="line">plt.ylim([<span class="number">0.76</span>, <span class="number">0.8</span>])</span><br><span class="line">plt.tight_layout()</span><br><span class="line"><span class="comment"># plt.savefig(&#x27;./figures/validation_curve.png&#x27;, dpi=300)</span></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<pre><code>Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+Font &#39;default&#39; does not have a glyph for &#39;-&#39; [U+2212], substituting with a dummy symbol.
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E9%A2%84%E6%B5%8B-%E4%B8%8B/output_35_1.png" alt="png"></p>
+<p>C=0.1模型性能最好</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 逻辑回归模型训练</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> f1_score,roc_auc_score,accuracy_score,confusion_matrix</span><br><span class="line">lr = LogisticRegression(C=<span class="number">0.1</span>)</span><br><span class="line">lr.fit(X_train_smote,y_train_smote)</span><br><span class="line">y_lr = lr.predict(X_test)</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;lr测试集auc:&#x27;</span>,roc_auc_score(y_test,y_lr))</span><br><span class="line">print()</span><br><span class="line"></span><br><span class="line">print(<span class="string">&#x27;lr训练集auc：&#x27;</span>, roc_auc_score(y_train_smote, lr.predict(X_train_smote)))</span><br></pre></td></tr></table></figure>
+
+<pre><code>lr测试集auc: 0.7541008854362444
+
+lr训练集auc： 0.7794580208081298
+</code></pre>
+<h2 id="3-2-随机森林"><a href="#3-2-随机森林" class="headerlink" title="3.2 随机森林"></a>3.2 随机森林</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line">forest_clf = RandomForestClassifier()</span><br><span class="line">param_grid = [</span><br><span class="line">    &#123;<span class="string">&#x27;n_estimators&#x27;</span>:[<span class="number">3</span>,<span class="number">10</span>,<span class="number">30</span>,<span class="number">100</span>,<span class="number">300</span>],<span class="string">&#x27;max_features&#x27;</span>:[<span class="number">2</span>,<span class="number">4</span>,<span class="number">8</span>,<span class="number">16</span>,<span class="number">24</span>,<span class="number">32</span>,<span class="number">42</span>]&#125;,</span><br><span class="line">]</span><br><span class="line">grid_search = GridSearchCV(forest_clf,param_grid,cv=<span class="number">5</span>,scoring=<span class="string">&#x27;roc_auc&#x27;</span>)</span><br><span class="line">grid_search.fit(X_train_smote,y_train_smote)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>GridSearchCV(cv=10, estimator=RandomForestClassifier(),
+             param_grid=[&#123;&#39;max_features&#39;: [2, 4, 8, 16, 24, 32, 42],
+                          &#39;n_estimators&#39;: [3, 10, 30, 100, 300]&#125;],
+             scoring=&#39;roc_auc&#39;)
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">grid_search.best_params_</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>&#123;&#39;max_features&#39;: 2, &#39;n_estimators&#39;: 300&#125;
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">grid_search.best_score_</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0.9358940513200729
+</code></pre>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y_test_predict = grid_search.best_estimator_.predict(X_test)</span><br><span class="line">roc_auc_score(y_test,y_test_predict)</span><br><span class="line">f1_score(y_test,y_test_predict)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<pre><code>0.5264663805436338
+</code></pre>
+<h2 id="3-3-XGBoost"><a href="#3-3-XGBoost" class="headerlink" title="3.3 XGBoost"></a>3.3 XGBoost</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> xgboost.sklearn <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="comment">## 定义 XGBoost模型 </span></span><br><span class="line">clf = XGBClassifier()</span><br><span class="line"><span class="comment"># 在训练集上训练XGBoost模型</span></span><br><span class="line">clf.fit(X_train_smote, y_train_smote)</span><br><span class="line">train_predict = clf.predict(X_train_smote)</span><br><span class="line">test_predict = clf.predict(X_test)</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> metrics</span><br><span class="line"></span><br><span class="line"><span class="comment"># ## 利用accuracy（准确度）【预测正确的样本数目占总预测样本数目的比例】评估模型效果</span></span><br><span class="line"><span class="comment"># print(&#x27;The accuracy of the Logistic Regression is:&#x27;,accuracy_score(y_train,train_predict))</span></span><br><span class="line"><span class="comment"># print(&#x27;The accuracy of the Logistic Regression is:&#x27;,accuracy_score(y_test,test_predict))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## 查看混淆矩阵 (预测值和真实值的各类情况统计矩阵)</span></span><br><span class="line">confusion_matrix_result = confusion_matrix(test_predict,y_test)</span><br><span class="line">print(<span class="string">&#x27;The confusion matrix result:\n&#x27;</span>,confusion_matrix_result)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 利用热力图对于结果进行可视化</span></span><br><span class="line">plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line">sns.heatmap(confusion_matrix_result, annot=<span class="literal">True</span>, cmap=<span class="string">&#x27;Blues&#x27;</span>,fmt=<span class="string">&#x27;d&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Predicted labels&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;True labels&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line">f1_score(y_test,test_predict)</span><br></pre></td></tr></table></figure>
+
+<pre><code>c:\python38\lib\site-packages\xgboost\sklearn.py:888: UserWarning: The use of label encoder in XGBClassifier is deprecated and will be removed in a future release. To remove this warning, do the following: 1) Pass option use_label_encoder=False when constructing XGBClassifier object; and 2) Encode your labels (y) as integers starting with 0, i.e. 0, 1, 2, ..., [num_class - 1].
+  warnings.warn(label_encoder_deprecation_msg, UserWarning)
+
+
+[15:24:40] WARNING: C:/Users/Administrator/workspace/xgboost-win64_release_1.3.0/src/learner.cc:1061: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective &#39;binary:logistic&#39; was changed from &#39;error&#39; to &#39;logloss&#39;. Explicitly set eval_metric if you&#39;d like to restore the old behavior.
+The confusion matrix result:
+ [[875 166]
+ [166 202]]
+</code></pre>
+<p><img src="/2021/06/14/%E7%94%A8%E6%88%B7%E6%B5%81%E5%A4%B1%E9%A2%84%E6%B5%8B-%E4%B8%8B/output_44_2.png" alt="png"></p>
+<pre><code>0.5489130434782609
+</code></pre>
+]]></content>
+      <tags>
+        <tag>-机器学习 -用户流失预测</tag>
+      </tags>
+  </entry>
 </search>
